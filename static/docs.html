@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<h2>Logger (mini) API:</h2>
+
+<div class="function">
+  <span class="cursive">class </span>
+  <span>api.<b>Logger</b> (api_key : str, **options)</span>
+</div>
+
+<h3>api.Logger methods:</h3>
+
+<h4>Setters:</h4>
+
+<div class="function">
+  <span><b>generate_log</b> (tablename, content, log_level, **options)</span>
+</div>
+
+<div class="description">
+  <div class="arg">tablename</div>
+  <div class="arg-desc">Title of table you`ve selected</div>
+  <div class="arg-desc">string</div>
+  <br>
+  <div class="arg">content</div>
+  <div class="arg-desc">description of log</div>
+  <div class="arg-desc">string</div>
+  <br>
+  <div class="arg">RETURN</div>
+  <div class="arg-desc">Log description</div>
+  <div class="arg-desc">dictionary</div>
+  <br>
+  <br>
+
+  Figure and add specific log to specific database
+
+</div>
+
+<h4>Getters: </h4>
+
+<div class="function">
+  <span><b>get_tables</b> (**options)</span>
+</div>
+
+<div class="description">
+  <div class="arg">RETURN</div>
+  <div class="arg-desc">List of table titles</div>
+  <div class="arg-desc">list [string]</div>
+  <br>
+  <br>
+  Get all table titles
+</div>
+<br>
+
+<div class="function">
+  <span><b>/set_table</b> http://http://127.0.0.1:5000//set_table<b>put your data in json</b></span>
+</div>
+
+<div class="description">
+  <div class="arg">id</div>
+  <div class="arg-desc">Telegram id of user, you want to change params</div>
+  <div class="arg-desc">string</div>
+  <div class="arg-desc">must given</div>
+  <br>
+  <div class="arg">params</div>
+  <div class="arg-desc">Put Here dictionary of parametrs you want to change( as a key use Field you want to change, as a value use value you want ti out in)</div>
+  <div class="arg-desc">dictionary</div>
+  <div class="arg-desc">Example of params you can put in:</div>
+  <div class="params"><div class="arg">DesTime_ID</div>
+  <div class="arg-desc">Input 0 for morning | and 1 for evening, this parametr sorts records and search only those with this time of mailing</div>
+  <div class="arg-desc">int</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <div class="arg">Gender_ID</div>
+  <div class="arg-desc">Input 1(male) | or 2(female)</div>
+  <div class="arg-desc">integer</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <div class="arg">Birthplace</div>
+  <div class="arg-desc">Input whatever you want, this parametr sorts records and search only those with this birth place</div>
+  <div class="arg-desc">string</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <div class="arg">RegDate</div>
+  <div class="arg-desc">input birthdate in the format:(%d.%m.%Y)</div>
+  <div class="arg-desc">string</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <div class="arg">RegDate</div>
+  <div class="arg-desc">input birthdate in the format:(%d.%m.%Y)</div>
+  <div class="arg-desc">string</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div class="arg">IsActiveBot</div>
+  <div class="arg-desc">Input 1 if you want to get active users| and 0 if you want to get people,who left</div>
+  <div class="arg-desc">integer</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <div class="arg">SubscrType_ID</div>
+  <div class="arg-desc">Input 1|3|4|5 depends on what kind of ID you want to get(1-free subscribe | 3-paied subscribe | 4- we haven't received a recurse payment | 5-user don't want to use subscribe anymore)</div>
+  <div class="arg-desc">integer</div>
+  <div class="arg-desc">optional</div>
+  <br>
+  <br>
+  <br>
+  <div class="arg">Source_ID</div>
+  <div class="arg-desc">Input whatever you want, this parametr sorts records and search only those with this Source_ID</div>
+  <div class="arg-desc">integer</div>
+  <div class="arg-desc">optional</div>
+  <br></div>
+
+
+
+
+
+<div class="function">
+    <span><b>/get_tables</b>(http://127.0.0.1:5000/get_tables) <b>put your data in json</b> </span>
+  </div>
+  
+  <div class="description">
+    <div class="arg">offset</div>
+    <div class="arg-desc">Amount of elements you want to pass before getting those, you need</div>
+    <div class="arg-desc">integer</div>
+    <div class="arg-desc">optional(if wasn't given, offset=0)</div>
+    <br>
+    <br>
+    <br>
+
+    <div class="arg">limit</div>
+    <div class="arg-desc">Amount of records you want to get</div>
+    <div class="arg-desc">integer</div>
+    <div class="arg-desc">optional(if wasn't given,limit=10</div>
+    <br>
+    <br>
+    <br>
+
+    <div class="arg">date</div>
+    <div class="arg-desc">Input dictionary with keys:start and end,and datr in it in format:"%d.%m.%Y, you will get all people,whose birthday in range</div>
+    <div class="arg-desc">dictionary</div>
+    <div class="arg-desc">optional</div>
+    
+    <br>
+    <br>
+    <br>
+    <div class="arg">degistration_date</div>
+    <div class="arg-desc">Input dictionary with keys:start and end,and date in it in format:"%d.%m.%Y, you will get all people,whose registration date in range</div>
+    <div class="arg-desc">dictionary</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <div class="arg">DesTime_ID</div>
+    <div class="arg-desc">Input 0 for morning | and 1 for evening, this parametr sorts records and search only those with this time of mailing</div>
+    <div class="arg-desc">int</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <div class="arg">Gender_ID</div>
+    <div class="arg-desc">Input 1(male) | or 2(female)</div>
+    <div class="arg-desc">integer</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <div class="arg">Birthplace</div>
+    <div class="arg-desc">Input whatever you want, this parametr sorts records and search only those with this birth place</div>
+    <div class="arg-desc">string</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    
+    <div class="arg">TelegramID</div>
+    <div class="arg-desc">Input whatever you want, this parametr sorts records and search only one with this telegram id</div>
+    <div class="arg-desc">string</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <div class="arg">IsActiveBot</div>
+    <div class="arg-desc">Input 1 if you want to get active users| and 0 if you want to get people,who left</div>
+    <div class="arg-desc">integer</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <div class="arg">SubscrType_ID</div>
+    <div class="arg-desc">Input 1|3|4|5 depends on what kind of ID you want to get(1-free subscribe | 3-paied subscribe | 4- we haven't received a recurse payment | 5-user don't want to use subscribe anymore)</div>
+    <div class="arg-desc">integer</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <div class="arg">Source_ID</div>
+    <div class="arg-desc">Input whatever you want, this parametr sorts records and search only those with this Source_ID</div>
+    <div class="arg-desc">integer</div>
+    <div class="arg-desc">optional</div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <code><h1>REQUEST EXAMPLE</h1><br>
+        json={"offset":0,<br>
+    "limit":1000,<br>
+    "date":{<br>
+        <div class="json_example">start":"29.11.1954",<br>
+            "end":"29.11.2000"<br></div>
+        },<br>
+    "registration_date":{<br>
+        <div class="json_example">"start":"27.06.2022",<br>
+                        "end":'13.07.2022'</div>
+        },<br>
+    "Name":"Карина",<br>
+    "Gender_ID":2,<br>
+    "DesTime_ID":0,<br>
+    "IsActiveBot":1})</code>
+    <br>
+    <br>
+    <code><h1>RESPONSE EXAMPLE</h1><br>
+        [<br>
+            <div class="json_example">{   
+                "ID": 3458,<br>
+                "Name": "Карина",<br>
+                "is_main": 1,<br>
+                "BirthTime": 6.3,<br>
+                "Birthday": "02.02.1994",<br>
+                "Gender_ID": 2,<br>
+                "Birthplace": "Карина",<br>
+                "DesTime_ID": 0,<br>
+                "TimeZone": 0,<br>
+                "TelegramID": "595009819",<br>
+                "RegDate": "2022-07-06 16:50:04",<br>
+                "IsActiveBot": 1,<br>
+                "Balance": 0,<br>
+                "IsActiveSub": 1,<br>
+                "SubscrType_ID": 1,<br>
+                "ActiveUntil": "2022-08-05",<br>
+                "DateSend": "2022-07-11",<br>
+                "Source_ID": 758357694
+            },<br><br>
+            {
+                "ID": 2,<br>
+                "Name": "Карина",<br> 
+                "is_main": 1, <br>
+                "BirthTime": "10:45", <br>
+                "Birthday": "04.01.1997", <br>
+                "Gender_ID": 2, <br>
+                "Birthplace": "\u041f\u0430\u0432\u043b\u043e\u0434\u0430\u0440",<br>
+                "DesTime_ID": 0,<br>
+                "TimeZone": 0,<br>
+                "TelegramID": "658805648",<br>
+                "RegDate": "2022-06-30 20:20:56",<br>
+                "IsActiveBot": 1,<br>
+                "Balance": 0,<br>
+                "IsActiveSub": 1,<br> 
+                "SubscrType_ID": 1,<br> 
+                "ActiveUntil": "2022-07-30",<br> 
+                "DateSend": "2022-07-11",<br>
+                 "Source_ID": null
+            }<br></div>
+        ]</code>
+  </div>
+  <div class="example"></div>
+</body>
+
+<style>
+  body {
+    background: #17191a;
+  }
+
+  .function {
+    background: gray;
+    padding: 10px 20px;
+  }
+
+  .arg {
+    width: 200px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .json_example{
+    margin-left: 20px;
+  }
+  .arg-desc {
+    width: 300px;
+    display: inline-block;
+  }
+
+  .description {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+  }
+
+  * {
+    color: white;
+  }
+
+  h4 {
+    text-decoration: underline;
+  }
+
+  .cursive {
+    font-style: italic;
+  }
+</style>
+
+</html>

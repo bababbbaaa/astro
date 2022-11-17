@@ -1,0 +1,15 @@
+__pycache__/
+env/
+videos/
+config.py
+проба.jpg
+utils/__pycache__
+databaseInteraction/__pycache__
+tests/__pycache__
+test/app.log
+app.log
+payments.db
+old_func/
+databaseInteraction/__pycache__
+data/
+horoscope.db

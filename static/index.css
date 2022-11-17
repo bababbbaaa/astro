@@ -1,0 +1,25 @@
+.root {
+    width : fit-content;
+    background: blue;
+    margin : auto;
+    position : relative;
+    top : 100px;
+    border-radius: 10px;
+    color : white;
+    font-weight : 600;
+    text-align : center;
+    cursor: pointer;
+    padding : 10px;
+}
+
+.export {
+    background : blue;
+    width : fit-content;
+    text-align : center;
+    border : none;
+    color : white;
+    cursor: pointer;
+    font-weight: 600;
+    padding : 10px;
+    border-radius: 10px;
+}
