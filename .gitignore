@@ -13,3 +13,5 @@ old_func/
 databaseInteraction/__pycache__
 data/
 horoscope.db
+static/*.xlsx
+error.log

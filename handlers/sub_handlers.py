@@ -2,8 +2,8 @@ import sys
 sys.path.append("../")
 import config
 from utils import *
-from mics import *
-from asyncio import *
+from controller import *
+
 @dp.callback_query_handler(lambda call: call.data.split(";")[0] == "sub")
 async def sub_options(call):
     try:

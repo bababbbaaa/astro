@@ -9,7 +9,7 @@ from calendar import Calendar
 from asyncio import *
 import time 
 import sys
-from mics import *
+from controller import *
 import horoscopeproc as horoscopeproc
 sys.path.append("../")
 import horoscopeusr as horoscopeusr

@@ -3,13 +3,7 @@ import sys
 sys.path.append("../")
 import config
 from utils import *
-from mics import *
-from asyncio import *
-
-
-
-
-
+from controller import *
 
 @dp.message_handler(commands=['gen_token'])
 @show_log_
