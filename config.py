@@ -1,22 +1,10 @@
-import horoscopeproc as horoscopeproc
 SUPPORT="ИМЯ ПОДДЕРЖКИ"
-# import functions
-# MANAGER_TOKEN="5536910630:AAG9RFUHVB3omnkyb2gcI_5oBCd9oYeidhw"
-# TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"#astrologyEveryDay
 import horoscopedb as horoscopedb
 from datetime import datetime
 MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
-TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"#astrologyEveryDay
-# from functions import select_all_active_until_table
-# inter_name="Введи свое имя:"
-# inter_gender="Отлично. Теперь, пожалуйста, введи свой пол одной буквой - женский (Ж) или мужской (М)."
-# inter_city="Пожалуйста, напиши, где ты родился."
-# inter_date="Теперь введи дату своего рождения.\n\nПожалуйста, пришли ее в формате: дд.мм.гггг, например: 29.11.1985"
-# inter_time="Пожалуйста, введи время своего рождения в таком формате: 12:15.\n\nЕсли ты не знаешь точное время своего рождения, выбери 12:00."
-# inter_time_option="Уже почти все! Осталось только выбрать подходящее тебе время получения твоего персонального ежедневного гороскопа.\n\nУтро - ты будешь получать гороскоп на сегодняшний день в первой половине дня.\n\nВечер - ты будешь получать гороскоп на завтрашний день во второй половине дня."
+# TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"#astrologyEveryDay
+TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM"
 
-# MANAGER_TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"
-# TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"#astrologyEveryDay
 photos={"inter_name":"days/name.png",
 "inter_gender":"days/gender.png",
 "inter_city":"days/city.png",
@@ -179,7 +167,3 @@ offert='''<a href="https://docs.google.com/document/d/1jwpcUW2Dj2nPr7M_gsBoXmwuX
 <a href="https://docs.google.com/document/d/1e2BED-8saLTsVIc0_fyMMKn8i5xnqwcF_k9oY_BHkJw/edit)">Соглашение на обработку рекуррентных платежей.</a>
 
 <a href="https://docs.google.com/document/d/1zGaul1srvBDIy1OnaoggKnXfmtDrP5UOSyKSjHYRLVU"> Оферта оказания услуг</a> '''
-# print(sub_type3_text(952863788))
-
-
-

@@ -6,7 +6,6 @@ from utils import *
 from controller import *
 
 @dp.message_handler(commands=['gen_token'])
-@show_log_
 async def generate_token(message):
     id = message.chat.id
 

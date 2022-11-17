@@ -4,7 +4,7 @@ import config
 from utils import *
 from controller import *
 from asyncio import *
-
+import functions
 
 #----------------------------------------start
 

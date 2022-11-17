@@ -13,11 +13,13 @@ from controller import *
 import horoscopeproc as horoscopeproc
 sys.path.append("../")
 import horoscopeusr as horoscopeusr
-import functions
-import for_payments
 import random
+from aiogram.types import *
 import horoscopeproc as horoscopeproc
-import horoscoperr as horoscoperr
+from rich.console import Console
+import string
+from aiogram.types import InlineKeyboardButton
+
 def check_format(data : str, time_format : str):
     try:
         datetime.strptime(data, time_format)
@@ -25,15 +27,40 @@ def check_format(data : str, time_format : str):
     except Exception as e:
         print(e)
         return False
-from rich.console import Console
 
 console = Console()
+
+class InlineButton(InlineKeyboardButton):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.callback_data = ''.join(random.choice(
+            string.ascii_uppercase + string.digits) for _ in range(32))
+
+    def onClick(self, coro, *args, **kwargs):
+        try:
+            @dp.callback_query_handler(lambda call: call.data == self.callback_data)
+            async def some_coro(call):
+                return await coro(call, *args, **kwargs)
+
+        except Exception as e:
+            logger.error(f'{coro} - handler exception --> {e}')
+
+async def general_info(message: Message):
+    author = message.from_user.id
+    chat = message.chat
+    me = await bot.get_me()
+
+    return author, chat, me
 
 def create_session():
     LINK ='sqlite:///' + abspath(join('../horoscope.db'))
 
     engine = create_engine(LINK)
     return sessionmaker(engine)()
+
+def markup_row(_markup: types.InlineKeyboardMarkup, array: list):
+    _markup.row(*array)
 
 def days_in_month(month_index : int, year_index : int) -> int:
     c = Calendar()
@@ -223,7 +250,7 @@ async def send_mes(posts):
 
 
 
-async  def show_log_(coro):
+async def show_log_(coro):
     @functools.wraps(coro)
     async def wrapper(ctx, *args, **kwargs):
 
