@@ -828,6 +828,7 @@ try:
 
         mes=await wait_until_send(id=post.from_user.id,text="Если необходимо отправить выбранной аудитории, то перенесите файл с телеграмм айди. Если такой необходимости нет, напишите 'нет'")
         bot.register_next_step_handler(mes,ask_file,buttons,author,date,time,is_heading,post)
+    
     async def ask_file(message,buttons, author, date, time, is_heading: bool,post):
         print(message)
         if message.content_type=="text":

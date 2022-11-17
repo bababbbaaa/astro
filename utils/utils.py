@@ -7,11 +7,10 @@ from posixpath import abspath
 from os.path import join
 from calendar import Calendar
 from asyncio import *
-import time 
+import time
 import sys
 from controller import *
 import horoscopeproc as horoscopeproc
-sys.path.append("../")
 import horoscopeusr as horoscopeusr
 import random
 from aiogram.types import *
@@ -20,7 +19,10 @@ from rich.console import Console
 import string
 from aiogram.types import InlineKeyboardButton
 
-def check_format(data : str, time_format : str):
+sys.path.append("../")
+
+
+def check_format(data: str, time_format: str):
     try:
         datetime.strptime(data, time_format)
         return True
@@ -28,7 +30,9 @@ def check_format(data : str, time_format : str):
         print(e)
         return False
 
+
 console = Console()
+
 
 class InlineButton(InlineKeyboardButton):
     def __init__(self, *args, **kwargs):
@@ -46,6 +50,18 @@ class InlineButton(InlineKeyboardButton):
         except Exception as e:
             logger.error(f'{coro} - handler exception --> {e}')
 
+
+async def startup(message):
+    suggesting_commands = [
+        BotCommand("/start", description="Старт"),
+        BotCommand("/send", description="Отправить гороскоп"),
+        BotCommand("/calendar", description="Календарь постов"),
+        BotCommand("/manager_access", description="Модерирование постов")
+    ]
+
+    await bot.set_my_commands(suggesting_commands)
+
+
 async def general_info(message: Message):
     author = message.from_user.id
     chat = message.chat
@@ -53,25 +69,28 @@ async def general_info(message: Message):
 
     return author, chat, me
 
+
 def create_session():
-    LINK ='sqlite:///' + abspath(join('../horoscope.db'))
+    LINK = 'sqlite:///' + abspath(join('../horoscope.db'))
 
     engine = create_engine(LINK)
     return sessionmaker(engine)()
 
+
 def markup_row(_markup: types.InlineKeyboardMarkup, array: list):
     _markup.row(*array)
 
-def days_in_month(month_index : int, year_index : int) -> int:
+
+def days_in_month(month_index: int, year_index: int) -> int:
     c = Calendar()
     days = c.monthdays2calendar(year_index, month_index)[-1]
-
 
     for i in range(len(days) - 1, -1, -1):
         if days[i][0] != 0:
             return days[i][0]
 
-def make_markup(buttons : list) -> InlineKeyboardMarkup:
+
+def make_markup(buttons: list) -> InlineKeyboardMarkup:
     markup = InlineKeyboardMarkup()
 
     for button in buttons:
@@ -80,54 +99,61 @@ def make_markup(buttons : list) -> InlineKeyboardMarkup:
 
     return markup
 
+
 def write_pid():
     RUNNING = 'running.txt'
 
     with open(RUNNING, 'a') as write_stream:
         write_stream.write(f'{os.getpid()}\n')
-async def wait_until_send_photo(id,caption,photo,reply_markup=None,parse_mode=None):
-        while True:
-            try:
-                mes=await bot.send_photo(id,caption=caption,photo=photo,reply_markup=reply_markup,parse_mode=parse_mode)
-                return mes
-            except Exception as err:
-                
-                if 'error_code' not in vars(err).keys():
-                    return 0
-                    
-                if err.error_code==429:
-                    return err
 
-                elif err.error_code==400:
-                    return err
-                elif err.error_code==403:
-                    horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
-                    return err
-                else:
-                    return err
+
+async def wait_until_send_photo(id, caption, photo, reply_markup=None, parse_mode=None):
+    while True:
+        try:
+            mes = await bot.send_photo(id, caption=caption, photo=photo, reply_markup=reply_markup, parse_mode=parse_mode)
+            return mes
+        except Exception as err:
+
+            if 'error_code' not in vars(err).keys():
+                return 0
+
+            if err.error_code == 429:
+                return err
+
+            elif err.error_code == 400:
+                return err
+            elif err.error_code == 403:
+                horoscopeusr.ChUserInfo(inpValue=0, inpTelegramID=str(
+                    id), inpFieldName="IsActiveBot")
+                return err
+            else:
+                return err
+
+
 async def wait_until_copy(id, forward_id, mes_id, reply_markup=None):
     while True:
 
         try:
-            mes =await bot.copy_message(
+            mes = await bot.copy_message(
                 id, forward_id, mes_id, reply_markup=reply_markup)
             return mes
         except Exception as err:
             if 'error_code' not in vars(err):
                 return err
             if err.error_code == 429:
-                print (err)
+                print(err)
                 return err
-            if err.error_code==400:
+            if err.error_code == 400:
                 return err
             else:
                 return(err)
+
 
 async def wait_until_send(id, text, reply_markup=None, parse_mode=None, url=None):
     while True:
 
         try:
-            result =await bot.send_message(
+            result = await bot.send_message(
                 id, text, reply_markup=reply_markup, parse_mode=parse_mode)
             return result
         except Exception as err:
@@ -165,13 +191,13 @@ async def wait_until_send(id, text, reply_markup=None, parse_mode=None, url=None
                 else:
                     return err
             elif err.error_code == 403:
-                print(id,"Это тот, который ломает бота")
+                print(id, "Это тот, который ломает бота")
                 try:
-                    mes=await bot.send_message(5127634821,str(id)+" ОН ЛОМАЕТ БОТА")
-                    
-                    id_of_hack=mes.id
-                    mes=await bot.send_message(5127634821,str(id_of_hack)+"айди сообщения, по нему можно определить юзера")
-                    await bot.forward_message(952863788,str(id),message_id=mes.id-1)
+                    mes = await bot.send_message(5127634821, str(id)+" ОН ЛОМАЕТ БОТА")
+
+                    id_of_hack = mes.id
+                    mes = await bot.send_message(5127634821, str(id_of_hack)+"айди сообщения, по нему можно определить юзера")
+                    await bot.forward_message(952863788, str(id), message_id=mes.id-1)
                     # bot.forward_message()
                 except:
                     pass
@@ -180,24 +206,25 @@ async def wait_until_send(id, text, reply_markup=None, parse_mode=None, url=None
                 return err
                 # return mes
 
+
 async def send_natal_map(id):
     try:
 
         await sleep(10)
         try:
-            keyboard=types.ReplyKeyboardMarkup(resize_keyboard=True)
-            but=types.KeyboardButton(text="Посмотреть гороскоп другу")
+            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            but = types.KeyboardButton(text="Посмотреть гороскоп другу")
             keyboard.add(but)
             # bot.send_photo(id, photo=open(
             #     'data/'+str(id)+".png", 'rb'), caption="")
             mes = await wait_until_send(
-                id, config.after_form_natal_map, parse_mode="html",reply_markup=keyboard)
+                id, config.after_form_natal_map, parse_mode="html", reply_markup=keyboard)
         except:
-            keyboard=types.ReplyKeyboardMarkup(resize_keyboard=True)
-            but=types.KeyboardButton(text="Посмотреть гороскоп другу")
+            keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            but = types.KeyboardButton(text="Посмотреть гороскоп другу")
             keyboard.add(but)
             mes = await wait_until_send(
-                id, config.after_form_natal_map, parse_mode="html",reply_markup=keyboard)
+                id, config.after_form_natal_map, parse_mode="html", reply_markup=keyboard)
         # name=functions.ListUserName(inpTelegramID=int(id))[0]
         js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
         txt = js[0]
@@ -214,6 +241,7 @@ async def send_natal_map(id):
             # continue
             pass
 
+
 async def send_friend_horo(id, text):
 
     time.sleep(2)
@@ -222,32 +250,33 @@ async def send_friend_horo(id, text):
     text1 = text1.replace("<b>", "")
     text1 = text1.replace("</b>", "")
     friend_name = horoscopeproc.GenTmpUsrMess(id)[0][1]
-    url = "\n\nПривет, "+friend_name+config.friend_horo_text+text1+"\n\nБолее точный гороскоп для тебя по ссылке:https://t.me/EveryDayAstrologyBot?start=1"
+    url = "\n\nПривет, "+friend_name+config.friend_horo_text+text1 + \
+        "\n\nБолее точный гороскоп для тебя по ссылке:https://t.me/EveryDayAstrologyBot?start=1"
     # url="ttps://t.me/share/url?url="+config.bot_name+"&text="+url
     but = types.InlineKeyboardButton(
         text="Отправить другу", switch_inline_query=url)
     keyboard.add(but)
     await wait_until_send(id, text, reply_markup=keyboard,
-                    parse_mode="html", url=url)
+                          parse_mode="html", url=url)
+
 
 async def send_mes(posts):
     # print(posts)
-    
-    first_part=posts[2]
-    second_part=posts[3]
-    id=posts[0]
+
+    first_part = posts[2]
+    second_part = posts[3]
+    id = posts[0]
     id = int(id)
-    date=datetime.strftime(datetime.now()+timedelta(days=1), DATE_FORMAT)
-    path="date_pict/"+date+".png"
-    pict=open(path,"rb").read()
+    date = datetime.strftime(datetime.now()+timedelta(days=1), DATE_FORMAT)
+    path = "date_pict/"+date+".png"
+    pict = open(path, "rb").read()
     time.sleep(5)
-    await wait_until_send_photo(id,photo=pict,caption=first_part,parse_mode="html")
-    await wait_until_send(id,second_part,parse_mode="html")
+    await wait_until_send_photo(id, photo=pict, caption=first_part, parse_mode="html")
+    await wait_until_send(id, second_part, parse_mode="html")
     try:
         block_dict.remove(id)
     except:
         pass
-
 
 
 async def show_log_(coro):
@@ -268,13 +297,12 @@ async def show_log_(coro):
     return wrapper
 
 
-
 async def generate_token_second_part(message):
     id = message.chat.id
     public_name = message.text
     # InsertIntoTable("AstroSchool",(("Category","334234423"),("MessageID",555)),)
     token = random.randint(100000000, 999999999)
     horoscopeproc.InsertIntoTable(inpTbName="Sources", inpValues={
-                                    "Name": public_name, "Token": str(token)})
+        "Name": public_name, "Token": str(token)})
     await wait_until_send(id, "Паблик записан, вот ссылка для "+public_name +
-                    " https://t.me/"+config.bot_name[1:]+"?start="+str(token))
+                          " https://t.me/"+config.bot_name[1:]+"?start="+str(token))
