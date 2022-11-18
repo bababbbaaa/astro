@@ -151,7 +151,12 @@ def check_date(date_string : str) -> bool:
     return True
 
 def check_time(time_string : str) -> bool:
-    pass
+    try:
+        time = date_time.strptime(time_string, TIME_FORMAT)
+    except:
+        return False
+
+    return True
 
 def days_in_month(month_index: int, year_index: int) -> int:
     c = Calendar()

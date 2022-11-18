@@ -80,14 +80,23 @@ async def handle_first(call: CallbackQuery, state: FSMContext):
         await bot.send_message(author, "Пост не является рубрикой : записано")
 
         # время спрашивается
-        await NewPost.time.set()
-        await bot.send_message(author, "Напишите время отправки сообщения в формате: часы:минуты")
+        await ask_time(call, state)
+
+async def ask_time(message : CallbackQuery, state : FSMContext):
+    author = message.from_user.id
+
+    await NewPost.time.set()
+    await bot.send_message(author, "Напишите время отправки сообщения в формате: часы:минуты")
 
 
 @dp.message_handler(state=NewPost.time)
 async def ask_date(message: CallbackQuery, state: FSMContext, manually = False):
     author = message.from_user.id
 
+    if not check_time(message.text) and not manually:
+        await bot.send_message(author, "Некорректный формат записи времени, попробуйте снова")
+        await ask_time(message, state)
+        return
 
     async with state.proxy() as state_data:
         if not manually:
@@ -142,8 +151,6 @@ async def send_post(message: CallbackQuery, state: FSMContext):
 
     buttons = parse_buttons(buttons)
     markup = make_markup_by_list(buttons, post.message_id)
-
-    print(buttons)
 
     if time is not None:
         time = date_time.strptime(time, TIME_FORMAT)
