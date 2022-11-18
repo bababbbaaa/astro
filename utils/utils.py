@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-from telebot.types import *
+from re import X
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from posixpath import abspath
@@ -17,22 +17,14 @@ from aiogram.types import *
 import horoscopeproc as horoscopeproc
 from rich.console import Console
 import string
+from utils import logger
 from aiogram.types import InlineKeyboardButton
+import requests
+from datetime import datetime as date_time
 
 sys.path.append("../")
 
-
-def check_format(data: str, time_format: str):
-    try:
-        datetime.strptime(data, time_format)
-        return True
-    except Exception as e:
-        print(e)
-        return False
-
-
 console = Console()
-
 
 class InlineButton(InlineKeyboardButton):
     def __init__(self, *args, **kwargs):
@@ -80,6 +72,86 @@ def create_session():
 def markup_row(_markup: types.InlineKeyboardMarkup, array: list):
     _markup.row(*array)
 
+
+def make_markup_by_list(buttons: list, post_id : str) -> "None | aiogram.types.InlineKeyboardMarkup":
+    """
+
+    Cоздает markup из кнопок с ссылками
+
+    buttons : [(title, link)]
+    :return: aiogram.types.InlineKeyboardMarkup
+
+    """
+
+    markup = InlineKeyboardMarkup(row_width=2)
+    _session = create_session()
+
+    for elem in buttons:
+        text, link = elem
+
+        if not check_url(link):
+            continue
+
+        add_button(_session, post_id, text, link)
+
+        button = InlineButton(text=text, url=link)
+        markup.add(button)
+
+    return markup
+
+
+def parse_buttons(scheme: str) -> "None | list[tuple['title', 'link']]":
+    """
+    Переводит текст пользователя с описанием кнопок в 
+    list[tuple(title, link)], где title - надпись на кнопке, а link - ссылка, заключенная в ней
+
+    """
+
+    if scheme.lower() == 'нет':
+        return
+
+    result = list()
+
+    rows = scheme.split('\n')
+    for row in rows:
+        try:
+            title, link = row.split(' - ')
+
+            link = link.lstrip(' ').rstrip(' ')
+        except Exception as e:
+            print(e)
+            continue
+
+        result.append((title, link))
+
+    return result
+
+def check_url(url: str) -> bool:
+    try:
+        requests.get(url)
+    except:
+        return False
+
+    return True
+
+
+def check_date(date_string : str) -> bool:
+    try:
+        date = date_time.strptime(date_string, DATE_FORMAT)
+        current = date_time.now()
+
+        date = date.replace(hour=current.hour, minute=current.minute, second=current.second)
+
+        if date.timestamp() < current.timestamp():
+            return False
+
+    except:
+        return False
+
+    return True
+
+def check_time(time_string : str) -> bool:
+    pass
 
 def days_in_month(month_index: int, year_index: int) -> int:
     c = Calendar()

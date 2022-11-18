@@ -6,6 +6,7 @@ from utils import *
 from datetime import date
 from calendar import Calendar
 from asyncio import *
+from traceback import format_exc
 import config
 
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -17,6 +18,7 @@ class NewPost(StatesGroup):
     date = State()
     time = State()
     content = State()
+    buttons = State()
 
 
 months = ['Январь', "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -62,7 +64,7 @@ async def handle_first(call: CallbackQuery, state: FSMContext):
     author = call.from_user.id
     data = call.data.split(";")[1]
     date = call.data.split(';')[2]
-    
+
     await NewPost.is_heading.set()
     async with state.proxy() as state_data:
         state_data['is_heading'] = True if data == 'YES' else False
@@ -81,19 +83,31 @@ async def handle_first(call: CallbackQuery, state: FSMContext):
         await NewPost.time.set()
         await bot.send_message(author, "Напишите время отправки сообщения в формате: часы:минуты")
 
-@dp.message_handler(state = NewPost.time)
-async def ask_date(message : CallbackQuery, state : FSMContext):
+
+@dp.message_handler(state=NewPost.time)
+async def ask_date(message: CallbackQuery, state: FSMContext, manually = False):
     author = message.from_user.id
 
+
     async with state.proxy() as state_data:
-        state_data['time'] = message.text
+        if not manually:
+            # если функция была вызвана не из-за записи некорретной даты в предыдущем вопросе
+            state_data['time'] = message.text
 
     await NewPost.date.set()
     await bot.send_message(author, "Напишите дату отправку сообщения в формате день.месяц.год")
 
+
 @dp.message_handler(state=NewPost.date)
-async def ask_content(message : CallbackQuery, state : FSMContext):
+async def ask_content(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
+
+    check = check_date(message.text)
+    if not check:
+        await bot.send_message(author, "Некорректная дата, попробуйте снова")
+        await ask_date(message, state, True)
+
+        return
 
     async with state.proxy() as state_data:
         state_data['date'] = message.text
@@ -101,19 +115,35 @@ async def ask_content(message : CallbackQuery, state : FSMContext):
     await NewPost.content.set()
     await bot.send_message(author, "Введите содержимое поста, которое нужно будет отправить")
 
+
 @dp.message_handler(state=NewPost.content)
-async def send_post(message : CallbackQuery, state : FSMContext):
+async def ask_buttons(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
 
     async with state.proxy() as state_data:
         state_data['content'] = message
 
+    await NewPost.buttons.set()
+    await bot.send_message(author, "Хотите добавить кнопки в пост?\nЕсли *да*, то опишите кнопки в формате\n ``` Кнопка 1 - ссылка\n Кнопка 2 - ссылка```\n\nЕсли *нет*, напишите 'нет'", parse_mode="Markdown")
+
+
+@dp.message_handler(state=NewPost.buttons)
+async def send_post(message: CallbackQuery, state: FSMContext):
+    author = message.from_user.id
+
+    async with state.proxy() as state_data:
         is_heading = state_data['is_heading']
         date = state_data['date']
         time = state_data.get('time')
         post = state_data['content']
+        buttons = message.text
 
     await state.finish()
+
+    buttons = parse_buttons(buttons)
+    markup = make_markup_by_list(buttons, post.message_id)
+
+    print(buttons)
 
     if time is not None:
         time = date_time.strptime(time, TIME_FORMAT)
@@ -124,10 +154,9 @@ async def send_post(message : CallbackQuery, state : FSMContext):
 
     try:
         content = str()
-        markup = types.InlineKeyboardMarkup()
 
         content += '*Мета данные*:\n'
-        content += f'*Рубрика* {is_heading}\n'
+        content += f'*Рубрика* {"Да" if is_heading else "Нет"}\n'
         content += f'*Дата*: {date.year} год, {months[date.month - 1]}, {date.day}-е число\n'
         content += f'*Время*: {time.hour} *часов* {time.minute} *минут*\n'
         content += '*Вызвать* календарь: /calendar'
@@ -138,13 +167,15 @@ async def send_post(message : CallbackQuery, state : FSMContext):
         db_date = date_time.strptime(db_date, DATE_FORMAT)
 
         month = str(db_date.month)
-
         day = str(db_date.day)
+        year = str(db_date.year)
+
         if len(month) == 1:
-            month = "0"+str(month)
+            month = "0" + month
         if len(day) == 1:
-            day = "0"+str(day)
-        db_date = str(day)+"."+str(month)+"."+str(db_date.year)
+            day = "0" + day
+
+        db_date = day + "." + month + "." + year
 
         db_message = post.message_id
         db_author = post.chat.id
@@ -172,8 +203,8 @@ async def send_post(message : CallbackQuery, state : FSMContext):
         #     first_row=db_first_row,
         #     path=path)
     except Exception as e:
+        print(format_exc(e))
         await bot.send_message(author, f'```{e}```', parse_mode="Markdown")
-
 
 
 @dp.callback_query_handler(lambda call: call.data.split(';')[0] == 'POST_MENU' and call.data.split(';')[1] == 'POSTS')
