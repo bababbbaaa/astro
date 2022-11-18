@@ -1,3 +1,4 @@
+from . import general
 from . import managers
 from . import registration
 from . import static_answers

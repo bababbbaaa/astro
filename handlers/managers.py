@@ -1,5 +1,6 @@
 from controller import dp, bot
 from datetime import datetime as date_time
+from datetime import timedelta
 from databaseInteraction import *
 from aiogram.types import *
 from utils import *

@@ -48,7 +48,7 @@ async def startup(message):
         BotCommand("/start", description="Старт"),
         BotCommand("/send", description="Отправить гороскоп"),
         BotCommand("/calendar", description="Календарь постов"),
-        BotCommand("/manager_access", description="Модерирование постов")
+        BotCommand("/manager_access", description="Модерирование постов"),
     ]
 
     await bot.set_my_commands(suggesting_commands)
