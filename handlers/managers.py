@@ -1,3 +1,4 @@
+from re import A
 from controller import dp, bot
 from datetime import datetime as date_time
 from datetime import timedelta
@@ -20,6 +21,7 @@ class NewPost(StatesGroup):
     time = State()
     content = State()
     buttons = State()
+    file = State()
 
 
 months = ['Январь', "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -83,7 +85,8 @@ async def handle_first(call: CallbackQuery, state: FSMContext):
         # время спрашивается
         await ask_time(call, state)
 
-async def ask_time(message : CallbackQuery, state : FSMContext):
+
+async def ask_time(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
 
     await NewPost.time.set()
@@ -91,7 +94,7 @@ async def ask_time(message : CallbackQuery, state : FSMContext):
 
 
 @dp.message_handler(state=NewPost.time)
-async def ask_date(message: CallbackQuery, state: FSMContext, manually = False):
+async def ask_date(message: CallbackQuery, state: FSMContext, manually=False):
     author = message.from_user.id
 
     if not check_time(message.text) and not manually:
@@ -138,17 +141,55 @@ async def ask_buttons(message: CallbackQuery, state: FSMContext):
 
 
 @dp.message_handler(state=NewPost.buttons)
-async def send_post(message: CallbackQuery, state: FSMContext):
+async def ask_file(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
 
     async with state.proxy() as state_data:
+        if state_data.get('buttons'):
+            await send_post(message, state)
+
+            return
+
+        state_data['buttons'] = message.text
+
+    await bot.send_message(author, "Либо отправьте файл в формате txt, либо напишите любой текст, чтобы не использовать файл")
+
+
+@dp.message_handler(content_types=[ContentType.DOCUMENT], state='*')
+async def get_files(message: CallbackQuery, state: FSMContext):
+    await NewPost.file.set()
+    async with state.proxy() as state_data:
+        check = await check_file_state(state_data)
+
+        if not check:
+            return
+
+        await send_post(message, state)
+
+async def send_post(message: CallbackQuery, state: FSMContext):
+    author = message.from_user.id
+
+    print('file is here')
+
+    async with state.proxy() as state_data:
+        print(state_data)
+
         is_heading = state_data['is_heading']
         date = state_data['date']
         time = state_data.get('time')
         post = state_data['content']
-        buttons = message.text
+        buttons = state_data['buttons']
+
+        file = message
+        if message.text is not None:
+            file = None
 
     await state.finish()
+
+    if file is not None:
+        file_info = await bot.get_file(file.document.file_id)
+
+        print(file_info)
 
     buttons = parse_buttons(buttons)
     markup = make_markup_by_list(buttons, post.message_id)

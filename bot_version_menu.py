@@ -848,6 +848,7 @@ try:
             with open("post_files/"+name+".txt","wb") as file:
                 file.write(downloaded_file)
             path="/post_files/"+name+".txt"
+            
         send_post(buttons,author,date,time,is_heading,post,path)
         # bot.register_next_step_handler(
         #     buttons, send_post, author, date, time, is_heading,file_info, message)

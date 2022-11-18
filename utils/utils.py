@@ -21,6 +21,7 @@ from utils import logger
 from aiogram.types import InlineKeyboardButton
 import requests
 from datetime import datetime as date_time
+from aiogram.dispatcher.storage import FSMContext
 
 sys.path.append("../")
 
@@ -85,6 +86,9 @@ def make_markup_by_list(buttons: list, post_id : str) -> "None | aiogram.types.I
 
     markup = InlineKeyboardMarkup(row_width=2)
     _session = create_session()
+
+    if buttons is None:
+        return markup
 
     for elem in buttons:
         text, link = elem
@@ -154,6 +158,20 @@ def check_time(time_string : str) -> bool:
     try:
         time = date_time.strptime(time_string, TIME_FORMAT)
     except:
+        return False
+
+    return True
+
+async def check_file_state(state_data):
+    keys = ['is_heading', 'date', 'content', 'buttons']
+
+    # если менеджер все предыдущие пункты создания поста
+    for key in keys:
+        if key not in state_data:
+            return False
+            
+    # если пост не рубрика и при этом время не заполнено
+    if not state_data['is_heading'] and 'time' not in state_data:
         return False
 
     return True
