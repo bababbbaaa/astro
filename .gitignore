@@ -16,3 +16,4 @@ horoscope.db
 static/*.xlsx
 error.log
 .vscode/
+post_files/
