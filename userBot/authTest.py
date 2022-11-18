@@ -1,21 +1,21 @@
 """
-
 Один клиент бесперерывно проверяет, корректно ли работает регистрация
-После каждый регистрации блокирует бота и начинает заново
-
+После каждoй регистрации удаляет себя из базы бота и начинает заново
 """
 
 import time
 from pyrogram import Client, filters
+from pyrogram.types import Message
 from threading import Thread
-from constants import *
+from data import users
 import logger
 import json
 import os, functools
+from traceback import format_exc
 
 COMMANDS = [
     'asgard_uga_buga123', 
-    'М', 
+    'button : 1', 
     '30.10.2000', 
     '12:00', 
     'Махачкала',
@@ -24,7 +24,7 @@ COMMANDS = [
     'start'
     ]
 
-answers_file = os.path.join('..', 'config.json')
+answers_file = os.path.join('static', 'answers.json')
 answers_data = open(answers_file, 'r', encoding='utf-8').read()
 config_data = json.loads(answers_data)
 answers = config_data.get("Auth")
@@ -33,7 +33,7 @@ MANAGERS = config_data.get("MANAGERS")
 
 ANSWERS = {
     'asgard_uga_buga123' : answers["name"],
-    'М' : answers["gender"], 
+    'button : 1' : answers["gender"], 
     '30.10.2000' : answers["date"], 
     '12:00' : answers["time"], 
     'Махачкала' : answers["place"],
@@ -43,13 +43,17 @@ ANSWERS = {
 }
 
 INCORRECT_FORMAT = answers["incorrect"]
-USER, APP_ID, APP_HASH = users[2], APP_IDS[2], APP_HASHS[2]
+user = users['SharapaGorg']
+
+
+USER, APP_ID, APP_HASH = 'SharapaGorg', user[0], user[1]
 
 CHAT = 'EveryDayAstrologyBot'
 WARNING_DELAY = 30
 DELAY = 3
 
 logger.warning("Activating app...")
+logger.info(f'Current app: {USER} : [{APP_ID}, {APP_HASH}]')
 
 app = Client(USER, APP_ID, APP_HASH, workdir='sessions')
 
@@ -93,7 +97,7 @@ def authtest(coro):
         try:
             return coro(ctx, *args, **kwargs)    
         except Exception as e:
-            logger.error(f'Exception during the test: {e}')
+            logger.error(f'Exception during the test: {format_exc(e)}')
 
     return wrapper
 
@@ -102,13 +106,13 @@ retries = 0
 
 @app.on_message(filters.bot)
 @authtest
-def get_message(client, message):
+def get_message(client : Client, message : Message):
     global last_command, last_answer, last_reply, last_sent, update_checker
 
     last_reply = time.time()
     update_checker = True
 
-    if message.text is None or 'Дорог' in message.text:
+    if message.text is not None and 'Дорог' in message.text:
         return
 
     if message.text != INCORRECT_FORMAT:
@@ -123,13 +127,15 @@ def get_message(client, message):
 
     expected_answer = ANSWERS.get(last_command)
     if last_answer != expected_answer:
-        warning = f"Unexpected answer: [{last_command}] : " + last_answer.replace('\n', ' ')
-        logger.error(warning)
-        
-        error_ = f"```Message : {last_command}\nWarning : Unexpected answer\nAnswer  : {last_answer[:30]}\nExpected: {expected_answer[:30]}```"
+        expected_answer_ = expected_answer[30:] if expected_answer is not None else "BUTTONS"
+        last_command_ = last_command[30:] if last_command is not None else "BUTTONS"
 
-        warn_managers(error_, [952863788])
-        
+        warn_ = f"```Message : {last_command}\nWarning : Unexpected answer\nAnswer  : {last_command_}\nExpected: {expected_answer_}```"
+
+        logger.warning(warn_.replace('```', ''))
+
+        # warn_managers(error_, [952863788])
+
 
     if last_command == COMMANDS[-1]:
         current_command = COMMANDS[0]
@@ -138,7 +144,16 @@ def get_message(client, message):
 
     time.sleep(DELAY)
     
-    app.send_message(CHAT, current_command)
+    if 'button' in current_command:
+        button_index = int(current_command.split(' - ')[1])
+
+        try:
+            message.click(button_index)
+        except:
+            pass
+    else:
+        app.send_message(CHAT, current_command)
+
     last_sent = time.time()
 
     # check delay
@@ -158,5 +173,3 @@ logger.info(f"Sender: {USER} | Receiver : {CHAT} ")
 Thread(target=start, args=[], name="Auth-Starter").start()
 
 app.run()
-
-

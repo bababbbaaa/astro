@@ -96,19 +96,3 @@ def warning(*args, **kwargs):
 
 def error(*args, **kwargs):
     log(ERROR_COLOR, LEVEL.ERROR, 'ERROR', *args, **kwargs)
-
-
-def get_errors():
-    reg = r'\[ERROR\s*\]\s*(?P<msg>.+)$'
-
-    file = open(FILE_NAME, 'r')
-    text = file.read()
-
-    matches = re.findall(reg, text, RegexFlag.MULTILINE)
-
-    completed = []
-
-    for item in matches:
-        completed.append(item)
-
-    return str(completed[len(completed) - 1])

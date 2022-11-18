@@ -352,7 +352,6 @@ async def render_posts(call: Message | CallbackQuery, date, delete_message: bool
 
 
 async def calendar_handler(message, date: str, post: bool):
-    print('triggered')
     if date is None:
         return
 
