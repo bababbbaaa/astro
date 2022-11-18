@@ -27,12 +27,12 @@ sys.path.append("../")
 
 console = Console()
 
+
 class InlineButton(InlineKeyboardButton):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.callback_data = ''.join(random.choice(
-            string.ascii_uppercase + string.digits) for _ in range(32))
+        self.callback_data = generate_token(32)
 
     def onClick(self, coro, *args, **kwargs):
         try:
@@ -63,6 +63,10 @@ async def general_info(message: Message):
     return author, chat, me
 
 
+def generate_token(length):
+    return ''.join(random.choice(
+                string.ascii_uppercase + string.digits) for _ in range(length))
+
 def create_session():
     LINK = 'sqlite:///' + abspath(join('../horoscope.db'))
 
@@ -74,7 +78,7 @@ def markup_row(_markup: types.InlineKeyboardMarkup, array: list):
     _markup.row(*array)
 
 
-def make_markup_by_list(buttons: list, post_id : str) -> "None | aiogram.types.InlineKeyboardMarkup":
+def make_markup_by_list(buttons: list, post_id: str) -> "None | aiogram.types.InlineKeyboardMarkup":
     """
 
     Cоздает markup из кнопок с ссылками
@@ -130,6 +134,7 @@ def parse_buttons(scheme: str) -> "None | list[tuple['title', 'link']]":
 
     return result
 
+
 def check_url(url: str) -> bool:
     try:
         requests.get(url)
@@ -139,12 +144,13 @@ def check_url(url: str) -> bool:
     return True
 
 
-def check_date(date_string : str) -> bool:
+def check_date(date_string: str) -> bool:
     try:
         date = date_time.strptime(date_string, DATE_FORMAT)
         current = date_time.now()
 
-        date = date.replace(hour=current.hour, minute=current.minute, second=current.second)
+        date = date.replace(hour=current.hour,
+                            minute=current.minute, second=current.second)
 
         if date.timestamp() < current.timestamp():
             return False
@@ -154,13 +160,15 @@ def check_date(date_string : str) -> bool:
 
     return True
 
-def check_time(time_string : str) -> bool:
+
+def check_time(time_string: str) -> bool:
     try:
         time = date_time.strptime(time_string, TIME_FORMAT)
     except:
         return False
 
     return True
+
 
 async def check_file_state(state_data):
     keys = ['is_heading', 'date', 'content', 'buttons']
@@ -169,12 +177,18 @@ async def check_file_state(state_data):
     for key in keys:
         if key not in state_data:
             return False
-            
+
     # если пост не рубрика и при этом время не заполнено
     if not state_data['is_heading'] and 'time' not in state_data:
         return False
 
     return True
+
+
+def get_today():
+    today_string = date_time.strftime(date_time.today(), DATE_FORMAT)
+    return today_string
+
 
 def days_in_month(month_index: int, year_index: int) -> int:
     c = Calendar()

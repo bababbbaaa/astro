@@ -9,6 +9,7 @@ from datetime import date
 from calendar import Calendar
 from asyncio import *
 from traceback import format_exc
+from os import path
 import config
 
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -166,6 +167,7 @@ async def get_files(message: CallbackQuery, state: FSMContext):
 
         await send_post(message, state)
 
+
 async def send_post(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
 
@@ -188,8 +190,18 @@ async def send_post(message: CallbackQuery, state: FSMContext):
 
     if file is not None:
         file_info = await bot.get_file(file.document.file_id)
+        download = await bot.download_file(file_info.file_path)
+        today = get_today()
 
-        print(file_info)
+        name = f'{today}_{generate_token(9)}.txt'
+        file_path = path.join('post_files', name)
+
+        with open(file_path, "wb") as write_stream:
+            download.seek(0)
+
+            write_stream.write(download.read())
+
+    print(file_path)
 
     buttons = parse_buttons(buttons)
     markup = make_markup_by_list(buttons, post.message_id)
