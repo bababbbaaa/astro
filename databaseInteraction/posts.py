@@ -165,6 +165,6 @@ def update_post(
 def delete_post(_session, post) -> None:
     _session.delete(post)
     _session.commit()
-drop_table()
-Base.metadata.drop_all(engine)
+# drop_table()
+# Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
