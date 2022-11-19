@@ -2,8 +2,57 @@ import sys
 sys.path.append("../")
 import config
 from utils import *
-from mics import *
-from asyncio import *
+from controller import *
+
+
+
+
+@dp.message_handler(commands=["subscribe"])
+async def subscribe(message):
+    
+    id=message.chat.id
+    print(functions.GetUsers(id)[0]["SubscrType_ID"])
+    sub_type=int(functions.GetUsers(id)[0]["SubscrType_ID"])
+    try:
+        if id in delete_cache:
+            for i in delete_cache[id]:
+                bot.delete_message(id, i)
+    except:
+        pass
+    if sub_type==1 or sub_type==2:
+        print("here")
+        keyboard=types.InlineKeyboardMarkup()
+        but1=types.InlineKeyboardButton(text="Активировать подписку", callback_data="2opt;"+str(sub_type))
+        keyboard.row(but1)
+        print(config.sub_type1_text(id))
+        await wait_until_send(id, str(config.sub_type1_text(id)), reply_markup=keyboard)
+
+    if sub_type == 100:
+        keyboard = types.InlineKeyboardMarkup()
+        but1 = types.InlineKeyboardButton(
+            text="Активировать подписку", callback_data="2opt;"+str(sub_type))
+        keyboard.row(but1)
+        await wait_until_send(id, config.sub_type3_text(id), reply_markup=keyboard)
+
+    if sub_type == 3:
+        keyboard = types.InlineKeyboardMarkup()
+        # end_date = str(horoscopeproc.GetSubscrState(id)[0][2])
+        but1 = types.InlineKeyboardButton(
+            text="Продлить подписку", callback_data="2opt;"+str(sub_type))
+        but2 = types.InlineKeyboardButton(
+            text="Отказаться от подписки", callback_data="end")
+        keyboard.row(but1, but2)
+        await wait_until_send(id, config.sub_type3_text(id), reply_markup=keyboard)
+
+    if sub_type == 4 or sub_type == 5:
+        keyboard = types.InlineKeyboardMarkup()
+        but1 = types.InlineKeyboardButton(
+            text="Активировать подписку", callback_data="2opt;"+str(sub_type))
+        keyboard.row(but1)
+        await wait_until_send(id, config.sub_type4_text(id), reply_markup=keyboard)
+
+
+
 @dp.callback_query_handler(lambda call: call.data.split(";")[0] == "sub")
 async def sub_options(call):
     try:

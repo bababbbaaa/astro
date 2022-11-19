@@ -91,8 +91,7 @@ async def Get_Data():
     if len(day) < 2:
         day = "0"+day
     data = day+"."+mon+"."+year
-    return(data)
-
+    return(data) 
 
 
 block_dict=[]
@@ -828,6 +827,7 @@ try:
 
         mes=await wait_until_send(id=post.from_user.id,text="Если необходимо отправить выбранной аудитории, то перенесите файл с телеграмм айди. Если такой необходимости нет, напишите 'нет'")
         bot.register_next_step_handler(mes,ask_file,buttons,author,date,time,is_heading,post)
+    
     async def ask_file(message,buttons, author, date, time, is_heading: bool,post):
         print(message)
         if message.content_type=="text":
@@ -847,6 +847,7 @@ try:
             with open("post_files/"+name+".txt","wb") as file:
                 file.write(downloaded_file)
             path="/post_files/"+name+".txt"
+
         send_post(buttons,author,date,time,is_heading,post,path)
         # bot.register_next_step_handler(
         #     buttons, send_post, author, date, time, is_heading,file_info, message)
@@ -1235,12 +1236,12 @@ try:
     async def gen_user_mess(message):
 
         id = message.chat.id
-        handlers.horoscopeusr.RegTmpUser(id)
+        horoscopeusr.RegTmpUser(id)
         is_user_already_in_handler[id] = True
         text = message.text
         # try:
         # or functions.ListUserName(inpTelegramID=id)[0]==None:
-        if handlers.horoscopeusr.RegUser(inpTelegramID=str(id))[0] == True:
+        if horoscopeusr.RegUser(inpTelegramID=str(id))[0] == True:
             # print(horoscopeusr.RegUser(inpTelegramID=str(id))[0])
 
             await wait_until_send(id, config.inter_name)
@@ -1286,7 +1287,7 @@ try:
                 await wait_until_send(id, config.friend_block_start)
                 # elif user_info["Name"]==None:
                 #     await wait_until_send(id,"Чтобы мы могли отправить гороскоп вашему другу, нам необходимо знать его данные\nВведите имя вашего друга")
-
+# 
                 validation_circle(message)
         # except Exception as e:
             #     print(e)
@@ -1367,7 +1368,7 @@ try:
                 return 0
             block_dict.append(id)
             # or functions.ListUserName(inpTelegramID=id)[0]==None:
-            if handlers.horoscopeusr.RegUser(inpTelegramID=str(id))[0] == True:
+            if horoscopeusr.RegUser(inpTelegramID=str(id))[0] == True:
 
                 await wait_until_send(id, config.inter_name)
 
@@ -1424,14 +1425,14 @@ try:
                 else:
                     # name=functions.ListUserName(inpTelegramID=int(id))[0]
                     
-                    js = handlers.horoscopeproc.GenHourMessAll(
+                    js = horoscopeproc.GenHourMessAll(
                         11, inpTelegramID=str(id))
                     txt = js[0]
                     # print(js)
                     today_send = txt[6]
                     if functions.select_all_active_until_table(id)["days_till_end"]+1<=0:
-                        handlers.horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
-                        handlers.horoscopeusr.ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
+                        horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
+                        horoscopeusr.ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
                         subscribe(message)
                         return 0                                                                                                                                                                                                      
                     elif today_send:
@@ -1442,7 +1443,6 @@ try:
 
                         Thread(target=send_mes, args=(js[0],)).start()
 
-                        bot.register_next_step_handler(mes, main)
                     else:
                         text = ""
                         text += (js[0][2]+"\n\n"+js[0][3])
@@ -1453,9 +1453,7 @@ try:
                         Thread(target=send_mes, args=(
                             js[0],)).start()
 
-                        # bot.register_next_step_handler(mes,main)
 
-                        bot.register_next_step_handler(mes, main)
         except Exception as err:
             await wait_until_send(id, "Что-то пошло не так,попроуйте еще раз")
             try:
