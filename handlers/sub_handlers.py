@@ -283,28 +283,7 @@ async def full_back(call):
         bot.delete_message(chat_id=id, message_id=call.message.id)
     except:
         pass
-@dp.callback_query_handler(lambda call: call.data.split(";")[0] == "tim")
-async def time_select(call):
-    try:
-        id=call.from_user.id
-        data=call.data
-        data=data.split(";")
-        if data[1]=="mor":
-            functions.shedule_time_changer(inpTelegramID=id,shedule_time=int(0))
 
-
-        else:
-            functions.shedule_time_changer(inpTelegramID=id,shedule_time=int(1))
-        mes=await wait_until_send(id,"Спасибо, все данные заполнены.\n\nПожалуйста, подождите. Формируем вашу натальную карту, на основе которой будет составляться ваш персональный ежедневный гороскоп.\n\nЕсли вы ошиблись при вводе, то отправьте корректные данные в поддержку @AstroBot_support. Мы исправим информацию, чтобы для вас формировался корректный гороскоп.")
-        await wait_until_send(id,config.before_first_horo)
-        await send_natal_map(id,)
-    except:
-        try:
-            await wait_until_send(id, "Что-то пошло не так")
-        except:
-            return 0
-    finally:
-        bot.delete_message(chat_id=id,message_id=call.message.id)
 @dp.callback_query_handler(lambda call: call.data.find("2opt") != -1)
 async def opt2(call):
     try:
@@ -378,31 +357,6 @@ async def agreement(call):
     finally:
         try:
             bot.delete_message(chat_id=id, message_id=call.message.id)
-        except:
-            pass
-@dp.callback_query_handler( lambda call:call.data.find("ge1nder")!=-1)
-async def gender(call):
-    try:
-        id = call.from_user.id
-        data = call.data.split(";")
-        text = int(data[1])
-        horoscopeusr.ChUserInfo(
-        inpValue=text, inpTelegramID=str(id), inpFieldName="Gender_ID")
-        # Введите город,в котором вы родилисьы
-        message=await wait_until_send_photo(id, config.inter_date,photo=photos["inter_date"])
-
-        # bot.register_next_step_handler(
-        #     message, validation_birth, message.id)
-    except:
-        pass
-    finally:
-        # try:
-        #     bot.delete_message(id,del_id+1)
-        # except:
-        #     pass
-        try:
-
-            bot.delete_message(id,call.message.id)
         except:
             pass
 @dp.callback_query_handler(lambda call: call.data.find("net") != -1)

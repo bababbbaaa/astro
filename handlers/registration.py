@@ -45,7 +45,7 @@ async def start(message):
             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
 
     else:
-        await registartion1(id, text)
+        await registartion1(int(id), text)
 
 
 @dp.message_handler(text="full_delete_user", state="*")
@@ -194,7 +194,11 @@ async def time_select(call):
         # Удаляем сообщение, чтобы юзер не игрался с выбором времени
         await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         await wait_until_send(id, config.before_first_horo)
-        await send_mes(id,)
+        js = horoscopeproc.GenHourMessAll(
+                        11, inpTelegramID=str(id))
+        txt = js[0]
+
+        await send_mes(txt)
     except:
         try:
             await wait_until_send(id, "Что-то пошло не так")
