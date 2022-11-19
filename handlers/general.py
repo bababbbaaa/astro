@@ -1,6 +1,7 @@
 from controller import dp, bot
 from aiogram.types import *
 from aiogram.dispatcher.storage import FSMContext
+from .registration import registartion1
 from utils import *
 
 
