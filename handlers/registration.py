@@ -46,7 +46,7 @@ async def start(message):
             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
 
     else:
-        await registartion(id, text)
+        await registartion1(id, text)
 
 
 @dp.message_handler(text="full_delete_user", state="*")

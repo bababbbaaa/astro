@@ -1,7 +1,7 @@
 from controller import dp, bot
 from aiogram.types import *
 from aiogram.dispatcher.storage import FSMContext
-from .registration import registartion
+from .registration import registartion1
 from utils import *
 
 
@@ -42,7 +42,7 @@ async def main(message):
             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
 
     else:
-        await registartion(id, text)
+        await registartion1(id, text)
 
 @dp.message_handler(state="*")
 async def unknown_handler(message: Message):
