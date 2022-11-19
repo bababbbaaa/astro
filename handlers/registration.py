@@ -95,14 +95,14 @@ async def registartion1(id: int, text: str):
         keyboard.row(but1, but2)
         await wait_until_send_photo(id, config.inter_gender, photo=photos["inter_gender"], reply_markup=keyboard)
 
-    elif user["Birthday"] == None:
+    elif user["Birthday"] == None or user["Birthday"]=="":
         if functions.validation_everything(type="Birthday", text=text)[0] == True:
             horoscopeusr.ChUserInfo(
                 inpTelegramID=id, inpFieldName="Birthday", inpValue=text)
             await wait_until_send_photo(id, config.inter_city, photo=photos["inter_city"])
         else:
             await wait_until_send_photo(id, config.inter_date, photo=photos["inter_date"])
-    elif user["Birthplace"] == None:
+    elif user["Birthplace"] == None or user["Birthplace"]=="":
 
         if functions.validation_everything(type="birth_place", text=text)[0] == True:
             horoscopeusr.ChUserInfo(
@@ -110,7 +110,7 @@ async def registartion1(id: int, text: str):
             await wait_until_send_photo(id, config.inter_time, photo=photos["inter_time"])
         else:
             await wait_until_send_photo(id, config.inter_city, photo=photos["inter_city"])
-    elif user["BirthTime"] == None:
+    elif user["BirthTime"] == None or user["BirthTime"]=="":
         if functions.validation_everything(type="BirthTime", text=text)[0] == True:
 
             horoscopeusr.ChUserInfo(
