@@ -38,7 +38,6 @@ async def start(message):
                     text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
             except:
                 pass
-
         await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
 
     elif text == "/start":
@@ -46,7 +45,7 @@ async def start(message):
             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
 
     else:
-        await registartion1(id, text)
+        await registartion1(int(id), text)
 
 
 @dp.message_handler(text="full_delete_user", state="*")
@@ -126,6 +125,34 @@ async def registartion1(id: int, text: str):
         await bot.send_message(id, "Выберите в меню то, что вам необходимо")
 
 
+
+
+#---------------------------------------------
+@dp.message_handler(content_types=['text'])
+async def main(message):
+    id = message.chat.id
+    is_user_already_in_handler[id] = True
+
+    text = message.text
+    text1 = text.split()
+
+    if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
+        if len(text1) == 2:
+            try:
+                horoscopeusr.ChUserInfo(inpValue=int(
+                    text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
+            except:
+                pass
+
+        await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+
+    elif text == "/start":
+        await wait_until_send(
+            id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
+
+    else:
+        await registartion1(id, text)
+
 # ---------------------------------------------Gender enter field------------------
 
 
@@ -167,7 +194,11 @@ async def time_select(call):
         # Удаляем сообщение, чтобы юзер не игрался с выбором времени
         await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         await wait_until_send(id, config.before_first_horo)
-        await send_mes(id,)
+        js = horoscopeproc.GenHourMessAll(
+                        11, inpTelegramID=str(id))
+        txt = js[0]
+
+        await send_mes(txt)
     except:
         try:
             await wait_until_send(id, "Что-то пошло не так")

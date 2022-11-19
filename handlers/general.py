@@ -19,27 +19,31 @@ async def cancel_handler(message: Message, state: FSMContext):
     await message.reply('Действие было прервано', reply_markup=ReplyKeyboardRemove())
 
 
-@dp.message_handler(content_types=[ContentType.TEXT])
-async def main(message):
-    id = message.chat.id
-    is_user_already_in_handler[id] = True
+# @dp.message_handler(content_types=[ContentType.TEXT])
+# async def main(message):
+#     id = message.chat.id
+#     is_user_already_in_handler[id] = True
 
-    text = message.text
-    text1 = text.split()
+#     text = message.text
+#     text1 = text.split()4qbgggggg h................................................\\[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[\\\\\\\\\\\\\\\\\\\\2222222222222222444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444#     if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
+#         if len(text1) == 2:
+#             try:
+#                 horoscopeusr.ChUserInfo(inpValue=int(
+#                     text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
+#             except:
+#                 pass
 
-    if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
-        if len(text1) == 2:
-            try:
-                horoscopeusr.ChUserInfo(inpValue=int(
-                    text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
-            except:
-                pass
+#         await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
 
-        await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+#     elif text == "/start":
+#         await wait_until_send(
+#             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
 
-    elif text == "/start":
-        await wait_until_send(
-            id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
+#     else:
+#         await registartion(id, text)
 
-    else:
-        await registartion1(id, text)
+@dp.message_handler(state="*")
+async def unknown_handler(message: Message):
+    author = message.from_user.id
+
+    await bot.send_message(author, "Выберите в меню то, что вам необходимо")

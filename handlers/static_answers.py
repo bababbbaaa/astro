@@ -20,32 +20,26 @@ from controller import *
 
 
 
-@dp.message_handler(content_types=['text'])
-async def main(message):
-    id = message.chat.id
-    is_user_already_in_handler[id] = True
+@dp.message_handler(commands=["support"])
 
-    text = message.text
-    text1 = text.split()
+async def feedback(message):
+    try:
+        id = message.chat.id
 
-    if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
-        if len(text1) == 2:
-            try:
-                horoscopeusr.ChUserInfo(inpValue=int(
-                    text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
-            except:
-                pass
+        await wait_until_send(id, config.support)
 
-        await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+    except:
+        return 1
 
-    elif text == "/start":
-        await wait_until_send(
-            id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
+@dp.message_handler(commands=["change"])
 
-    # else:
-        # await registartion1(id, text)
+async def change_tim(message):
+    try:
+        id = message.chat.id
+        await wait_until_send(id, config.change_data)
 
-
+    except:
+        return 1
 
 
 

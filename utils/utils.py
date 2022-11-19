@@ -24,7 +24,7 @@ from datetime import datetime as date_time
 from aiogram.dispatcher.storage import FSMContext
 from datetime import timedelta
 sys.path.append("../")
-
+import asyncio
 console = Console()
 
 
@@ -379,7 +379,7 @@ async def send_mes(posts):
     date = datetime.strftime(datetime.now()+timedelta(days=1), DATE_FORMAT)
     path = "date_pict/"+date+".png"
     pict = open(path, "rb").read()
-    time.sleep(5)
+    await asyncio.sleep(5)
     await wait_until_send_photo(id, photo=pict, caption=first_part, parse_mode="html")
     await wait_until_send(id, second_part, parse_mode="html")
     try:
