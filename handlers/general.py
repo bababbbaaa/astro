@@ -43,9 +43,3 @@ async def main(message):
 
     else:
         await registartion1(id, text)
-
-@dp.message_handler(state="*")
-async def unknown_handler(message: Message):
-    author = message.from_user.id
-
-    await bot.send_message(author, "Выберите в меню то, что вам необходимо")
