@@ -3,14 +3,12 @@ from asyncio import *
 from controller import *
 from utils import *
 import config
-import sys
-sys.path.append("../")
+import functions
 
 # ----------------------------------------start
 
 
 @dp.message_handler(commands=['start'])
-# @show_log_
 async def start(message):
 
     text = message.text
@@ -51,6 +49,13 @@ async def start(message):
         await registartion(id, text)
 
 
+@dp.message_handler(text="full_delete_user", state="*")
+async def full_delete_user(message: Message):
+    author = message.from_user.id
+
+    functions.full_delete_user(author)
+
+    await bot.send_message(author, "Аккаунт был успешно удален")
 
 
 
@@ -118,7 +123,8 @@ async def registartion1(id: int, text: str):
         else:
             await wait_until_send_photo(id, config.inter_time, photo=photos["inter_time"])
     else:
-        await wait_until_send(id, "Выберите в меню то, что вам необходимо")
+        await bot.send_message(id, "Выберите в меню то, что вам необходимо")
+
 
 # ---------------------------------------------Gender enter field------------------
 

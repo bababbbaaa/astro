@@ -171,11 +171,7 @@ async def get_files(message: CallbackQuery, state: FSMContext):
 async def send_post(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
 
-    print('file is here')
-
     async with state.proxy() as state_data:
-        print(state_data)
-
         is_heading = state_data['is_heading']
         date = state_data['date']
         time = state_data.get('time')
@@ -200,8 +196,6 @@ async def send_post(message: CallbackQuery, state: FSMContext):
             download.seek(0)
 
             write_stream.write(download.read())
-
-    print(file_path)
 
     buttons = parse_buttons(buttons)
     markup = make_markup_by_list(buttons, post.message_id)
@@ -254,15 +248,15 @@ async def send_post(message: CallbackQuery, state: FSMContext):
         await bot.copy_message(author, author, post.message_id, reply_markup=markup)
 
         database = create_session()
-        # add_post(
-        #     database,
-        #     category=db_category,
-        #     managerId=db_author,
-        #     postId=db_message,
-        #     date=db_date,
-        #     time=db_time,
-        #     first_row=db_first_row,
-        #     path=path)
+        add_post(
+            database,
+            category=db_category,
+            managerId=db_author,
+            postId=db_message,
+            date=db_date,
+            time=db_time,
+            first_row=db_first_row,
+            path=file_path)
     except Exception as e:
         print(format_exc(e))
         await bot.send_message(author, f'```{e}```', parse_mode="Markdown")
