@@ -4,6 +4,8 @@ from controller import *
 from utils import *
 import config
 import sys
+import functions
+
 sys.path.append("../")
 
 # ----------------------------------------start
@@ -51,7 +53,16 @@ async def start(message):
         await registartion(id, text)
 
 
-@dp.message_handler(content_types=['text'])
+
+@dp.message_handler(text="full_delete_user", state="*")
+async def full_delete_user(message : Message):
+    author = message.from_user.id
+
+    functions.full_delete_user(author)
+
+    await bot.send_message(author, "Аккаунт был успешно удален")
+
+@dp.message_handler(content_types=[ContentType.TEXT])
 async def main(message):
     id = message.chat.id
     is_user_already_in_handler[id] = True
@@ -166,7 +177,7 @@ async def gender(call):
         pass
     finally:
         try:
-            bot.delete_message(id, call.message.message_id)
+            await bot.delete_message(id, call.message.message_id)
         except:
             pass
 
@@ -197,3 +208,4 @@ async def time_select(call):
             await wait_until_send(id, "Что-то пошло не так")
         except:
             return 0
+

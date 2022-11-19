@@ -171,11 +171,7 @@ async def get_files(message: CallbackQuery, state: FSMContext):
 async def send_post(message: CallbackQuery, state: FSMContext):
     author = message.from_user.id
 
-    print('file is here')
-
     async with state.proxy() as state_data:
-        print(state_data)
-
         is_heading = state_data['is_heading']
         date = state_data['date']
         time = state_data.get('time')
