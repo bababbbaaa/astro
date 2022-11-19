@@ -38,7 +38,6 @@ async def start(message):
                     text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
             except:
                 pass
-
         await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
 
     elif text == "/start":
@@ -125,6 +124,34 @@ async def registartion1(id: int, text: str):
     else:
         await bot.send_message(id, "Выберите в меню то, что вам необходимо")
 
+
+
+
+#---------------------------------------------
+@dp.message_handler(content_types=['text'])
+async def main(message):
+    id = message.chat.id
+    is_user_already_in_handler[id] = True
+
+    text = message.text
+    text1 = text.split()
+
+    if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
+        if len(text1) == 2:
+            try:
+                horoscopeusr.ChUserInfo(inpValue=int(
+                    text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
+            except:
+                pass
+
+        await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+
+    elif text == "/start":
+        await wait_until_send(
+            id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
+
+    else:
+        await registartion1(id, text)
 
 # ---------------------------------------------Gender enter field------------------
 
