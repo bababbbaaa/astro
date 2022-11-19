@@ -3,16 +3,12 @@ from asyncio import *
 from controller import *
 from utils import *
 import config
-import sys
 import functions
-
-sys.path.append("../")
 
 # ----------------------------------------start
 
 
 @dp.message_handler(commands=['start'])
-# @show_log_
 async def start(message):
 
     text = message.text
@@ -53,49 +49,13 @@ async def start(message):
         await registartion(id, text)
 
 
-
 @dp.message_handler(text="full_delete_user", state="*")
-async def full_delete_user(message : Message):
+async def full_delete_user(message: Message):
     author = message.from_user.id
 
     functions.full_delete_user(author)
 
     await bot.send_message(author, "Аккаунт был успешно удален")
-
-@dp.message_handler(content_types=[ContentType.TEXT])
-async def main(message):
-    id = message.chat.id
-    is_user_already_in_handler[id] = True
-
-    text = message.text
-    text1 = text.split()
-
-    if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
-        if len(text1) == 2:
-            try:
-                horoscopeusr.ChUserInfo(inpValue=int(
-                    text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
-            except:
-                pass
-
-        await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
-
-    # elif functions.ListUserName(inpTelegramID=id)[0] == "":
-    #     if len(text1) == 2:
-    #         try:
-    #             horoscopeusr.ChUserInfo(inpValue=int(
-    #                 text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
-    #         except:
-    #             pass
-
-    #     await wait_until_send_photo(id, config.inter_name,photo=photos["inter_name"])
-
-    elif text == "/start":
-        await wait_until_send(
-            id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
-
-    else:
-        await registartion(id, text)
 
 
 async def registartion(id: int, text: str):
@@ -159,7 +119,8 @@ async def registartion(id: int, text: str):
         else:
             await wait_until_send_photo(id, config.inter_time, photo=photos["inter_time"])
     else:
-        await wait_until_send(id, "Выберите в меню то, что вам необходимо")
+        await bot.send_message(id, "Выберите в меню то, что вам необходимо")
+
 
 # ---------------------------------------------Gender enter field------------------
 
@@ -208,4 +169,3 @@ async def time_select(call):
             await wait_until_send(id, "Что-то пошло не так")
         except:
             return 0
-
