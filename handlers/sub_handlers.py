@@ -11,7 +11,6 @@ from controller import *
 async def subscribe(message):
     
     id=message.chat.id
-    print(functions.GetUsers(id)[0]["SubscrType_ID"])
     sub_type=int(functions.GetUsers(id)[0]["SubscrType_ID"])
     try:
         if id in delete_cache:

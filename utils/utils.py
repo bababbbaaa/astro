@@ -387,6 +387,10 @@ async def send_mes(posts):
     except:
         pass
 
+def add_message_to_cache(id,message_id):
+    if id not in delete_cache:
+            delete_cache[id]=list()
+    delete_cache[id].append(message_id)
 
 async def show_log_(coro):
     @functools.wraps(coro)
