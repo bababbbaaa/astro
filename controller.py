@@ -5,7 +5,14 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 bot = Bot(token=config.TOKEN, parse_mode="html")
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
-connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
+user = 'admin1'
+password = "Sergey24@123"
+host = '185.209.29.236'
+port = 3306
+database = 'horoscope'
+connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
+            user, password, host, port, database)
+# connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
 
 engine = create_engine(
     url=connection_string

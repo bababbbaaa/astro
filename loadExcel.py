@@ -1,6 +1,6 @@
 import openpyxl
 import horoscopedb as horoscopedb
-from horoscopeproc import GetTbLen
+from .horoscopeproc import GetTbLen
 from datetime import datetime
 from horoscoperr import HandleMess
 

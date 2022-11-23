@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from horoscopeusr import CreateUsrMess
 from sqlalchemy import null
 import config
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 import horoscopeusr as horoscopeusr
 import sqlite3
 import random

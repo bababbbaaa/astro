@@ -1,5 +1,5 @@
-import horoscopedb as horoscopedb
-import horoscopeproc as horoscopeproc
+import horoscopedb
+import horoscopeproc
 from horoscoperr import HandleMess
 import random
 from datetime import date, datetime, timedelta
@@ -22,15 +22,15 @@ def RegUser(inpTelegramID):
 
    
    
-   cur.execute("SELECT Name FROM Users WHERE  TelegramID = ?" ,(inpTelegramID,))                       
+   cur.execute("SELECT Name FROM Users WHERE  TelegramID = %s" ,(inpTelegramID,))                       
    
    
    records = cur.fetchall()
 
    if len(records)>=1:        # пользователь уже зарегистрирован
       
-      HandleMess("Пользователь уже зарегистрирован, ТЛГ ID :"+inpTelegramID+", имя: "+records[0][0],1,True)
-      return((False,"Пользователь уже зарегистрирован, ТЛГ ID :"+inpTelegramID+", имя: "+records[0][0],1,))
+      HandleMess("Пользователь уже зарегистрирован, ТЛГ ID :"+str(inpTelegramID)+", имя: "+records[0][0],1,True)
+      return((False,"Пользователь уже зарегистрирован, ТЛГ ID :"+str(inpTelegramID)+", имя: "+records[0][0],1,))
 
    
    
@@ -40,13 +40,13 @@ def RegUser(inpTelegramID):
    strQuery = """INSERT INTO Users (Name,TimeZone, TelegramID,IS_Main,
                                      IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
                                      ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
-                 VALUES ('',0,?,1,
+                 VALUES ('',0,%s,1,
                          1,0,1,1,
                         (
                          SELECT date(strftime('%s','now', 'localtime')+7*86400,'unixepoch') as ActiveUntil 
                          FROM SubscrTypes
                          WHERE SubscrTypes.ID = 1
-                         ),0,?,?)
+                         ),0,%s,%s)
                 """
    cur.execute(strQuery,(inpTelegramID,0,-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
    ##cur.execute(strQuery,(inpTelegramID,0,lenMess-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю          
@@ -59,13 +59,81 @@ def RegUser(inpTelegramID):
    return((True,"",3,))
 
  except Exception as error:
-   HandleMess("Ошибка процедуры регистрации пользователя, ТГ ID: "+inpTelegramID+"\n"+str(error),3,True)
+   HandleMess("Ошибка процедуры регистрации пользователя, ТГ ID: "+str(inpTelegramID)+"\n"+str(error),3,True)
    return((False,"Ошибка процедуры регистрации, поробуйте позднее",4,))
  finally:    
     if cur:
        cur.close()
     if conn:  
        conn.close() 
+
+
+
+
+## inpValues- словарь содержащий Name,Gender_ID,Birthday,DesTime_ID,BirthTime,Birthplace
+def RegUserFull(inpTelegramID,inpValues):
+ try:
+
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return((False,"Ошибка подключения к БД",4,))
+   cur = conn.cursor()
+   # проверить существует ли главный пользователь с  таким же ТЛГ ID
+
+   
+   
+   cur.execute("SELECT Name FROM Users WHERE  TelegramID = %s" ,(inpTelegramID,))                       
+   
+   
+   records = cur.fetchall()
+
+   if len(records)>=1:        # пользователь уже зарегистрирован
+      
+      HandleMess("Пользователь уже зарегистрирован, ТЛГ ID :"+str(inpTelegramID)+", имя: "+records[0][0],1,True)
+      return((False,"Пользователь уже зарегистрирован, ТЛГ ID :"+str(inpTelegramID)+", имя: "+records[0][0],1,))
+
+   
+   
+   # такого пользователя ранее не было - просто добавить гл.
+   lenMess = horoscopeproc.GetTbLen(conn,"MessBodies")
+   
+   strQuery = """INSERT INTO Users (Name,Gender_ID,Birthday,DesTime_ID,BirthTime,Birthplace,
+                                    TimeZone, TelegramID,IS_Main,
+                                     IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
+                                     RegDate,RegDateFin,
+                                     ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
+                 VALUES (%s,%s,%s,%s,%s,%s,
+                         0,%s,1,
+                         1,0,1,1,
+                         NOW(), NOW(),
+                         DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY) ,0,0,-1)
+                """
+   cur.execute(strQuery,(inpValues['Name'],inpValues['Gender_ID'],inpValues['Birthday'],inpValues['DesTime_ID'],inpValues['BirthTime'],inpValues['Birthplace'],
+                         inpTelegramID,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
+   
+   ##cur.execute(strQuery,(inpTelegramID,0,lenMess-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю          
+   conn.commit()
+   
+##   newID = cur.lastrowid      #  добавить пользователю список его собщений - из таблицы MessBodies
+##   if not CreateUsrMess(conn,newID,0,lenMess):  # регистрация будет вызываться отдельно
+##      return((False,"",2,))
+##   else:
+   return((True,"",3,))
+
+ except Exception as error:
+   HandleMess("Ошибка процедуры регистрации пользователя, ТГ ID: "+str(inpTelegramID)+"\n"+str(error),3,True)
+   return((False,"Ошибка процедуры регистрации, поробуйте позднее",4,))
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close() 
+
+
+
+
+
 
 ## пользователю с UserID  добавить список сообщений, просто перемешанных номеров от begMess до endMess по 4 колонкам
 def CreateUsrMess(conn,UserID,begMess,endMess):
@@ -84,7 +152,7 @@ def CreateUsrMess(conn,UserID,begMess,endMess):
       reslist.append((UserID,lst_1[i],lst_2[i],lst_3[i],lst_4[i],)) 
    
   
-   cur.executemany("INSERT INTO UserMess (User_ID,Col_1,Col_2,Col_3,Col_4) VALUES(?, ?, ?, ?, ?)", reslist)
+   cur.executemany("INSERT INTO UserMess (User_ID,Col_1,Col_2,Col_3,Col_4) VALUES(%s, %s, %s, %s, %s)", reslist)
    conn.commit()
    return True
  except Exception as error:
@@ -105,34 +173,34 @@ def GenNewUserMess(inpTelegramID):
    cur = conn.cursor()
    
 
-   cur.execute("SELECT ID FROM Users WHERE  TelegramID = ?" ,(inpTelegramID,))                       
+   cur.execute("SELECT ID FROM Users WHERE  TelegramID = %s" ,(inpTelegramID,))                       
    records = cur.fetchall()
    
    if len(records)==0:        # пользователь не зарегистрирован      
-      HandleMess("Пользователь не зарегистрирован, ТЛГ ID :"+inpTelegramID,True)
-      return((False,"Пользователь не зарегистрирован, ТЛГ ID :"+inpTelegramID))
+      HandleMess("Пользователь не зарегистрирован, ТЛГ ID :"+str(inpTelegramID),True)
+      return((False,"Пользователь не зарегистрирован, ТЛГ ID :"+str(inpTelegramID)))
    CurrID = records[0][0]
 
    
    # если у пользователя есть сообщения - ему не генерировать
-   cur.execute("SELECT ID FROM UserMess WHERE  User_ID = ?" ,(CurrID,))
+   cur.execute("SELECT ID FROM UserMess WHERE  User_ID = %s" ,(CurrID,))
    records = cur.fetchall()
    
+   
    if len(records)!=0:
-      return((True,"У пользователя уже есть сообщения , ТЛГ ID :"+inpTelegramID,3,))       
+      return((True,"У пользователя уже есть сообщения , ТЛГ ID :"+str(inpTelegramID),3,))       
              
    lenMess = horoscopeproc.GetTbLen(conn,"MessBodies") 
    if not CreateUsrMess(conn,CurrID,0,lenMess):  # регистрация будет вызываться отдельно
       return((False,"",2,))
-   else:  
-      return((True,"",3,))
-    
-   cur.execute("UPDATE Users SET IntrvMessEnd = ? WHERE ID = ? ",(lenMess-1,CurrID,))
- 
-   
+  
+   cur.execute("UPDATE Users SET IntrvMessEnd = %s WHERE ID = %s ",(lenMess-1,CurrID,))   
+   conn.commit() 
+   return((True,"",3,))
+  
 
  except Exception as error:
-   HandleMess("Ошибка процедуры регистрации пользователя, ТГ ID: "+inpTelegramID+"\n"+str(error),3,True)
+   HandleMess("Ошибка процедуры регистрации пользователя, ТГ ID: "+str(inpTelegramID)+"\n"+str(error),3,True)
    return((False,"Ошибка процедуры регистрации, поробуйте позднее",4,))
  finally:    
     if cur:
@@ -156,7 +224,7 @@ def GenAllUsrMess():
    lastID  = lenMess-1
    
    cur = conn.cursor()
-   cur.execute("SELECT ID,IntrvMessEnd FROM Users WHERE IntrvMessEnd < ? ",(lastID,) )
+   cur.execute("SELECT ID,IntrvMessEnd FROM Users WHERE IntrvMessEnd < %s ",(lastID,) )
 
    usrList = list()   
    records = cur.fetchall()
@@ -167,7 +235,9 @@ def GenAllUsrMess():
     
    for row in records:
       currID  = row[0]
-      currEND = row[1]
+      currEND = row[1]  # -1 тоже самое что 199 (была ошибка один день, не было соммита)
+      if currEND==-1:
+         currEND = 199 
       #print(str(currID)+" "+str(currEND))
 ##      if currEND >= lastID:
 ##        continue
@@ -176,11 +246,13 @@ def GenAllUsrMess():
         return False
       usrList.append((lastID,currID,))
 ##   print(usrList)   
-   cur.executemany("UPDATE Users SET IntrvMessEnd = ? WHERE ID = ? ",usrList)  
+   cur.executemany("UPDATE Users SET IntrvMessEnd = %s WHERE ID = %s ",usrList)  
 ##    cur.execute("UPDATE Users SET IntrvMessEnd = ? WHERE ID = ?  " ,(lastID,currID,))
    conn.commit()
 
-    
+
+
+
 
    return True
  except Exception as error:
@@ -233,14 +305,14 @@ def ChUserInfo(inpTelegramID,inpFieldName, inpValue):
      HandleMess("Ошибка имени поля для изменения Users : "+inpFieldName,3,True)
      return(False,)
 
-  cur.execute("SELECT 1 FROM Users WHERE TelegramID = ? " ,(inpTelegramID,))
+  cur.execute("SELECT 1 FROM Users WHERE TelegramID = %s " ,(inpTelegramID,))
   records = cur.fetchall()
   
   if len(records) != 1:  
     HandleMess("Не зарегистрирован  ТЛГ ID: "+inpTelegramID ,3,True)
     return(False,"Не зарегистрирован  ТЛГ ID: "+inpTelegramID,)
 
-  cur.execute("UPDATE Users SET "+inpFieldName+" = ? WHERE TelegramID = ?  " ,(inpValue,inpTelegramID,))
+  cur.execute("UPDATE Users SET "+inpFieldName+" = %s WHERE TelegramID = %s  " ,(inpValue,inpTelegramID,))
 
   conn.commit()
   return(True,)
@@ -260,7 +332,7 @@ def ChUserInfo(inpTelegramID,inpFieldName, inpValue):
 def ListUserName(conn,inpTelegramID):
  try:
   cur = conn.cursor()   
-  cur.execute("SELECT Name FROM Users WHERE (TelegramID = ?) ORDER BY IS_Main DESC" ,(inpTelegramID,))
+  cur.execute("SELECT Name FROM Users WHERE (TelegramID = %s) ORDER BY IS_Main DESC" ,(inpTelegramID,))
   res = list()
   records = cur.fetchall()
   for row in records:
@@ -286,7 +358,7 @@ def RegTmpUser(inpTelegramID):
    cur = conn.cursor()
    
    cur.execute( """INSERT INTO UsersTmp (TelegramID)
-                 VALUES (?)""",(inpTelegramID,));
+                 VALUES (%s)""",(inpTelegramID,));
    
    conn.commit()
    return((True,"",3,))
@@ -312,7 +384,7 @@ def DelTmpUser(inpTelegramID=None):
    if inpTelegramID == None:
       cur.execute("DELETE FROM UsersTmp");                        
    else:    
-      cur.execute("DELETE FROM UsersTmp WHERE  TelegramID = ?" ,(inpTelegramID,));                       
+      cur.execute("DELETE FROM UsersTmp WHERE  TelegramID = %s" ,(inpTelegramID,));                       
    conn.commit()
    return((True,"",3,))
  except Exception as error:
@@ -334,7 +406,7 @@ def GetTmpUserInfo(inpTelegramID):
        return((False,"Ошибка подключения к БД",4,))
    cur = conn.cursor()
    
-   cur.execute("SELECT  TelegramID,Name,Gender_ID,Birthday FROM UsersTmp WHERE  TelegramID = ? ORDER BY ID DESC LIMIT 1" ,(inpTelegramID,));                       
+   cur.execute("SELECT  TelegramID,Name,Gender_ID,Birthday FROM UsersTmp WHERE  TelegramID = %s ORDER BY ID DESC LIMIT 1" ,(inpTelegramID,));                       
    records = cur.fetchall()
    if len(records)>0:
       row = records[0]
@@ -376,7 +448,7 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
      HandleMess("Ошибка имени поля для изменения UsersTmp : "+inpFieldName,3,True)
      return((False,))
 
-  cur.execute("SELECT 1 FROM UsersTmp WHERE TelegramID = ? " ,(inpTelegramID,))
+  cur.execute("SELECT 1 FROM UsersTmp WHERE TelegramID = %s " ,(inpTelegramID,))
   records = cur.fetchall()
   
   if len(records) == 0:  
@@ -384,7 +456,7 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
     return((False,"Не зарегистрирован временный ТЛГ ID: "+inpTelegramID,))
 
 
-  cur.execute("UPDATE UsersTmp SET "+inpFieldName+" = ? WHERE ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = ?)", (inpValue,inpTelegramID,))
+  cur.execute("UPDATE UsersTmp SET "+inpFieldName+" = %s WHERE ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = %s)", (inpValue,inpTelegramID,))
    
 
   conn.commit()
@@ -398,16 +470,22 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
     if conn:  
        conn.close() 
 
-  
-    
+
+
+
+##inpValues = {"Name":"Sasa","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
+##RegUserFull(999999999,inpValues)
+##print(GenNewUserMess(999999999))
+
+
 ##conn = horoscopedb.ConnectDb()
-##print(RegUser('123'))
+##print(RegUser(123456789))
 ##CreateUsrMess(conn,1,0,10)
 ##print(ChUserInfo("123","Source_ID", 3) )
 ##print(ChUserInfo(conn,"1234","sasa","DesTime_id", "10") )
 
 ##old = datetime.now()
-##print(GenNewUserMess("636215588"))
+##print(GenNewUserMess(123456789))
 ##print("tot="+str(datetime.now()-old))
        
 
@@ -419,3 +497,4 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 ##print(GenAllUsrMess())
 ##print(datetime.datetime.now())
 
+##

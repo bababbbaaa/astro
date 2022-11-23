@@ -15,7 +15,7 @@ from datetime import datetime as date_time
 from asyncio import *
 from rich.console import Console
 
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 
 from utils import *
 

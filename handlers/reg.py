@@ -237,10 +237,21 @@ async def end_registartion(message: CallbackQuery, state: FSMContext,destime_id)
         birth_time=state_data["birth_time"]
         birth_place=state_data["birth_place"]
         horoscopeusr.ChUserInfo(inpTelegramID=id, inpFieldName="Name", inpValue=name)
+        time.sleep(1)
         horoscopeusr.ChUserInfo(inpTelegramID=id, inpFieldName="Gender_ID", inpValue=gender)
+        time.sleep(1)
+
         horoscopeusr.ChUserInfo(inpTelegramID=id, inpFieldName="Birthday", inpValue=birth_day)
+        time.sleep(1)
+
         horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="DesTime_ID",inpValue=destime_id)
+
+        time.sleep(1)
+
         horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="BirthTime",inpValue=birth_time)
+
+        time.sleep(1)
+
         horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="Birthplace",inpValue=birth_place)
 
 

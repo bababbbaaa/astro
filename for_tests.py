@@ -240,7 +240,7 @@
 # import datetime
 # # print(datetime.datetime.strftime(datetime.datetime.now(),"%H:%M"))
 import horoscopeusr as horoscopeusr
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 import functions
 # print(horoscopeproc.GenHourMessAll(11,"245188029"))1358174961
 import time

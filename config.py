@@ -167,3 +167,6 @@ offert='''<a href="https://docs.google.com/document/d/1jwpcUW2Dj2nPr7M_gsBoXmwuX
 <a href="https://docs.google.com/document/d/1e2BED-8saLTsVIc0_fyMMKn8i5xnqwcF_k9oY_BHkJw/edit)">Соглашение на обработку рекуррентных платежей.</a>
 
 <a href="https://docs.google.com/document/d/1zGaul1srvBDIy1OnaoggKnXfmtDrP5UOSyKSjHYRLVU"> Оферта оказания услуг</a> '''
+
+#CREATE USER 'test_user'@'localhost' IDENTIFIED BY 'password';
+

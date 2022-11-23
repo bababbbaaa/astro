@@ -10,11 +10,10 @@ from asyncio import *
 import time
 import sys
 from controller import *
-import horoscopeproc as horoscopeproc
-import horoscopeusr as horoscopeusr
+import horoscopeusr
 import random
 from aiogram.types import *
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 from rich.console import Console
 import string
 from utils import logger

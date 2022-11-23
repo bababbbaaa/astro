@@ -3,7 +3,7 @@ import schedule
 from threading import Thread
 import time
 from for_payments import Get_Data
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 from datetime import datetime, date, timedelta
 import config
 import telebot
