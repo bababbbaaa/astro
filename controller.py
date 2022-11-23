@@ -5,8 +5,8 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 bot = Bot(token=config.TOKEN, parse_mode="html")
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
-user = 'admin1'
-password = "Sergey24@123"
+user = 'admin2'
+password = "Sergey123"
 host = '185.209.29.236'
 port = 3306
 database = 'horoscope'

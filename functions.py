@@ -629,7 +629,7 @@ def ListUserName(inpTelegramID):
     conn=horoscopedb.ConnectDb()
     try:
         cur = conn.cursor()   
-        cur.execute("SELECT Name FROM Users WHERE (TelegramID = ?) ORDER BY IS_Main DESC" ,(inpTelegramID,))
+        cur.execute("SELECT Name FROM Users WHERE TelegramID = %s ORDER BY IS_Main DESC" ,(inpTelegramID,))
         res = list()
         records = cur.fetchall()
         for row in records:
@@ -644,20 +644,13 @@ def ListUserName(inpTelegramID):
             cur.close()
             conn.commit()
 
-def count_payments():
-    conn=sqlite3.connect('payments.db')
-    cur=conn.cursor()
-    cur.execute("SELECT count(*) FROM Payments")
-    length=cur.fetchall()
-    cur.close()
-    conn.close()
-    return int(length[0][0])+10000
-print(count_payments())
+
+
 def GetUsers(inpTelegramID):
     try:
         conn=horoscopedb.ConnectDb()
         cur = conn.cursor()   
-        cur.execute("SELECT * FROM Users WHERE (TelegramID = ?)" ,(str(inpTelegramID),))
+        cur.execute("SELECT * FROM Users WHERE (TelegramID = %s)" ,(str(inpTelegramID),))
         res = list()
         records = cur.fetchall()
         cur.close()

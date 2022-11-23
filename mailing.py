@@ -480,13 +480,13 @@ def service_message() -> None:
                     # ChUserInfo(inpTelegramID=id,inpFieldName="ActiveUntil",inpValue=end_for_users)
 
                     # ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=3)
-                    # add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(functions.count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
+                    # add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
 
                     # Thread(target=wait_until_send,args=(id,"Ваша подписка была продлена, спасибо")).start()
                     # pass
                     # set_field(id=int(recurent_subs[i].TelegramID),end=end)
 
-                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(functions.count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
+                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
 
                     # Thread(target=wait_until_send,args=(id,"Ваша подписка была продлена, спасибо")).start()
                 else:
@@ -496,7 +496,7 @@ def service_message() -> None:
                     # url="url"
                     # delete_sub(id)
                     # ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
-                    # add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(functions.count_payments()),active_until=1,days=30,payed=False,amount=69,link="mailing error",)
+                    # add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until=1,days=30,payed=False,amount=69,link="mailing error",)
                     end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
                     Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],end_time)).start()
                     # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)

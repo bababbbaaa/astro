@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from requests import request
 import requests
 from databaseInteraction.payments import add_payment
+from utils import *
 
 import functions
 
@@ -111,7 +112,7 @@ def generate_payment_link_recurse(
     signature = calculate_signature(
         merchant_login,
         cost,
-        functions.count_payments(),
+        count_payments(),
         merchant_password_1,
         "Shp_days="+str(days),
         "Shp_id="+str(number),
@@ -121,7 +122,7 @@ def generate_payment_link_recurse(
     data = {
         'MerchantLogin': merchant_login,
         'OutSum': cost,
-        'InvoiceID': functions.count_payments(),
+        'InvoiceID': count_payments(),
         'Description': description,
         'SignatureValue': signature,
         'IsTest': is_test,
@@ -142,7 +143,7 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
     is_test = 0,
     tg_id=0):
     url="https://auth.robokassa.ru/Merchant/Recurring"
-    number1=functions.count_payments()
+    number1=count_payments()
     signature = calculate_signature(
         merchant_login,
         cost,

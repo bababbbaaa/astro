@@ -41,13 +41,11 @@ def RegUser(inpTelegramID):
                                      IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
                                      ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
                  VALUES ('',0,%s,1,
-                         1,0,1,1,
-                        (
-                         SELECT date(strftime('%s','now', 'localtime')+7*86400,'unixepoch') as ActiveUntil 
-                         FROM SubscrTypes
-                         WHERE SubscrTypes.ID = 1
-                         ),0,%s,%s)
+                         1,0,1,1,                         
+                         NOW(),DATE_SUB(NOW(), INTERVAL 100 YEAR),%s,%s)
                 """
+
+##   NOW(),DATE_SUB(NOW(), INTERVAL 300 YEAR),%s,%s)*/
    cur.execute(strQuery,(inpTelegramID,0,-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
    ##cur.execute(strQuery,(inpTelegramID,0,lenMess-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю          
    conn.commit()
@@ -88,27 +86,42 @@ def RegUserFull(inpTelegramID,inpValues):
    
    records = cur.fetchall()
 
-   if len(records)>=1:        # пользователь уже зарегистрирован
+   if len(records)==0:        # пользователь уже зарегистрирован
       
-      HandleMess("Пользователь уже зарегистрирован, ТЛГ ID :"+str(inpTelegramID)+", имя: "+records[0][0],1,True)
-      return((False,"Пользователь уже зарегистрирован, ТЛГ ID :"+str(inpTelegramID)+", имя: "+records[0][0],1,))
+      HandleMess("Пользователь не зарегистрирован, ТЛГ ID :"+str(inpTelegramID),True)
+      return((False,"Пользователь не  зарегистрирован, ТЛГ ID :"+str(inpTelegramID)))
 
    
    
    # такого пользователя ранее не было - просто добавить гл.
    lenMess = horoscopeproc.GetTbLen(conn,"MessBodies")
    
-   strQuery = """INSERT INTO Users (Name,Gender_ID,Birthday,DesTime_ID,BirthTime,Birthplace,
-                                    TimeZone, TelegramID,IS_Main,
-                                     IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
-                                     RegDate,RegDateFin,
-                                     ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
-                 VALUES (%s,%s,%s,%s,%s,%s,
-                         0,%s,1,
-                         1,0,1,1,
-                         NOW(), NOW(),
-                         DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY) ,0,0,-1)
+##   strQuery = """INSERT INTO Users (Name,Gender_ID,Birthday,DesTime_ID,BirthTime,Birthplace,
+##                                    TimeZone, TelegramID,IS_Main,
+##                                     IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
+##                                     RegDate,RegDateFin,
+##                                     ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
+##                 VALUES (%s,%s,%s,%s,%s,%s,
+##                         0,%s,1,
+##                         1,0,1,1,
+##                         NOW(), NOW(),
+##                         DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY) ,0,0,-1)
+##                """
+
+   strQuery = """UPDATE  Users SET Name = %s,
+                                     Gender_ID = %s,
+                                     Birthday = %s,
+                                     DesTime_ID = %s,
+                                     BirthTime = %s,
+                                     Birthplace = %s,                                                                    
+                                     RegDate = NOW(),
+                                     RegDateFin = NOW(),
+                                     ActiveUntil = DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY)                 
+                 WHERE TelegramID = %s        
                 """
+
+
+   
    cur.execute(strQuery,(inpValues['Name'],inpValues['Gender_ID'],inpValues['Birthday'],inpValues['DesTime_ID'],inpValues['BirthTime'],inpValues['Birthplace'],
                          inpTelegramID,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
    
@@ -474,10 +487,8 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 
 
 ##inpValues = {"Name":"Sasa","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
-##RegUserFull(999999999,inpValues)
-##print(GenNewUserMess(999999999))
-
-
+##RegUserFull(121212121299,inpValues)
+##print(GenNewUserMess(121212121212))
 ##conn = horoscopedb.ConnectDb()
 ##print(RegUser(123456789))
 ##CreateUsrMess(conn,1,0,10)
@@ -497,4 +508,6 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 ##print(GenAllUsrMess())
 ##print(datetime.datetime.now())
 
-##
+##print(RegUser(121212121237))
+##print(RegTmpUser(121212121212))
+##print(ChUserInfo(121212121212,"Source_ID", 5) )

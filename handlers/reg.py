@@ -236,24 +236,15 @@ async def end_registartion(message: CallbackQuery, state: FSMContext,destime_id)
         birth_day=state_data["birth_day"]
         birth_time=state_data["birth_time"]
         birth_place=state_data["birth_place"]
-        horoscopeusr.ChUserInfo(inpTelegramID=id, inpFieldName="Name", inpValue=name)
-        time.sleep(1)
-        horoscopeusr.ChUserInfo(inpTelegramID=id, inpFieldName="Gender_ID", inpValue=gender)
-        time.sleep(1)
-
-        horoscopeusr.ChUserInfo(inpTelegramID=id, inpFieldName="Birthday", inpValue=birth_day)
-        time.sleep(1)
-
-        horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="DesTime_ID",inpValue=destime_id)
-
-        time.sleep(1)
-
-        horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="BirthTime",inpValue=birth_time)
-
-        time.sleep(1)
-
-        horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="Birthplace",inpValue=birth_place)
-
+        kwarks={
+            "Name":name,
+            "Gender_ID":gender,
+            "Birthday":birth_day,
+            "DesTime_ID":destime_id,
+            "BirthTime":birth_time,
+            "Birthplace":birth_place
+        }
+        horoscopeusr.RegUserFull(inpTelegramID=id,inpValues=kwarks)
 
         horoscopeusr.GenNewUserMess(str(id))
     # Удаляем сообщение, чтобы юзер не игрался с выбором времени

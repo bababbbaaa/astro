@@ -22,9 +22,9 @@ def ConnectDb(Payment = False):
 def ConnectMySql(): 
  try:
     
-    conn =  connect(host = "localhost",
-                    user = "root",
-                    password="12345",
+    conn =  connect(host = "185.209.29.236",
+                    user = "admin2",
+                    password="Sergey123",
                     db = "horoscope")
     return(conn)
  except Exception as error:

@@ -78,18 +78,18 @@
 # # # # #             break
 # # # # #     except Exception as err:
 # # # # # #         # print(err)
-# # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(functions.count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
+# # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
 # # # # # #         continue
 # # # # # pay=for_payments.get_money_for_sub(id=int(10332),amount=69,days=30,test=0)
-# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(functions.count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
+# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
 # # # # # # print(pay.text)
 # # # # # pay=for_payments.get_money_for_sub(id=int(10359),amount=69,days=30,test=0)
 # # # # # print(pay.text)
-# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(functions.count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
+# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
 
 # # # # # pay=for_payments.get_money_for_sub(id=int(10378),amount=69,days=30,test=0)
 # # # # # print(pay.text)
-# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(functions.count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
+# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
 # # # # LOGIN="Astrobot"
 # # # # PASSWORD_FOR_ROBOKASSA="oLy0Vda8EbnP8wlR5Xi1"
 # # # # # idempotence_key = str(uuid.uuid4())
@@ -99,14 +99,14 @@
 # # # # TEST_PASSWORD="ygAdIPC6I1c1qxER1Iu8"
 # # # # # pay=for_payments.get_money_for_sub(id=int(10853),amount=69,days=30,test=0,tg_id=)
 # # # # # # print(pay.text)
-# # # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(functions.count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
+# # # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
 
 # # # # # pay=for_payments.get_money_for_sub(id=int(10210),amount=69,days=30,test=0)
 # # # # # print(pay.text)
-# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(functions.count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
+# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
 
 # # # # import robokassa
-# # # # # add_payment(sub_type=3,telegram_id=2,payment_id=str(functions.count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
+# # # # # add_payment(sub_type=3,telegram_id=2,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
 # # # # x=robokassa.earn_recurrent_pay("Astrobot",PASSWORD_FOR_ROBOKASSA,cost=69,number=10853,description="Оплата подписки на астробота",is_test=0,days=30,tg_id=5088332038)
 # # # # print(x)
 # # # # pass 
@@ -245,21 +245,26 @@ import functions
 # print(horoscopeproc.GenHourMessAll(11,"245188029"))1358174961
 import time
 import functions
-time1=time.time()
-x=functions.GetUsers("952863788")
-time2=time.time()
-print(time2-time1)
-# print(x)
-time1=time.time()
-x=functions.RegMainUser("121313131")
-time2=time.time()
-print(time2-time1)
-time1=time.time()
-x=functions.GetUsers("1358174961")
-time2=time.time()
-print(time2-time1)
-# print(x)
-time1=time.time()
-x=horoscopeproc.GenHourMessAll(11,"1358174961")
-time2=time.time()
-print(time2-time1)
+# time1=time.time()
+# x=functions.GetUsers("952863788")
+# time2=time.time()
+# print(time2-time1)
+# # print(x)
+# time1=time.time()
+# x=functions.RegMainUser("121313131")
+# time2=time.time()
+# print(time2-time1)
+# time1=time.time()
+# x=functions.GetUsers("1358174961")
+# time2=time.time()
+# print(time2-time1)
+# # print(x)
+# time1=time.time()
+# x=horoscopeproc.GenHourMessAll(11,"1358174961")
+# time2=time.time()
+# print(time2-time1)
+import horoscopedb
+conn=horoscopedb.ConnectDb()
+cur=conn.cursor()
+res=cur.execute("SELECT * FROM Users")
+print(res)

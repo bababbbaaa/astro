@@ -19,7 +19,7 @@ from telebot import types
 import config
 from config import *
 import telebot
-
+from utils import *
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 def wait_until_send(id, text, reply_markup=None, parse_mode=None, url=None):
             while True:
@@ -315,7 +315,7 @@ def get_payment():
         #     ChUserInfo(inpTelegramID=id,inpFieldName="ActiveUntil",inpValue=end_for_users)
 
         #     ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=3)
-        #     add_payment(sub_type=3,telegram_id=id,payment_id=str(functions.count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
+        #     add_payment(sub_type=3,telegram_id=id,payment_id=str(count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
 
         #     wait_until_send(id,"Ваша подписка была продлена, спасибо")        # username = request.args.get('username')
         # except Exception as err:
@@ -333,7 +333,7 @@ def get_payment():
             else:
                 x=InvId
             add_sub(id=id,start=Get_Data(),end=end,pay_id=x,type=price)
-            add_payment(sub_type=3,telegram_id=id,payment_id=str(functions.count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
+            add_payment(sub_type=3,telegram_id=id,payment_id=str(count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
             text="Ваша подписка успешно продлена"
         else:
             add_sub(id=id,start=Get_Data(),end=end,pay_id=InvId,type=price)
@@ -355,7 +355,7 @@ def get_payment():
         except Exception as err :
             console.log(err)
             logger.error(err)
-            add_payment(sub_type=3,telegram_id=str(id),active_until=end,days=days,payed=True,amount=price,payment_id=functions.count_payments(),link="error")
+            add_payment(sub_type=3,telegram_id=str(id),active_until=end,days=days,payed=True,amount=price,payment_id=count_payments(),link="error")
             print(err)
             # wait_until_send(id,"Что-то пошло не так, попробуйте оплатить снова или напишите в поддержку")
             return "bad sign"
