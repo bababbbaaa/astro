@@ -67,6 +67,26 @@ def generate_token(length):
     return ''.join(random.choice(
                 string.ascii_uppercase + string.digits) for _ in range(length))
 
+def alchemy_to_dict(alchemy_object):
+    ignore_keys= ['_sa_instance_state']
+    result = dict()
+
+    for key in vars(alchemy_object):
+        if key in ignore_keys:
+            continue
+
+        result[key] = getattr(alchemy_object, key)
+
+    return result
+
+def alchemy_list_convert(objects : list) -> list:
+    result = list()
+
+    for object in objects:
+        result.append(alchemy_to_dict(object))
+
+    return result
+
 def create_session():
     user = 'admin2'
     password = "Sergey123"
