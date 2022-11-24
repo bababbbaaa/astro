@@ -1,22 +1,29 @@
 from aiogram import *
-import config
-from databaseInteraction import *
+from sqlalchemy import *
+from sqlalchemy.ext.declarative import declarative_base
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from sqlalchemy.orm import sessionmaker
+import config
 
 bot = Bot(token=config.TOKEN, parse_mode="html")
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
+
 user = 'admin2'
 password = "Sergey123"
 host = '185.209.29.236'
 port = 3306
 database = 'horoscope'
 connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
-            user, password, host, port, database)
-# connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
+    user, password, host, port, database)
+
+Base = declarative_base()
+
 
 engine = create_engine(
     url=connection_string
 )
+
+Session = sessionmaker(engine)()
 
 block_dict = list()
 delete_cache = dict()

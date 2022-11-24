@@ -1,33 +1,18 @@
 from datetime import datetime
 from sqlalchemy import *
-from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy.orm import sessionmaker
-from posixpath import abspath
-from os.path import join
+from controller import Base, engine
 
-user = 'admin2'
-password = "Sergey123"
-host = '185.209.29.236'
-port = 3306
-database = 'horoscope'
-connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
-            user, password, host, port, database)
-# connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
-
-engine = create_engine(
-    url=connection_string
-)
 Session = sessionmaker(engine)()
-
-Base = declarative_base()
 
 DATE_FORMAT = '%d.%m.%Y'
 TIME_FORMAT = '%H:%M'
 
+
 class Post(Base):
     """
-    
+
     Модель запланированный пост в базе данных
     ID : int
     category : str
@@ -41,28 +26,30 @@ class Post(Base):
 
     __tablename__ = 'Posts'
 
-    ID = Column(Integer, nullable=False, unique=True, primary_key=True)
+    ID = Column(Integer, nullable=False, primary_key=True, autoincrement=True)
     Category = Column(String, nullable=False)
     Time = Column(String, nullable=False)
     Date = Column(Integer, nullable=False)
     ManagerID = Column(String, nullable=False)
     PostID = Column(String, nullable=False)
     FirstRow = Column(String, nullable=False)
-    FilePath=Column(String,)
+    FilePath = Column(String,)
+
+
 def drop_table():
     Post.__table__.drop(engine)
 
-def add_post(
-    _session, 
-    category : str, 
-    managerId : int, 
-    postId : int, 
-    date : str, 
-    first_row : str,
-    path:str,
-    time : str = None) -> Post:
-    """ Создание нового поста """
 
+def add_post(
+        _session,
+        category: str,
+        managerId: int,
+        postId: int,
+        date: str,
+        first_row: str,
+        path: str,
+        time: str = None) -> Post:
+    """ Создание нового поста """
 
     date = datetime.strptime(date, DATE_FORMAT)
     date = datetime.strftime(date, DATE_FORMAT)
@@ -76,31 +63,32 @@ def add_post(
         ManagerID=managerId,
         PostID=postId,
         Date=date,
-        FirstRow=first_row
-        ,FilePath=path)
+        FirstRow=first_row, FilePath=path)
 
     _session.add(post)
     _session.commit()
 
     return post
 
-def get_posts(_session, date : str = None, category : str = None, time : str = None,*args, **kwargs) -> list:
+
+def get_posts(_session, date: str = None, category: str = None, time: str = None, *args, **kwargs) -> list:
     """ 
-    
+
     Получение постов по определенным критериям 
-    
+
     :return: list[Post]
     """
 
     posts = _get_posts(date, category, time)
     return list(_session.scalars(posts))
 
+
 def _get_posts(
-    date : str = None, 
-    category : str = None, 
-    time : str = None, 
-     *args, 
-     **kwargs) -> list:
+        date: str = None,
+        category: str = None,
+        time: str = None,
+        *args,
+        **kwargs) -> list:
 
     posts = select(Post)
 
@@ -115,34 +103,37 @@ def _get_posts(
     if time:
         time = datetime.strptime(time, TIME_FORMAT)
         time = datetime.strftime(time, TIME_FORMAT)
-        
+
         posts = posts.where(Post.Time == time)
 
     return posts
 
+
 def _get_post(id):
 
-    return select(Post).where(Post.PostID == id) 
+    return select(Post).where(Post.PostID == id)
+
 
 def get_post(_session, id) -> Post:
     """" 
-    
+
     Получение поста по определенным критериям
-    
+
     :return: Post
     """
 
     return _session.execute(_get_post(id)).scalar()
 
+
 def update_post(
-    _session, 
-    id, 
-    new_id : int = None, 
-    category : str = None,
-    time : str = None,
+    _session,
+    id,
+    new_id: int = None,
+    category: str = None,
+    time: str = None,
     date: str = None,
-    first_row : str = None
-    ) -> None:
+    first_row: str = None
+) -> None:
 
     post = get_post(_session, id)
 
@@ -151,7 +142,7 @@ def update_post(
 
     if category is not None:
         setattr(post, "Category", category)
-    
+
     if time is not None:
         time = datetime.strptime(time, TIME_FORMAT)
         time = datetime.strftime(time, TIME_FORMAT)
@@ -170,6 +161,7 @@ def update_post(
     _session.commit()
 
     return
+
 
 def delete_post(_session, post) -> None:
     _session.delete(post)
