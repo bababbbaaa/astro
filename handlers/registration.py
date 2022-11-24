@@ -58,7 +58,7 @@ async def start(message):
     else:
         await registartion1(int(id), text)
 
-
+@dp.message_handler(commands=["full_delete_user_uga_buga"])
 @dp.message_handler(text="full_delete_user", state="*")
 async def full_delete_user(message: Message):
     author = message.from_user.id

@@ -979,7 +979,7 @@ def InsertIntoTable(inpTbName,inpValues):
    for key in inpValues:
       NamesFields = NamesFields +key+","
       QVal.append(inpValues[key]) 
-      QMark = QMark+" ?,"
+      QMark = QMark+" %s,"
       
    NamesFields = NamesFields.rstrip(',')  # удалить последнюю запятую
    QMark = QMark.rstrip(',')
@@ -1146,7 +1146,7 @@ def CopyUsrMess():
 
 ##old = datetime.now()
 
-##print(GenHourMessAll(0,651193384))
+##print(GenHourMessAll(0,121212121237))
 ##print(GenHourMessAll(1,))#5560719600
 #5392589497
 ##print("tot="+str(datetime.now()-old))
@@ -1156,3 +1156,6 @@ def CopyUsrMess():
 ##print(SaveSegmentDb('3'))
 
 ##CopyUsrMess()
+
+
+##print(InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"}))

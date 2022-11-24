@@ -92,12 +92,17 @@ async def gen_user_mess(message):
 @dp.message_handler(state=UserReg.name)
 async def enter_name(message: CallbackQuery, state: FSMContext):
     id=message.chat.id
+
     add_message_to_cache(id,message_id=message.message_id)
     async with state.proxy() as state_data:
         
 
         state_data['name'] = message.text
-
+        if len(message.text)>254:
+            await delete_messages_from_cache(id)
+            mes=await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+            add_message_to_cache(id,mes.message_id)
+            return 0 
         await UserReg.gender.set()
 
         keyboard = types.InlineKeyboardMarkup()
@@ -110,6 +115,7 @@ async def enter_name(message: CallbackQuery, state: FSMContext):
         keyboard.row(but1, but2)
         await delete_messages_from_cache(id)
         await wait_until_send_photo(id, config.inter_gender, photo=photos["inter_gender"], reply_markup=keyboard)
+
 
 
 
@@ -161,6 +167,16 @@ async def enter_birth_place(message: CallbackQuery, state: FSMContext):
     id=message.chat.id
     text=message.text
     add_message_to_cache(id,message_id=message.message_id)
+    #----------------------------валидация-------------{
+
+    if len(message.text)>254:
+            await delete_messages_from_cache(id)
+            mes=await wait_until_send_photo(id, config.inter_date, photo=photos["inter_date"])
+            add_message_to_cache(id,mes.message_id)
+            return 0 
+
+    #----------------------------валидация-------------}
+
     async with state.proxy() as state_data:
         state_data["birth_place"]=text
         await UserReg.birth_time.set()
@@ -175,6 +191,16 @@ async def enter_birth_time(message: CallbackQuery, state: FSMContext):
     id=message.chat.id
     text=message.text
     add_message_to_cache(id,message.message_id)
+
+    #----------------------------валидация-------------{
+    if len(message.text)>6:
+            await delete_messages_from_cache(id)
+            mes=await wait_until_send_photo(id, config.inter_time, photo=photos["inter_time"],)
+            add_message_to_cache(id,mes.message_id)
+            return 0 
+        #----------------------------валидация-------------}
+
+
     async with state.proxy() as state_data:
         state_data["birth_time"]=text
 

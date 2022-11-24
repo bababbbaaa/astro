@@ -323,7 +323,7 @@ def get_payment():
         # username = request.args.get('username')
         # username = request.args.get('username')
         date_end=functions.GetUsers(id)[0]["ActiveUntil"]
-
+        date_end=datetime.strftime(date_end,"%Y-%m-%d")
         end=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(days))
         end_for_users=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(days),base="users")
         if get_sub(id)!=None:

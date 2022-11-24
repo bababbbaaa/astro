@@ -264,7 +264,9 @@ import functions
 # time2=time.time()
 # print(time2-time1)
 import horoscopedb
-conn=horoscopedb.ConnectDb()
-cur=conn.cursor()
-res=cur.execute("SELECT * FROM Users")
-print(res)
+from utils import *
+# session=create_session()
+# conn=horoscopedb.ConnectDb()
+# cur=session.cursor()
+# res=cur.execute("SELECT * FROM Posts")
+# print(res)

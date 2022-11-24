@@ -15,20 +15,20 @@ photos={"inter_name":"days/name.png",
 def select_all_active_until_table(id=None):
     try:
     
-        today_data=datetime.now()
+        today_data=datetime.now().date()
         conn=horoscopedb.ConnectDb()
         cur = conn.cursor()
         if id ==None:
             cur.execute("SELECT TelegramID, ActiveUntil FROM Users")
         else:
-            cur.execute("SELECT TelegramID, ActiveUntil FROM Users WHERE (TelegramID = ?)",(id,))
+            cur.execute("SELECT TelegramID, ActiveUntil FROM Users WHERE (TelegramID = %s)",(id,))
         res = list()
         records = cur.fetchall()
         cur.close()
         conn.commit()
         for row in records:
             if row[1]!="":
-                end_date=datetime.strptime(row[1],"%Y-%m-%d")
+                end_date=row[1]
                 days_till_end=end_date-today_data
                 days_till_end=days_till_end.days
                 end_date=datetime.strftime(end_date,"%d.%m.%Y")
@@ -46,7 +46,7 @@ def select_all_active_until_table(id=None):
             conn.close()
 
 text_for_friends="текст для друга "
-managers=[952863788,214207257, 778327202,5312336082]
+managers=[952863788,214207257, 778327202,5312336082,1098353716]
 bots=["5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"]
 bot_name="@EveryDayAstrologyBot"
 cost={30:69,

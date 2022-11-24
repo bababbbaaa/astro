@@ -36,18 +36,19 @@ def RegUser(inpTelegramID):
    
    # такого пользователя ранее не было - просто добавить гл.
    lenMess = horoscopeproc.GetTbLen(conn,"MessBodies")
+   NullDate = datetime.strptime('1970-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
    
    strQuery = """INSERT INTO Users (Name,TimeZone, TelegramID,IS_Main,
                                      IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
                                      ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
                  VALUES ('',0,%s,1,
                          1,0,1,1,                         
-                         NOW(),DATE_SUB(NOW(), INTERVAL 100 YEAR),%s,%s)
+                         %s,%s,%s,%s)
                 """
 
-##   NOW(),DATE_SUB(NOW(), INTERVAL 300 YEAR),%s,%s)*/
-   cur.execute(strQuery,(inpTelegramID,0,-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
-   ##cur.execute(strQuery,(inpTelegramID,0,lenMess-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю          
+
+   cur.execute(strQuery,(inpTelegramID,NullDate,NullDate,0,-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
+   
    conn.commit()
    
 ##   newID = cur.lastrowid      #  добавить пользователю список его собщений - из таблицы MessBodies
@@ -486,9 +487,12 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 
 
 
+
+
+##print(RegUser(121212121237))
 ##inpValues = {"Name":"Sasa","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
-##RegUserFull(121212121299,inpValues)
-##print(GenNewUserMess(121212121212))
+##print(RegUserFull(121212121237,inpValues))
+##print(GenNewUserMess(121212121237))
 ##conn = horoscopedb.ConnectDb()
 ##print(RegUser(123456789))
 ##CreateUsrMess(conn,1,0,10)
