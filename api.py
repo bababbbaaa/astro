@@ -126,7 +126,7 @@ def converion():
 #     start_date=date["since"]
 #     end_date=date["to"]
 import functions
-    # cur.execute("SELECT * FROM Users WHERE ID>=? AND Id<=?",(offset,offset+limit,));                       
+    # cur.execute("SELECT * FROM Users WHERE ID>=%s AND Id<=%s",(offset,offset+limit,));                       
     # records = cur.fetchall()
 @app.route("/delete_file_with_path",methods=["GET","POST"])
 def delete_file():
@@ -206,7 +206,7 @@ def get_tables(data=None):
             max(start_date, end_date)
             ).strftime('%d.%m.%Y').tolist()
 
-        string_for_request+="Birthday IN ("+"?, "*(len(list_of_dates)-1)+"?) AND "
+        string_for_request+="Birthday IN ("+"%s, "*(len(list_of_dates)-1)+"%s) AND "
         tuple_for_request=list_of_dates
         date_exists=True
         del(data["date"])
@@ -217,7 +217,7 @@ def get_tables(data=None):
 
         end=datetime.strptime(data["registration_date"]["end"],"%d.%m.%Y")
         end=datetime.strftime(end,"%Y-%m-%d")+" 00:00:00"
-        string_for_request+="RegDate BETWEEN ? AND ? AND "
+        string_for_request+="RegDate BETWEEN %s AND %s AND "
         tuple_for_request.append(start)
         tuple_for_request.append(end)
         date_exists=True
@@ -225,19 +225,19 @@ def get_tables(data=None):
     if "Name" in data:
         if not data["Name"]=="":
             
-            string_for_request+="Name LIKE ? AND "
+            string_for_request+="Name LIKE %s AND "
             tuple_for_request.append("%"+data["Name"]+"%")
             del data["Name"]
     if "Birthplace" in data:
 
         if not data["Birthplace"]=="":
     
-            string_for_request+="Birthplace LIKE ? AND "
+            string_for_request+="Birthplace LIKE %s AND "
             tuple_for_request.append("%"+data["Birthplace"]+"%")
             del data["Birthplace"]
     for i in data:
         if not data[i]==None:
-            string_for_request+= i+" = ?"
+            string_for_request+= i+" = %s"
             string_for_request+=" AND "
             tuple_for_request.append(data[i])
         else:
