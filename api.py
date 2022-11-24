@@ -1,5 +1,6 @@
 
 from flask import Flask, jsonify, request
+import flask
 from flask_cors import CORS
 from horoscopedb import ConnectDb
 import json
@@ -457,26 +458,33 @@ def get_payments():
         payments=Pay.list(limit=limit+offset,status="succeeded")
         for i in range((limit+offset)/100):
             payments.extend(Pay.list(limit=limit+offset,status="succeeded"))
-<<<<<<< HEAD
 
-@app.route('/get_sources', methods=['POST'])
+@app.route('/get_sources', methods=['POST', 'GET'])
 def get_sources_route():
     sources = get_sources()
+    converted = alchemy_list_convert(sources)
 
-    pass
+    return jsonify(converted)
 
+@app.route('/add_source', methods=['POST'])
+def add_source_route():
+    data = request.get_json()
+
+    try:
+        title : str = data['title']
+        code  : str = data['code']
+        price : int = data['price']
+
+        new_source = add_source(title, code, price)
+        t = new_source.title
+
+        converted = alchemy_to_dict(new_source)
+        return jsonify(converted)
+    except:
+        return 'Some of the required keys were not passed', 400
 
 HOST = '195.2.79.3'
 PORT = '443'
 
-app.run(host=HOST, port=PORT,debug=True)
-=======
-# app.run(debug=True)
-# HOST = '195.2.79.3'
-# PORT = '443'
-
 # app.run(host=HOST, port=PORT,debug=True)
-# #
 app.run(debug=True)
-
->>>>>>> 04cb8d752c7e733f461d98a1f5b6b129b8a06895

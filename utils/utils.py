@@ -78,6 +78,14 @@ def alchemy_to_dict(alchemy_object):
 
     return result
 
+def alchemy_list_convert(objects : list) -> list:
+    result = list()
+
+    for object in objects:
+        result.append(alchemy_to_dict(object))
+
+    return result
+
 def create_session():
     user = 'admin2'
     password = "Sergey123"
