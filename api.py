@@ -8,7 +8,6 @@ from horoscopeusr import ChUserInfo
 
 from for_payments import *
 # additional tools
-import horoscopeusr as horoscopeusr
 import random
 from utils.utils import *
 DATE_FORMAT = '%d.%m.%Y'
@@ -458,10 +457,15 @@ def get_payments():
         payments=Pay.list(limit=limit+offset,status="succeeded")
         for i in range((limit+offset)/100):
             payments.extend(Pay.list(limit=limit+offset,status="succeeded"))
-# app.run(debug=True)
+
+@app.route('/get_sources', methods=['POST'])
+def get_sources_route():
+    sources = get_sources()
+
+    pass
+
+
 HOST = '195.2.79.3'
 PORT = '443'
 
 app.run(host=HOST, port=PORT,debug=True)
-# #
-# app.run()
