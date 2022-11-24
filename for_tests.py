@@ -20,10 +20,14 @@ import requests
 # # from databaseInteraction import *
 # # from datetime import date, timedelta
 # # from datetime import datetime as date_time
+# out_summ=69.000000&OutSum=69.000000&inv_id=16799&InvId=16799&crc=502F0B1930B9DCAD0E0D6084CBA804A0&SignatureValue=502F0B1930B9DCAD0E0D6084CBA804A0&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=an177@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=610893809
+
+#out_summ=69.000000&OutSum=69.000000&inv_id=17574&InvId=17574&crc=A22A6FAD29799C1B21B12A2D5F79B773&SignatureValue=A22A6FAD29799C1B21B12A2D5F79B773&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=1707910@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=629955174&Shp_prev=13639
+#out_summ=69.000000&OutSum=69.000000&inv_id=15228&InvId=15228&crc=5C279FD13D8B5796D4EA7494A19505E2&SignatureValue=5C279FD13D8B5796D4EA7494A19505E2&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=natalyailyina@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=635405278
 
 # # from rich.console import Console
 request1=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
-"inv_id":10,"InvId":10919,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":952863788
+"inv_id":15228,"InvId":15228,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":635405278,
 })
 print(request1)
 # # # import horoscopeproc

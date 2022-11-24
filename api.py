@@ -328,7 +328,7 @@ def get_payment():
         end_for_users=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(days),base="users")
         if get_sub(id)!=None:
             delete_sub(id)
-            if prev_id!=0:
+            if prev_id!=None and prev_id!=0:
                 x=prev_id
             else:
                 x=InvId
@@ -347,7 +347,6 @@ def get_payment():
             # signature = request.form.get['SignatureValue']
             pay=payments.get_payment(id)[0]
             print(pay,"PAYYY")
-            print(pay.payment_id,"PAYYYY")
             # payment=add_payment(sub_type=3,telegram_id=str(id),active_until=end,days=days,payed=True,amount=price,link="None",payment_id=InvId)
             # signature = robokassa.calculate_signature(cost, id, signature)
             # if robokassa.check_signature_result(id, cost, signature, merchant_password_2):

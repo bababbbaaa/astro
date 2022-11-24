@@ -47,7 +47,7 @@ def make_recurse_pay(id,amount,days=30,test=0):
 def get_money_for_sub(id,amount=config.cost[30],days=30,test=0,tg_id=0):
     request=robokassa.earn_recurrent_pay("Astrobot",PASSWORD_FOR_ROBOKASSA,cost=amount,number=id,description="Оплата подписки на астробота",is_test=0,days=days,tg_id=tg_id)          
     return(request)
-print(make_payment(952863788,69,30,1))
+# print(make_payment(952863788,69,30,1))
 # def get_recurse_payment(id,amount=config.cost[30],days=30,test=0):
 
 # request1=make_payment(100,69,test=1)

@@ -16,6 +16,7 @@ from aiogram.types import *
 import horoscopeproc
 from rich.console import Console
 import string
+from databaseInteraction import *
 from utils import logger
 from aiogram.types import InlineKeyboardButton
 import requests
