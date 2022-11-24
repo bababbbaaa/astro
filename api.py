@@ -474,8 +474,10 @@ def add_source_route():
         title : str = data['title']
         code  : str = data['code']
         price : int = data['price']
+        date  : str = data['date']
+        type  : str = data['type']
 
-        new_source = add_source(title, code, price)
+        new_source = add_source(title, code, price, date, type)
         t = new_source.title
 
         converted = alchemy_to_dict(new_source)

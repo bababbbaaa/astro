@@ -1,9 +1,6 @@
-from datetime import datetime
 from sqlalchemy import *
-
-from sqlalchemy.orm import sessionmaker
-
 from controller import engine, Base, Session
+from utils import *
 
 
 class Source(Base):
@@ -24,6 +21,8 @@ class Source(Base):
     title = Column(Text, nullable=False)
     code = Column(Text, nullable=False)
     price = Column(Integer, nullable=False)
+    date = Column(Text, nullable=False)
+    type = Column(Text, nullable=False)
 
 
 def drop_table():
@@ -33,12 +32,19 @@ def drop_table():
 def add_source(
         title: str,
         code: str,
-        price: int) -> Source:
+        price: int,
+        date : str,
+        type : str) -> Source:
+
+    if not check_date(date):
+        raise Exception("Invalid date")
 
     source = Source(
         title=title,
         code=code,
-        price=price
+        price=price,
+        date=date,
+        type=type
     )
 
     Session.add(source)
@@ -101,6 +107,5 @@ def _get_sources(title) -> list:
         sources = sources.where(Source.title == title)
 
     return sources
-
 
 Base.metadata.create_all(engine)
