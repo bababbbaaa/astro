@@ -48,7 +48,8 @@ user = users['SharapaGorg']
 
 USER, APP_ID, APP_HASH = 'SharapaGorg', user[0], user[1]
 
-CHAT = 'EveryDayAstrologyBot'
+# CHAT = 'EveryDayAstrologyBot'
+CHAT = 'TotalDBbot'
 WARNING_DELAY = 30
 DELAY = 3
 
@@ -130,6 +131,7 @@ def get_message(client : Client, message : Message):
         expected_answer_ = expected_answer[30:] if expected_answer is not None else "BUTTONS"
         last_command_ = last_command[30:] if last_command is not None else "BUTTONS"
 
+        
         warn_ = f"```Message : {last_command}\nWarning : Unexpected answer\nAnswer  : {last_command_}\nExpected: {expected_answer_}```"
 
         logger.warning(warn_.replace('```', ''))
@@ -145,7 +147,7 @@ def get_message(client : Client, message : Message):
     time.sleep(DELAY)
     
     if 'button' in current_command:
-        button_index = int(current_command.split(' - ')[1])
+        button_index = int(current_command.split(' : ')[1])
 
         try:
             message.click(button_index)
