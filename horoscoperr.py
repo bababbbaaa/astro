@@ -6,7 +6,7 @@
 #          4 - критическая ошибка, сообщать админу в ТЛГ или по почте
 #  toProt - вносить в протокол
 def HandleMess(strErr,typeErr=1,toProt=False):
-    # print(strErr) 
+    print(strErr) 
    
 
 

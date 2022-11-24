@@ -1,4 +1,4 @@
-import horoscopedb as horoscopedb
+import horoscopedb
 from horoscoperr import HandleMess
 import random
 from datetime import date, datetime, timedelta
@@ -19,62 +19,62 @@ def strRusDays(inpDays):
 #  количество строк в таблице
 
 def GetTbLen(conn, inpTbName):
-    try:
-        cur = conn.cursor()
-        cur.execute("SELECT COUNT(1) FROM "+inpTbName)
-        records = cur.fetchall()
-        if len(records) == 0:
-            return(0)
-        else:
-            return(records[0][0])
-    except Exception as error:
-        HandleMess("Ошибка подсчета кол-ва строк в таблице: " +
-                   str(inpTbName)+"\n" + str(error), 4, True)
-        return(0)
-    finally:
-        if cur:
-            cur.close()
+ try:
+   cur = conn.cursor()
+   cur.execute("SELECT COUNT(1) FROM "+inpTbName);
+   records = cur.fetchall()
+   if len(records) == 0:
+     return(0)
+   else:
+     return(records[0][0])
+ except Exception as error:
+    HandleMess("Ошибка подсчета кол-ва строк в таблице: " +
+               str(inpTbName)+"\n" + str(error), 4, True)
+    return(0)
+ finally:
+    if cur:
+       cur.close()
 
 
 # получить заголовок из таблицы по текущей дате
 
 def GetCommonDayHeaderOnDate(conn, inpDate, TomorrTable=0):
-    try:
+ try:
 
-        listMonth = ("января", "февраля", "марта",
-                     "апреля", "мая", "июня",
-                     "июля", "августа", "сентября",
-                     "октября", "ноября", "декабря")
+     listMonth = ("января", "февраля", "марта",
+                "апреля", "мая", "июня",
+                "июля", "августа", "сентября",
+                "октября", "ноября", "декабря")
 
-        CurrDate = inpDate   # date.today()
-        inpDateStr = CurrDate.strftime("%Y-%m-%d")
-        cur = conn.cursor()
-        if TomorrTable == 0:
-            cur.execute(
-                "SELECT Header FROM MessHeaders WHERE MessDate = ?", (inpDateStr,))
-        else:
-            cur.execute(
-                "SELECT Header FROM MessHeaders_1 WHERE MessDate = ?", (inpDateStr,))
+     CurrDate = inpDate   # date.today()
+     inpDateStr = CurrDate.strftime("%Y-%m-%d")
+     cur = conn.cursor()
+     if TomorrTable == 0:
+       cur.execute(
+           "SELECT Header FROM MessHeaders WHERE MessDate = %s", (inpDateStr,))
+     else:
+       cur.execute(
+           "SELECT Header FROM MessHeaders_1 WHERE MessDate = %s", (inpDateStr,))
 
-        records = cur.fetchall()
+     records = cur.fetchall()
 
-        if len(records) == 0:
-            HandleMess("Не найдено ни одного заголовка для даты " +
-                       inpDateStr, 3, True)
-            CurrHeaderTXT = "ЗАГОЛОВОК"
-        else:
-            CurrHeaderTXT = records[0][0]
+     if len(records) == 0:
+         HandleMess("Не найдено ни одного заголовка для даты " +
+                    inpDateStr, 3, True)
+         CurrHeaderTXT = "ЗАГОЛОВОК"
+     else:
+         CurrHeaderTXT = records[0][0]
 
-        CurrDateTXT = CurrDate.strftime("%d")+" "+listMonth[CurrDate.month-1]
+     CurrDateTXT = CurrDate.strftime("%d")+" "+listMonth[CurrDate.month-1]
 
-        return CurrDateTXT+".\n\nОбщий гороскоп дня.</b>\n\n"+CurrHeaderTXT
-    except Exception as error:
-        HandleMess(
-            "Ошибка процедуры формирования общего заголовка: \n" + str(error), 4, True)
-        return(None)
-    finally:
-        if cur:
-            cur.close()
+     return CurrDateTXT+".\n\nОбщий гороскоп дня.</b>\n\n"+CurrHeaderTXT
+ except Exception as error:
+     HandleMess(
+         "Ошибка процедуры формирования общего заголовка: \n" + str(error), 4, True)
+     return(None)
+ finally:
+    if cur:
+       cur.close()
 
 # сформировать все сообщения для активных  в этот час,
 # либо для пользователя по ТЛГ ID
@@ -82,36 +82,38 @@ def GetCommonDayHeaderOnDate(conn, inpDate, TomorrTable=0):
 
 def GenHourMessAll(inpDesTimeID, inpTelegramID=None):
 
-    # подключиться к базе
+ # подключиться к базе
 
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(None)
-        cur = conn.cursor()
-        # размер таблиц с текстами
+ try:
+    cur = False
+    conn = horoscopedb.ConnectDb()
 
-        bodyLen = GetTbLen(conn, "MessBodies")
+    if conn is None:
+       return(None)
 
-        if bodyLen == 0:
-            HandleMess("Пустая таблица  текстов ", 4, True)
-            return(None)
+    cur = conn.cursor()
+    # размер таблиц с текстами
 
-        midday = datetime.strptime('12:00:00', '%H:%M:%S').time()
+    bodyLen = GetTbLen(conn, "MessBodies")
 
-        # найти заголовок на сегодня, и на завтра
-        TodayHeaderTXT = GetCommonDayHeaderOnDate(conn, date.today())
-        # текст на завтра взять из завтрашней таблицы
-        TomorHeaderTXT = GetCommonDayHeaderOnDate(
-            conn, date.today()+timedelta(days=1), 1)
+    if bodyLen == 0:
+       HandleMess("Пустая таблица  текстов ", 4, True)
+       return(None)
 
-        if (TodayHeaderTXT == None or TomorHeaderTXT == None):
-            return(None)
+    midday = datetime.strptime('12:00:00', '%H:%M:%S').time()
 
-        currNow = date.today()
+    # найти заголовок на сегодня, и на завтра
+    TodayHeaderTXT = GetCommonDayHeaderOnDate(conn, date.today())
+    # текст на завтра взять из завтрашней таблицы
+    TomorHeaderTXT = GetCommonDayHeaderOnDate(
+        conn, date.today()+timedelta(days=1), 1)
 
-        txtQuery = """SELECT Users.ID as UsrID,
+    if (TodayHeaderTXT == None or TomorHeaderTXT == None):
+       return(None)
+
+    currNow = date.today()
+
+    txtQuery = """SELECT Users.ID as UsrID,
                          Name,
                          TelegramID,
                          Gender_ID,
@@ -126,10 +128,10 @@ def GenHourMessAll(inpDesTimeID, inpTelegramID=None):
                          coalesce(Mb4.Col_4,'') as txtCol_4,
                          ActiveUntil as ActiveUntil,
                          Users.StdShutoff  as StdShutoff,
-                         
+
                          UserSentMess.ID as SentMessID,      /*отправленные сегодня сообщения*/
                          UserSentMess.Col_1,
-                         coalesce(SMb1.Col_1,'') as StxtCol_1,  
+                         coalesce(SMb1.Col_1,'') as StxtCol_1,
                          UserSentMess.Col_2,
                          coalesce(SMb2.Col_2,'') as StxtCol_2,
                          UserSentMess.Col_3,
@@ -139,267 +141,295 @@ def GenHourMessAll(inpDesTimeID, inpTelegramID=None):
                          Users.RegDateFin        as RegDateFin,   /* дата регистрации */
                          Users.DesTime_ID        as DesTime_ID,    /*когда высылать гороскоп утро(0)/вечер(1)*/
 
-                         coalesce(Mb1T.Col_1,'') as txtCol_1T,  /*26*/  /*завтрашние сообщения*/                     
-                         coalesce(Mb2T.Col_2,'') as txtCol_2T,  /*27*/                        
-                         coalesce(Mb3T.Col_3,'') as txtCol_3T,  /*28*/                       
-                         coalesce(Mb4T.Col_4,'') as txtCol_4T,  /*29*/ 
+                         coalesce(Mb1T.Col_1,'') as txtCol_1T,  /*26*/  /*завтрашние сообщения*/
+                         coalesce(Mb2T.Col_2,'') as txtCol_2T,  /*27*/
+                         coalesce(Mb3T.Col_3,'') as txtCol_3T,  /*28*/
+                         coalesce(Mb4T.Col_4,'') as txtCol_4T,  /*29*/
 
-                         coalesce(SMb1T.Col_1,'') as StxtCol_1T, /*30*/  /*завтрашние из отправленных*/                         
-                         coalesce(SMb2T.Col_2,'') as StxtCol_2T, /*31*/                        
-                         coalesce(SMb3T.Col_3,'') as StxtCol_3T, /*32*/                        
+                         coalesce(SMb1T.Col_1,'') as StxtCol_1T, /*30*/  /*завтрашние из отправленных*/
+                         coalesce(SMb2T.Col_2,'') as StxtCol_2T, /*31*/
+                         coalesce(SMb3T.Col_3,'') as StxtCol_3T, /*32*/
                          coalesce(SMb4T.Col_4,'') as StxtCol_4T,  /*33*/
                          Users.SubscrType_ID as SubscrType_ID,     /*34*/   /*тип подписки 1-пробная,3 - оплачена, 5 - не активна*/
-                         CASE WHEN Users.SubscrType_ID = 3 THEN 0 
+                         CASE WHEN Users.SubscrType_ID = 3 THEN 0
 	                 ELSE      Users.SubscrType_ID     END As SubscrTypeForORDER  /* необходимо для сортировки сначла опл(3), потом проб(1),не акт (5)*/
-                         
-                                                                    
-                        
+
+
+
                  FROM Users
-                 LEFT JOIN  
-                    ( SELECT MIN(ID) as MessID, 
-                             User_ID as User_ID           
+                 """
+
+    txtQueryMiddleAll = """ LEFT JOIN
+                    ( SELECT MIN(ID) as MessID,
+                             User_ID as User_ID
                       FROM UserMess
-                      GROUP BY User_ID 
+                      GROUP BY User_ID
                      ) As UM ON Users.ID = UM.User_Id
 
-                 LEFT JOIN                               /*сегодняшние сообщения*/
-                    ( SELECT MIN(ID) as MessID, 
-                             User_ID as User_ID           
+                   LEFT JOIN                               /*сегодняшние сообщения*/
+                     ( SELECT MIN(ID) as MessID,
+                             User_ID as User_ID
                       FROM UserSentMess
-                      WHERE DateSend = date('now', 'localtime') 
-                      GROUP BY User_ID 
+                      WHERE DateSend = CURRENT_DATE()
+                      GROUP BY User_ID
                      ) As USM ON Users.ID = USM.User_Id
-                         
-               
-                 LEFT JOIN  UserMess ON  UserMess.ID = UM.MessID
+                     """
+
+    txtQueryMiddleOne = """ LEFT JOIN
+                     ( SELECT MIN(ID) as MessID,
+                             User_ID as User_ID
+                      FROM UserMess WHERE User_ID = %s
+                     ) As UM ON Users.ID = UM.User_Id
+
+                    LEFT JOIN                               /*сегодняшние сообщения*/
+
+                     ( SELECT MIN(ID) as MessID,
+                             User_ID as User_ID
+                      FROM UserSentMess
+                      WHERE  DateSend = CURRENT_DATE() AND User_ID = %s
+
+                     ) As USM ON Users.ID = USM.User_Id
+                     """
+
+    txtQueryEnd = """ LEFT JOIN  UserMess ON  UserMess.ID = UM.MessID
                  LEFT JOIN  UserSentMess ON  UserSentMess.ID = USM.MessID
-                 
-                 LEFT JOIN MessBodies as Mb1 
-                 ON   Mb1.ID = UserMess.Col_1 
+
+                 LEFT JOIN MessBodies as Mb1
+                 ON   Mb1.ID = UserMess.Col_1
 
                  LEFT JOIN MessBodies as Mb2
-                 ON Mb2.ID = UserMess.Col_2 
+                 ON Mb2.ID = UserMess.Col_2
 
-                 LEFT JOIN MessBodies as Mb3 
-                 ON Mb3.ID = UserMess.Col_3 
+                 LEFT JOIN MessBodies as Mb3
+                 ON Mb3.ID = UserMess.Col_3
 
-                 LEFT JOIN MessBodies as Mb4 
+                 LEFT JOIN MessBodies as Mb4
                  ON Mb4.ID = UserMess.Col_4
 
-                 LEFT JOIN MessBodies as SMb1 
-                 ON   SMb1.ID = UserSentMess.Col_1 
+                 LEFT JOIN MessBodies as SMb1
+                 ON   SMb1.ID = UserSentMess.Col_1
 
                  LEFT JOIN MessBodies as SMb2
-                 ON SMb2.ID = UserSentMess.Col_2 
+                 ON SMb2.ID = UserSentMess.Col_2
 
-                 LEFT JOIN MessBodies as SMb3 
-                 ON SMb3.ID = UserSentMess.Col_3 
+                 LEFT JOIN MessBodies as SMb3
+                 ON SMb3.ID = UserSentMess.Col_3
 
-                 LEFT JOIN MessBodies as SMb4 
+                 LEFT JOIN MessBodies as SMb4
                  ON SMb4.ID = UserSentMess.Col_4
 
                  /*второй комплект для завтрашних г*/
 
-                 LEFT JOIN MessBodies_1 as Mb1T 
-                 ON   Mb1T.ID = UserMess.Col_1 
+                 LEFT JOIN MessBodies_1 as Mb1T
+                 ON   Mb1T.ID = UserMess.Col_1
 
                  LEFT JOIN MessBodies_1 as Mb2T
-                 ON Mb2T.ID = UserMess.Col_2 
+                 ON Mb2T.ID = UserMess.Col_2
 
-                 LEFT JOIN MessBodies_1 as Mb3T 
-                 ON Mb3T.ID = UserMess.Col_3 
+                 LEFT JOIN MessBodies_1 as Mb3T
+                 ON Mb3T.ID = UserMess.Col_3
 
-                 LEFT JOIN MessBodies_1 as Mb4T 
+                 LEFT JOIN MessBodies_1 as Mb4T
                  ON Mb4T.ID = UserMess.Col_4
 
-                 LEFT JOIN MessBodies_1 as SMb1T 
-                 ON   SMb1T.ID = UserSentMess.Col_1 
+                 LEFT JOIN MessBodies_1 as SMb1T
+                 ON   SMb1T.ID = UserSentMess.Col_1
 
                  LEFT JOIN MessBodies_1 as SMb2T
-                 ON SMb2T.ID = UserSentMess.Col_2 
+                 ON SMb2T.ID = UserSentMess.Col_2
 
-                 LEFT JOIN MessBodies_1 as SMb3T 
-                 ON SMb3T.ID = UserSentMess.Col_3 
+                 LEFT JOIN MessBodies_1 as SMb3T
+                 ON SMb3T.ID = UserSentMess.Col_3
 
-                 LEFT JOIN MessBodies_1 as SMb4T 
+                 LEFT JOIN MessBodies_1 as SMb4T
                  ON SMb4T.ID = UserSentMess.Col_4  """
 
-        if (inpTelegramID != None):
+    if (inpTelegramID != None):
 
-            cur.execute(txtQuery + " WHERE TelegramID =?  ", (inpTelegramID,))
+       cur.execute("SELECT ID FROM  Users WHERE TelegramID =%s ",
+                   (inpTelegramID,))
+       records = cur.fetchall()
+       if len(records) == 0:
+         HandleMess("Не найдено ни одной записи ключевыми полями, ТЛГ ID: " +
+                    str(inpTelegramID)+" и не сегодняшней датой отправки ", 3, True)
+         return(None)
+       CurrUsrID = records[0][0]
+       cur.execute(txtQuery + txtQueryMiddleOne+txtQueryEnd +
+                   " WHERE RegDateFin IS NOT NULL AND TelegramID =%s  ", (CurrUsrID, CurrUsrID, inpTelegramID,))
+       records = cur.fetchall()
 
-            records = cur.fetchall()
+       if len(records) == 0:
+         HandleMess("Не найдено ни одной записи ключевыми полями, ТЛГ ID: " +
+                    str(inpTelegramID)+" и не сегодняшней датой отправки ", 3, True)
+         return(None)
 
-            if len(records) == 0:
-                HandleMess("Не найдено ни одной записи ключевыми полями, ТЛГ ID: " +
-                           inpTelegramID+" и не сегодняшней датой отправки ", 3, True)
-                return(None)
+    else:
 
-        else:
+       if inpDesTimeID == None:
+         HandleMess("Не указано время утро(0)/вечер(1)", 3, True)
+         return(None)
 
-            if inpDesTimeID == None:
-                HandleMess("Не указано время утро(0)/вечер(1)", 3, True)
-                return(None)
-
-            # выбрать всех активных для этого часа
-            cur.execute(txtQuery + """ WHERE (IsActiveBot = 1 AND
+       # выбрать всех активных для этого часа
+       cur.execute(txtQuery + txtQueryMiddleAll+txtQueryEnd + """ WHERE (IsActiveBot = 1 AND
                                        /*  IsActiveSub = 1 AND*/
                                        /*   ActiveUntil > ? AND*/
-                                         DesTime_ID = ?  AND
-                                        (Users.DateSend<>date('now', 'localtime')) )
+                                       RegDateFin IS NOT NULL AND
+                                          DesTime_ID = %s  AND
+                                     /* TelegramID = 5560719600  AND*/
+
+                                        (Users.DateSend<>CURRENT_DATE()) )
                                ORDER BY SubscrTypeForORDER """, (inpDesTimeID,))  # (datetime.strftime(datetime.now(), "%Y-%m-%d"),inpDesTimeID,))
 
-            records = cur.fetchall()
+       records = cur.fetchall()
 
-        resList = list()  # список всех сообщений пользователю
-        usrList = list()  # писок пользователей кому проставить дату отправки в Users
-        usrMessList = list()  # список сообщений для удаления из UserMess
-        usrStopList = list()  # список пользователей , которым отключить подписку
-        newTodayList = list()  # список сообщений, которые добавить в сегодня отправленные
-        for row in records:
+    resList = list()  # список всех сообщений пользователю
+    usrList = list()  # писок пользователей кому проставить дату отправки в Users
+    usrMessList = list()  # список сообщений для удаления из UserMess
+    usrStopList = list()  # список пользователей , которым отключить подписку
+    newTodayList = list()  # список сообщений, которые добавить в сегодня отправленные
+    for row in records:
 
-            UserID = row[0]
-            CurrName = row[1]
-            CurrTelegramID = row[2]
-            GenderID = row[3]
-            MessID = row[4]  # id сообщения кооторое сработало, его удалить
-            col_1 = row[5]
-            Txt_1 = row[6]
-            col_2 = row[7]
-            Txt_2 = row[8]
-            col_3 = row[9]
-            Txt_3 = row[10]
-            col_4 = row[11]
-            Txt_4 = row[12]
-            ActiveUntil = row[13]
-            StdShutoff = row[14]
+      UserID = row[0]
+      CurrName = row[1]
+      CurrTelegramID = row[2]
+      GenderID = row[3]
+      MessID = row[4]  # id сообщения кооторое сработало, его удалить
+      col_1 = row[5]
+      Txt_1 = row[6]
+      col_2 = row[7]
+      Txt_2 = row[8]
+      col_3 = row[9]
+      Txt_3 = row[10]
+      col_4 = row[11]
+      Txt_4 = row[12]
+      ActiveUntil = row[13]
+      StdShutoff = row[14]
 
-            # сначала проверяем в отправленных сегодня , потом уже берем из списка
-            SentMessID = row[15]
-            Scol_1 = row[16]
-            Stxt_1 = row[17]
-            Scol_2 = row[18]
-            Stxt_2 = row[19]
-            Scol_3 = row[20]
-            Stxt_3 = row[21]
-            Scol_4 = row[22]
-            Stxt_4 = row[23]
-            DesTimeID = row[25]   # время получения горо
-            # если SubscrTypeID = 5  подписка не активна, отправлять только заголовок дня
-            SubscrTypeID = row[34]
+      # сначала проверяем в отправленных сегодня , потом уже берем из списка
+      SentMessID = row[15]
+      Scol_1 = row[16]
+      Stxt_1 = row[17]
+      Scol_2 = row[18]
+      Stxt_2 = row[19]
+      Scol_3 = row[20]
+      Stxt_3 = row[21]
+      Scol_4 = row[22]
+      Stxt_4 = row[23]
+      DesTimeID = row[25]   # время получения горо
+      # если SubscrTypeID = 5  подписка не активна, отправлять только заголовок дня
+      SubscrTypeID = row[34]
 
-            # взять из завтрашней таблицы
-            if DesTimeID == 1:
-                Txt_1 = row[26]
-                Txt_2 = row[27]
-                Txt_3 = row[28]
-                Txt_4 = row[29]
+      # взять из завтрашней таблицы
+      if DesTimeID == 1:
+         Txt_1 = row[26]
+         Txt_2 = row[27]
+         Txt_3 = row[28]
+         Txt_4 = row[29]
 
-                Stxt_1 = row[30]
-                Stxt_2 = row[31]
-                Stxt_3 = row[32]
-                Stxt_4 = row[33]
+         Stxt_1 = row[30]
+         Stxt_2 = row[31]
+         Stxt_3 = row[32]
+         Stxt_4 = row[33]
 
-            RegDateFin = row[24]   # дата и время регистрации пользователя
-            RegDateFin_obj = datetime.strptime(RegDateFin, '%Y-%m-%d %H:%M:%S')
+      RegDateFin = str(row[24])   # дата и время регистрации пользователя
 
-            RegDate = RegDateFin_obj.date()
-            RegTime = RegDateFin_obj.time()
+      RegDateFin_obj = datetime.strptime(RegDateFin, '%Y-%m-%d %H:%M:%S')
 
-            DesTimeID = row[25]   # время получения горо
+      RegDate = RegDateFin_obj.date()
+      RegTime = RegDateFin_obj.time()
 
-            if DesTimeID == 0:    # утром сегодняшний
-                DayHeaderTXT = TodayHeaderTXT
-                whatDay = "сегодня"
-            else:                 # вечером завтрашний
-                DayHeaderTXT = TomorHeaderTXT
-                whatDay = "завтра"
+      DesTimeID = row[25]   # время получения горо
 
-            if ActiveUntil == None:
-                HandleMess(
-                    "У пользователя не указана дата окончания подписки, ТЛГ ID: "+str(inpTelegramID), 4, True)
-                continue
+      if DesTimeID == 0:    # утром сегодняшний
+         DayHeaderTXT = TodayHeaderTXT
+         whatDay = "сегодня"
+      else:                 # вечером завтрашний
+         DayHeaderTXT = TomorHeaderTXT
+         whatDay = "завтра"
 
-            if SentMessID != None:   # сегодня уже пользователю отправляли, взять из отправленных
-                Txt_1 = Stxt_1
-                Txt_2 = Stxt_2
-                Txt_3 = Stxt_3
-                Txt_4 = Stxt_4
-                todaySentMess = True
-            else:                    # сегодня еще не отправляли
-                todaySentMess = False
-                if MessID == None:
-                    HandleMess("У пользователя ТЛГ ID: "+str(CurrTelegramID) +
-                               ", Имя: "+str(CurrName)+" закончились сообщения!", 4, True)
-                    continue
+      if ActiveUntil == None:
+         HandleMess("У пользователя не указана дата окончания подписки, ТЛГ ID: " +
+                    str(inpTelegramID), 4, True)
+         continue
 
-                # добавляем в удаляемые сообщения
-                usrMessList.append((MessID,))
-                # добавляем в сегодняшние сообщения
-                newTodayList.append(
-                    (UserID, currNow, col_1, col_2, col_3, col_4))
+      if SentMessID != None:   # сегодня уже пользователю отправляли, взять из отправленных
+         Txt_1 = Stxt_1
+         Txt_2 = Stxt_2
+         Txt_3 = Stxt_3
+         Txt_4 = Stxt_4
+         todaySentMess = True
+      else:                    # сегодня еще не отправляли
+         todaySentMess = False
+         if MessID == None:
+            HandleMess("У пользователя ТЛГ ID: "+str(CurrTelegramID) +
+                       ", Имя: "+str(CurrName)+" закончились сообщения!", 4, True)
+            continue
 
-            ServMess = ""
-            Stat = 0
-            # проверить оставшуюся подписку
-            leftDays = durDays(currNow, ActiveUntil)
-            if leftDays == None:
-                HandleMess("Ошибка поиска разницы дат, ТЛГ ID: " +
-                           str(inpTelegramID), 4, True)
-                continue
-            if StdShutoff == 1:  # собщения выдаем только по флажку
-                Stat = 2
-                if leftDays <= 0:
+         usrMessList.append((MessID,))  # добавляем в удаляемые сообщения
+         # добавляем в сегодняшние сообщения
+         newTodayList.append((UserID, currNow, col_1, col_2, col_3, col_4))
 
-                    usrStopList.append((UserID,))  # отключить от рассылки
+      ServMess = ""
+      Stat = 0
+      # проверить оставшуюся подписку
+      leftDays = durDays(currNow, str(ActiveUntil))
+      if leftDays == None:
+         HandleMess("Ошибка поиска разницы дат, ТЛГ ID: " +
+                    str(inpTelegramID), 4, True)
+         continue
+      if StdShutoff == 1:  # собщения выдаем только по флажку
+        Stat = 2
+        if leftDays <= 0:
 
-                    ServMess = "Ваша подписка окончена !"
-                    Stat = 3
-                elif leftDays <= 3:
-                    ServMess = " До окончания подписки " + \
-                        ("остался" if leftDays == 1 else "осталось") + \
-                        " "+str(leftDays)+" "+strRusDays(leftDays)
-                    Stat = 2
+          usrStopList.append((UserID,))  # отключить от рассылки
 
-            # зарегился сегодня  до обеда и время отправки вечер, то сегодня в рассылку  включать
-            if (RegDate == currNow) and (DesTimeID == 1) and (RegTime < midday):
-                pass
-            else:
-                if Stat != 3:
-                    # проставить дату отправки пользователю (т.е.  блокировать сегодняшнюю  рассылку)
-                    usrList.append((currNow, UserID,))
+          ServMess = "Ваша подписка окончена !"
+          Stat = 3
+        elif leftDays <= 3:
+          ServMess = " До окончания подписки " + \
+              ("остался" if leftDays == 1 else "осталось") + \
+               " "+str(leftDays)+" "+strRusDays(leftDays)
+          Stat = 2
 
-            CurrDo = "Дорогой " if GenderID == 1 else "Дорогая "
+      # зарегился сегодня  до обеда и время отправки вечер, то сегодня в рассылку  включать
+      if (RegDate == currNow) and (DesTimeID == 1) and (RegTime < midday):
+         pass
+      else:
+        if Stat != 3:
+           # проставить дату отправки пользователю (т.е.  блокировать сегодняшнюю  рассылку)
+           usrList.append((currNow, UserID,))
 
-            CurrResHeaderTXT = "<b>"+CurrDo+CurrName+", "+whatDay+" "+DayHeaderTXT
+      CurrDo = "Дорогой " if GenderID == 1 else "Дорогая "
 
-            if SubscrTypeID == 5:  # по статусом 5 не формировать перс гор - только шапку
-                CurrMessTXT = ""
-                CurrResHeaderTXT = CurrResHeaderTXT+"\n\n\n <b>Прекрасного дня!</b> 🌸🌸🌸"
+      CurrResHeaderTXT = "<b>"+CurrDo+CurrName+", "+whatDay+" "+DayHeaderTXT
 
-            else:
-                CurrMessTXT = formMess(Txt_1, Txt_2, Txt_3, Txt_4)
+      if SubscrTypeID == 5:  # по статусом 5 не формировать перс гор - только шапку
+         CurrMessTXT = ""
+         CurrResHeaderTXT = CurrResHeaderTXT+"\n\n\n <b>Прекрасного дня!</b> 🌸🌸🌸"
 
-            resList.append((CurrTelegramID, CurrName, CurrResHeaderTXT,
-                           CurrMessTXT, ServMess, Stat, todaySentMess,))
+      else:
+         CurrMessTXT = formMess(Txt_1, Txt_2, Txt_3, Txt_4)
 
-        if cur:
-            cur.close()
-        # сохранить дату отправки в Users и удалить отправленные из UserMess, отключить от раасылки
-        delAndUpdUsrInfo(conn, currNow, usrList, usrMessList,
-                         usrStopList, newTodayList)
+      resList.append((CurrTelegramID, CurrName, CurrResHeaderTXT,
+                     CurrMessTXT, ServMess, Stat, todaySentMess, DesTimeID,))
 
-        return(resList)
+    if cur:
+        cur.close()
+    # сохранить дату отправки в Users и удалить отправленные из UserMess, отключить от раасылки
+    delAndUpdUsrInfo(conn, currNow, usrList, usrMessList,
+                     usrStopList, newTodayList)
 
-    except Exception as error:
-        HandleMess("Ошибка процедуры формирования текста г. для часа: " +
-                   str(inpDesTimeID)+"\n" + str(error), 4, True)
-        return(None)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+    return(resList)
+
+ except Exception as error:
+    HandleMess("Ошибка процедуры формирования текста г. для часа: " +
+               str(inpDesTimeID)+"\n" + str(error), 4, True)
+    return(None)
+ finally:
+    if cur:
+       cur.close()
+    if conn:
+       conn.close()
 
 
 #  возвращает разницу в днях между тек датой и вх датой
@@ -445,11 +475,27 @@ def delAndUpdUsrInfo(conn, currDate, usrList, usrMessList, usrStopList, newToday
 
         cur.executemany("DELETE FROM UserMess WHERE ID = ? ", usrMessList)
 
-# cur.executemany("UPDATE Users SET IsActiveSub = 0  WHERE ID = ? ",usrStopList)   пока не отменяем подписку
 
-        # добавить все новые отправленные сообщения
-        cur.executemany(
-            "INSERT INTO UserSentMess (User_ID,DateSend,Col_1,Col_2,Col_3,Col_4)  VALUES (?,?,?,?,?,?) ", newTodayList)
+   cur = conn.cursor()
+   cur.executemany("UPDATE Users SET DateSend = %s WHERE ID = %s ",usrList)
+   
+   cur.executemany("DELETE FROM UserMess WHERE ID = %s ",usrMessList)
+    
+# cur.executemany("UPDATE Users SET IsActiveSub = 0  WHERE ID = ? ",usrStopList)   пока не отменяем подписку
+      
+   cur.executemany("INSERT INTO UserSentMess (User_ID,DateSend,Col_1,Col_2,Col_3,Col_4)  VALUES (%s,%s,%s,%s,%s,%s) ",newTodayList) # добавить все новые отправленные сообщения     
+
+   
+   cur.execute("DELETE FROM UserSentMess WHERE DateSend <> %s ",(currDate,)) #  удалить все несегодняшние сообщения
+   
+   
+   conn.commit()
+   
+ except Exception as error:
+    HandleMess("Ошибка обновления даты отправки или списка сообщений пользователя \n"+ str(error),4,True)    
+ finally:    
+    if cur:
+       cur.close()
 
         cur.execute("DELETE FROM UserSentMess WHERE DateSend <> ? ",
                     (currDate,))  # удалить все несегодняшние сообщения
@@ -487,8 +533,43 @@ def GetSubscrState(inpTelegramID=None):
                    ON   SubscrTypes.ID = SubscrType_ID
                    WHERE  IsActiveBot =1 """
 
-        if inpTelegramID == None:
-            cur.execute(txtQuery)
+
+    if inpTelegramID  == None:
+      cur.execute(txtQuery) 
+    else:
+      cur.execute(txtQuery+ " AND TelegramID = %s ",(inpTelegramID,))  
+      
+      
+    records = cur.fetchall()   
+    resList = list()  # список статусов
+    for row in records:
+   
+      SubscrType  = row[0]
+      ActiveUntil = row[1] 
+      DaysSubscr  = row[2]
+      IsActiveSub = row[3]
+      IsActiveBot = row[4]
+      TryPayRem   = row[5] # осталось  попыток списать средства
+      TelegramID  = row[6]
+      if DaysSubscr == None:
+        HandleMess("У пользователя вообще нет подписки, ТЛГ ID: "+str(inpTelegramID),4,True)    
+        return(None)
+    
+      if ActiveUntil  == None:
+        HandleMess("У пользователя не указана дата окончания подписки, ТЛГ ID: "+str(inpTelegramID),4,True)    
+        return(None)
+
+      leftDays  = durDays(currNow,str(ActiveUntil))
+      if leftDays == None:
+        HandleMess("Ошибка поиска разницы дат, ТЛГ ID: "+str(inpTelegramID),4,True)    
+        return(None)
+
+      Stat = 0  
+      if IsActiveSub != 0:
+        
+        if SubscrType == 1:         
+          Mess = "Активирован пробный период на "
+          Stat = 1
         else:
             cur.execute(txtQuery + " AND TelegramID = ? ", (inpTelegramID,))
 
@@ -632,75 +713,77 @@ def GenTmpUsrMess(inpTelegramID):
                  LEFT JOIN MessBodies as Mb4 
                  ON Mb4.ID = coalesce(MainTb.Col_4,SecTb.Col_4,'')
                
-               WHERE (MainTb.ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = ?)) LIMIT 1 """
+               WHERE (MainTb.ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = %s)) LIMIT 1 """
 
-        cur.execute(txtQuery, (inpTelegramID,))
-        resList = list()  # список всех сообщений пользователю
 
-        records = cur.fetchall()
-        if len(records) != 1:
-            return(resList)
+    
+    cur.execute(txtQuery,(inpTelegramID,))  
+    resList = list()  # список всех сообщений пользователю
+    
+    records = cur.fetchall()
+    if len(records) != 1:
+       return(resList)
+   
+    
+    ServMess = None
+    Stat  = None
+    todaySentMess = None
+    row = records[0]
+    CurrTelegramID  = row[0]
+    CurrName        = row[1] 
+    GenderID        = row[2]
+    Birthday        = row[3]
+    UsersTmpID      = row[12]
+    
+    Txt_1           = row[8]
+    Txt_2           = row[9]
+    Txt_3           = row[10]
+    Txt_4           = row[11]
 
-        ServMess = None
-        Stat = None
-        todaySentMess = None
-        row = records[0]
-        CurrTelegramID = row[0]
-        CurrName = row[1]
-        GenderID = row[2]
-        Birthday = row[3]
-        UsersTmpID = row[12]
-
-        Txt_1 = row[8]
-        Txt_2 = row[9]
-        Txt_3 = row[10]
-        Txt_4 = row[11]
-
-        if(Txt_1 == "") or (Txt_2 == "") or (Txt_3 == "") or (Txt_4 == ""):    # еще не присвоены колонки
-
-            lenMess = GetTbLen(conn, "MessBodies")
-
-            Col_1 = random.randint(0, lenMess-1)  # получить новые значения
-            Col_2 = random.randint(0, lenMess-1)
-            Col_3 = random.randint(0, lenMess-1)
-            Col_4 = random.randint(0, lenMess-1)
-            cur.execute(""" SELECT Col_1 as Txt FROM MessBodies WHERE ID = ?
+    if(Txt_1 == "") or (Txt_2 == "") or (Txt_3 == "") or (Txt_4 == ""):    # еще не присвоены колонки
+       
+       lenMess = GetTbLen(conn,"MessBodies")
+       
+       Col_1 = random.randint(0, lenMess-1)  # получить новые значения 
+       Col_2 = random.randint(0, lenMess-1)
+       Col_3 = random.randint(0, lenMess-1)
+       Col_4 = random.randint(0, lenMess-1) 
+       cur.execute(""" SELECT Col_1 as Txt FROM MessBodies WHERE ID = %s
                         UNION ALL
-                        SELECT Col_2 as Txt FROM MessBodies WHERE ID = ?
+                        SELECT Col_2 as Txt FROM MessBodies WHERE ID = %s
                         UNION ALL
-                        SELECT Col_3 as Txt FROM MessBodies WHERE ID = ?
+                        SELECT Col_3 as Txt FROM MessBodies WHERE ID = %s
                         UNION ALL
-                        SELECT Col_4 as Txt FROM MessBodies WHERE ID = ? """, (Col_1, Col_2, Col_3, Col_4,))
-            records = cur.fetchall()
+                        SELECT Col_4 as Txt FROM MessBodies WHERE ID = %s """,(Col_1,Col_2,Col_3,Col_4,))       
+       records = cur.fetchall()
+       
+       Txt_1           = records[0][0]
+       Txt_2           = records[1][0]
+       Txt_3           = records[2][0]
+       Txt_4           = records[3][0]
+       # сохранить новые значения в последнюю запись с указанным ТЛГ ID
+       cur.execute(""" UPDATE  UsersTmp
+                       SET Col_1 = %s, Col_2 = %s, Col_3 = %s,Col_4 = %s
+                       WHERE ID = %s """,(Col_1,Col_2,Col_3,Col_4,UsersTmpID,))       
 
-            Txt_1 = records[0][0]
-            Txt_2 = records[1][0]
-            Txt_3 = records[2][0]
-            Txt_4 = records[3][0]
-            # сохранить новые значения в последнюю запись с указанным ТЛГ ID
-            cur.execute(""" UPDATE  UsersTmp
-                       SET Col_1 = ?, Col_2 = ?, Col_3 = ?,Col_4 = ?
-                       WHERE ID = ? """, (Col_1, Col_2, Col_3, Col_4, UsersTmpID,))
+       conn.commit() 
+        
+          
+    CurrDo = "Дорогой " if GenderID == 1 else "Дорогая " 
+    CurrResHeaderTXT = "<b>"+CurrDo+CurrName+", "+whatDay+" "+DayHeaderTXT      
+    CurrMessTXT = formMess(Txt_1,Txt_2,Txt_3,Txt_4)
+    resList.append((CurrTelegramID,CurrName,CurrResHeaderTXT,CurrMessTXT,GenderID,Birthday,)) 
 
-            conn.commit()
-
-        CurrDo = "Дорогой " if GenderID == 1 else "Дорогая "
-        CurrResHeaderTXT = "<b>"+CurrDo+CurrName+", "+whatDay+" "+DayHeaderTXT
-        CurrMessTXT = formMess(Txt_1, Txt_2, Txt_3, Txt_4)
-        resList.append((CurrTelegramID, CurrName, CurrResHeaderTXT,
-                       CurrMessTXT, GenderID, Birthday,))
-
-        return(resList)
-
-    except Exception as error:
-        HandleMess("Ошибка процедуры формирования для врем польз ТЛГ ID: " +
-                   inpTelegramID+"\n" + str(error), 4, True)
-        return(None)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+    return(resList)
+   
+ except Exception as error:
+    HandleMess("Ошибка процедуры формирования для врем польз ТЛГ ID: "+str(inpTelegramID)+"\n"+ str(error),4,True)
+    return(None)
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()   
 
 
 # записать данные в таблицу
@@ -873,32 +956,75 @@ def GetFromAstroSchool(inpDateSend, inpCategory=None):
 
 # получить список всех тлг ID получающих сообщения в указанное время
 def GetListUsersOnDesTime(inpDesTimeID):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(None)
-        cur = conn.cursor()
-        cur.execute("SELECT TelegramID FROM Users  WHERE DesTime_ID = ? AND ActiveUntil > ?",
-                    (inpDesTimeID, datetime.strftime(datetime.now(), "%Y-%m-%d")))
-        records = cur.fetchall()
-        return(records)
-
-    except Exception as error:
-        HandleMess("Ошибка получения списка ТЛГ ID получающих г. во время " +
-                   str(inpDesTimeID)+" \n" + str(error), 4, True)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return(None)
+   cur = conn.cursor()
+   cur.execute("SELECT TelegramID FROM Users  WHERE DesTime_ID = %s AND ActiveUntil > %s",(inpDesTimeID,datetime.strftime(datetime.now(), "%Y-%m-%d")))
+   records = cur.fetchall() 
+   return(records)
+   
+ except Exception as error:
+    HandleMess("Ошибка получения списка ТЛГ ID получающих г. во время "+str(inpDesTimeID)+" \n"+ str(error),4,True)    
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()   
 
 # выбрать данные из любой  таблицы по фильтрам
 # фильтр - это кортеж с кортежами , каждый вложенные состоит из 3- х элементов
 # имя фильтруемого поля, условие (как оно пишетсы в бд), значение условия
 # пример SelectDeleteFromTable("AstroSchool",(("Name","=","Вася"), ("ID",">",3),)  )       - добавить
 # пример SelectDeleteFromTable("AstroSchool",(("Name","=","Вася"), ("ID",">",3),),True  ) - Удалить
-##         SelectDeleteFromTable("AstroSchool",(('ID','>=',10),),True )
+# SelectDeleteFromTable("AstroSchool",(('ID','>=',10),),True )
+       
+# все условия объединяются оператором AND
+# допускается предача пустого кортежа условия
+# IsDel = True - Удаляет данные по указанному признаку
+       
+def SelectDeleteFromTable(inpTbName,inpFilter, IsDel=False):
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return(None)
+   cur = conn.cursor()
+   if IsDel:
+     Qtext = "DELETE FROM "+inpTbName 
+   else:   
+     Qtext = "SELECT * FROM "+inpTbName
+   
+   QVal = list()   
+   WhereText =" "  
+   for onecond in inpFilter:
+      WhereText = WhereText +onecond[0]+ onecond[1]+ "%s AND "
+      QVal.append(onecond[2]) 
+
+   WhereText = WhereText.rstrip(' AND ')  # удалить последнюю запятую
+   
+   if len(inpFilter)!= 0:
+      Qtext = Qtext+" WHERE "
+      
+   Qtext = Qtext+WhereText
+
+   cur.execute(Qtext,tuple(QVal))
+   if IsDel:
+      conn.commit()
+      return(True)
+   else:
+      records = cur.fetchall() 
+      return(records)
+   
+ except Exception as error:
+    HandleMess("Ошибка унив. запроса к таблице "+inpTbName+ "\n"+ str(error),4,True)    
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()   
 
 # все условия объединяются оператором AND
 # допускается предача пустого кортежа условия
@@ -954,46 +1080,46 @@ def SelectDeleteFromTable(inpTbName, inpFilter, IsDel=False):
 #  например
 #  InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"})
 #  Возвращает кортеж (True, ID  новой записи) или (False,)  при неудаче
-def InsertIntoTable(inpTbName, inpValues):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return((False,))
-        cur = conn.cursor()
+def InsertIntoTable(inpTbName,inpValues):
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return((False,))
+   cur = conn.cursor()
 
-        Qtext = "INSERT INTO "+inpTbName
+   Qtext = "INSERT INTO "+inpTbName
+   
+   QVal = list()   
+   NamesFields =" "
+   QMark      = " "
+   
+   for key in inpValues:
+      NamesFields = NamesFields +key+","
+      QVal.append(inpValues[key]) 
+      QMark = QMark+" %s,"
+      
+   NamesFields = NamesFields.rstrip(',')  # удалить последнюю запятую
+   QMark = QMark.rstrip(',')
+   if len(NamesFields)== 0:
+      return((False,))
+      
+   Qtext = Qtext+"("+NamesFields+") VALUES ("+QMark+")" 
 
-        QVal = list()
-        NamesFields = " "
-        QMark = " "
-
-        for key in inpValues:
-            NamesFields = NamesFields + key+","
-            QVal.append(inpValues[key])
-            QMark = QMark+" ?,"
-
-        NamesFields = NamesFields.rstrip(',')  # удалить последнюю запятую
-        QMark = QMark.rstrip(',')
-        if len(NamesFields) == 0:
-            return((False,))
-
-        Qtext = Qtext+"("+NamesFields+") VALUES ("+QMark+")"
-
-        cur.execute(Qtext, tuple(QVal))
-
-        conn.commit()
-        newID = cur.lastrowid
-        return((True, newID,))
-    except Exception as error:
-        HandleMess("Ошибка добавления данных в таблицу " +
-                   inpTbName+" \n" + str(error), 4, True)
-        return((False,))
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+   
+   cur.execute(Qtext,tuple(QVal))
+   
+   conn.commit()
+   newID = cur.lastrowid
+   return((True,newID,))
+ except Exception as error:
+    HandleMess("Ошибка добавления данных в таблицу "+inpTbName+" \n"+ str(error),4,True)
+    return((False,))
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
 
 # сохранить id пользователей в файл по заданным параметрам
 
@@ -1040,6 +1166,68 @@ def SaveSegmentDb(inPar):
         if f_out:
             f_out.close()
 
+
+def CopyUsrMess():
+ try:
+   curNew = False
+   curOld = False
+   connNew = horoscopedb.ConnectDb()
+   connOld = horoscopedb.ConnectOldDb()
+   curNew = connNew.cursor()
+   curOld = connOld.cursor()
+   curNew.execute("""SELECT  Users.ID 
+                 /*  Users.TelegramID,*/
+		 /*  coalesce(UsrMess.CountMess,0) as UsrCountMess  */
+                FROM Users 
+                LEFT JOIN ( SELECT Count(1) CountMess,
+                           User_ID
+                           FROM UserMess
+                           GROUP BY User_ID ) as UsrMess 
+               ON UsrMess.User_ID = Users.ID
+               WHERE (Users.IsActiveBot =0 and (Users.SubscrType_ID = 3 OR Users.SubscrType_ID = 1))and (coalesce(UsrMess.CountMess,0)=0) """)
+
+   recordsNew = curNew.fetchall()
+   resListIDNew = list()
+   strList = ""
+   for row in recordsNew:
+     resListIDNew.append(row[0])
+     strList = strList+str(row[0])+","
+
+   strList = strList[:-1]  
+   resTupIDNew = tuple(resListIDNew)
+   print(strList)
+   
+   
+# print(type(resListIDNew))
+# print(resListIDNew)
+   
+   curOld.execute("SELECT User_ID,Col_1,Col_2,Col_3,Col_4 FROM UserMess WHERE User_ID IN ( "+strList+")")
+   recordsOld = curOld.fetchall()
+
+   curNew.executemany("INSERT INTO UserMess (User_ID,Col_1,Col_2,Col_3,Col_4)  VALUES (%s,%s,%s,%s,%s) ",recordsOld) 
+   connNew.commit()
+   
+   
+   print("Hello")
+##   
+   print(str(len(recordsOld)))
+    
+ except Exception as error:
+    print(error)
+    return(error)
+    
+ finally:    
+    if curNew:
+       curNew.close()
+    if connNew:  
+       connNew.close()
+    if curOld:
+       curOld.close()
+    if connOld:  
+       connOld.close()   
+ 
+       
+
 ##
 # Активна платная подписка: \n\
 # отбираются записи таблицы Users у которых \n\
@@ -1063,12 +1251,27 @@ def SaveSegmentDb(inPar):
 
 
 # print(InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"}))
-##res = SelectDeleteFromTable("Users",(('ID','>',1000),("Gender_ID"," = ","2")))
+# res = SelectDeleteFromTable("Users",(('ID','>',1000),("Gender_ID"," = ","2")))
 # for row in res:
 # print(row)
 # res =
-# print(GenHourMessAll(1,"658805648"))
+       # 933017341,193427287
+# 314801740,245188029
+# 5392589497
+
+
+# old = datetime.now()
+
+# print(GenHourMessAll(0,121212121237))
+# print(GenHourMessAll(1,))#5560719600
+# 5392589497
+# print("tot="+str(datetime.now()-old))
 # for row in res:
 # print(row[2])
 # print(GenHourMessAll(1))
 # print(SaveSegmentDb('3'))
+
+# CopyUsrMess()
+
+
+# print(InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"}))

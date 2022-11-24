@@ -10,11 +10,10 @@ from asyncio import *
 import time
 import sys
 from controller import *
-import horoscopeproc as horoscopeproc
-import horoscopeusr as horoscopeusr
+import horoscopeusr
 import random
 from aiogram.types import *
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 from rich.console import Console
 import string
 from utils import logger
@@ -68,9 +67,18 @@ def generate_token(length):
                 string.ascii_uppercase + string.digits) for _ in range(length))
 
 def create_session():
-    LINK = 'sqlite:///' + abspath(join('../horoscope.db'))
+    user = 'admin2'
+    password = "Sergey123"
+    host = '185.209.29.236'
+    port = 3306
+    database = 'horoscope'
+    connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
+                user, password, host, port, database)
+    # connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
 
-    engine = create_engine(LINK)
+    engine = create_engine(
+        url=connection_string
+    )
     return sessionmaker(engine)()
 
 
@@ -351,6 +359,11 @@ async def send_natal_map(id):
             pass
 
 
+def count_payments():
+    session=Session
+    rows = session.query(Payment).count()
+    return int(rows)+10000
+
 async def send_friend_horo(id, text):
 
     await sleep(2)
@@ -387,6 +400,10 @@ async def send_mes(posts):
     except:
         pass
 
+def add_message_to_cache(id,message_id):
+    if id not in delete_cache:
+            delete_cache[id]=list()
+    delete_cache[id].append(message_id)
 
 async def show_log_(coro):
     @functools.wraps(coro)

@@ -3,15 +3,14 @@ sys.path.append("../")
 import config
 from utils import *
 from controller import *
-
-
+import functions
+import for_payments
 
 
 @dp.message_handler(commands=["subscribe"])
 async def subscribe(message):
     
     id=message.chat.id
-    print(functions.GetUsers(id)[0]["SubscrType_ID"])
     sub_type=int(functions.GetUsers(id)[0]["SubscrType_ID"])
     try:
         if id in delete_cache:
@@ -85,7 +84,7 @@ async def sub_options(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 @dp.callback_query_handler(lambda call:call.data.find("offer") != -1)
@@ -99,7 +98,7 @@ async def offert(call):
         await wait_until_send(id,config.offert,parse_mode="html",reply_markup=keyboard)
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 @dp.callback_query_handler(lambda call: call.data.find("inf") != -1)
@@ -121,7 +120,7 @@ async def sub_info(call):
     finally:
 
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 
@@ -145,7 +144,7 @@ async def end_sub(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 @dp.callback_query_handler(lambda call: call.data.find("fin_sub")!=-1)
@@ -153,14 +152,14 @@ async def fin_sub(call):
     try:
         id = call.from_user.id
         delete_sub(id=id)
-        add_payment(sub_type=3,telegram_id=id,payment_id=str(functions.count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="UNSUB")
+        add_payment(sub_type=3,telegram_id=id,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="UNSUB")
 
         await wait_until_send(id,'Подписка отменена. Вы можете в любой момент активировать ее заново через раздел меню "подписка".')
     except:
         await wait_until_send(id,"Мы не обнаружили у вас подписку")
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 @dp.callback_query_handler(lambda call: call.data.find("del") != -1)
@@ -176,7 +175,7 @@ async def delete(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 
@@ -193,7 +192,7 @@ async def fin_end(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 @dp.callback_query_handler(lambda call: call.data.find("SUBSCR_ACT") != -1)#SUBSCR_ACT
@@ -270,7 +269,7 @@ async def ret(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 
@@ -280,7 +279,7 @@ async def full_back(call):
     await wait_until_send(
         id, "Для использования бота выберите кнопку в меню")
     try:
-        bot.delete_message(chat_id=id, message_id=call.message.id)
+        await bot.delete_message(chat_id=id, message_id=call.message.message_id)
     except:
         pass
 
@@ -318,7 +317,7 @@ async def opt2(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 
@@ -331,7 +330,6 @@ async def agreement(call):
         id = call.from_user.id
         active_until = functions.GetUsers(id)[0]["ActiveUntil"]
         date_format = '%Y-%m-%d'
-        active_until = datetime.strptime(active_until, date_format)
         active_until = datetime.strftime(active_until, DATE_FORMAT)                
         url=for_payments.make_recurse_pay(id=id,days=days,amount=config.cost[days],test=0)
         keyboard=types.InlineKeyboardMarkup()
@@ -356,7 +354,7 @@ async def agreement(call):
             return 0
     finally:
         try:
-            bot.delete_message(chat_id=id, message_id=call.message.id)
+            await bot.delete_message(chat_id=id, message_id=call.message.message_id)
         except:
             pass
 @dp.callback_query_handler(lambda call: call.data.find("net") != -1)

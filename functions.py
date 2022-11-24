@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from horoscopeusr import CreateUsrMess
 from sqlalchemy import null
 import config
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 import horoscopeusr as horoscopeusr
 import sqlite3
 import random
@@ -207,12 +207,13 @@ def full_delete_user(id):
                'Birthday',
                'Birthplace',              
                'DesTime_ID',          
-               'TimeZone',
-               'IsActiveBot',
-               'Source_ID',
                ]
     for i in UsrFields:
-        horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName=i,inpValue="")
+        if i=="Gender_ID" or i=="DesTime_ID":
+            value=None
+        else:
+            value=""
+        horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName=i,inpValue=value)
 def RegUser(conn,inpTelegramID):
     try:
      
@@ -629,7 +630,7 @@ def ListUserName(inpTelegramID):
     conn=horoscopedb.ConnectDb()
     try:
         cur = conn.cursor()   
-        cur.execute("SELECT Name FROM Users WHERE (TelegramID = ?) ORDER BY IS_Main DESC" ,(inpTelegramID,))
+        cur.execute("SELECT Name FROM Users WHERE TelegramID = %s ORDER BY IS_Main DESC" ,(inpTelegramID,))
         res = list()
         records = cur.fetchall()
         for row in records:
@@ -644,20 +645,13 @@ def ListUserName(inpTelegramID):
             cur.close()
             conn.commit()
 
-def count_payments():
-    conn=sqlite3.connect('payments.db')
-    cur=conn.cursor()
-    cur.execute("SELECT count(*) FROM Payments")
-    length=cur.fetchall()
-    cur.close()
-    conn.close()
-    return int(length[0][0])+10000
-print(count_payments())
+
+
 def GetUsers(inpTelegramID):
     try:
         conn=horoscopedb.ConnectDb()
         cur = conn.cursor()   
-        cur.execute("SELECT * FROM Users WHERE (TelegramID = ?)" ,(str(inpTelegramID),))
+        cur.execute("SELECT * FROM Users WHERE (TelegramID = %s)" ,(str(inpTelegramID),))
         res = list()
         records = cur.fetchall()
         cur.close()
@@ -681,20 +675,21 @@ def GetUsers(inpTelegramID):
 def select_all_active_until_table(id=None):
     try:
 
-        today_data=datetime.now()
+        today_data=datetime.now().date()
         conn=horoscopedb.ConnectDb()
         cur = conn.cursor()
         if id ==None:
             cur.execute("SELECT TelegramID, ActiveUntil FROM Users")
         else:
-            cur.execute("SELECT TelegramID, ActiveUntil FROM Users WHERE (TelegramID = ?)",(id,))
+            cur.execute("SELECT TelegramID, ActiveUntil FROM Users WHERE (TelegramID = %s)",(id,))
         res = list()
         records = cur.fetchall()
         cur.close()
         conn.commit()
         for row in records:
             if row[1]!="":
-                end_date=datetime.strptime(row[1],"%Y-%m-%d")
+                end_date=row[1]
+
                 days_till_end=end_date-today_data
                 days_till_end=days_till_end.days
                 end_date=datetime.strftime(end_date,"%d.%m.%Y")
@@ -714,8 +709,10 @@ def select_all_active_until_table(id=None):
 
 
 def validation_everything(text,type):
-    if type=="birth_place" or type=='Место проживания' or type=="Name" or type=="BirthTime":
-        return(validation(text),text)
+    if type=="birth_place" or type=='Место проживания' or type=="Name" :
+        return(len(text)<255)
+    if type=="BirthTime":
+        return(len(text)<10)
     if type=="Birthday":
         if validation_date(text)=="not_real_data":
             return(False,0)

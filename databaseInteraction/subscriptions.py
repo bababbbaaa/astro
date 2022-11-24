@@ -220,9 +220,18 @@ from os.path import join
 
 Base = declarative_base()
 
-LINK ='sqlite:///' + abspath(join('.', 'horoscope.db'))
+user = 'admin2'
+password = "Sergey123"
+host = '185.209.29.236'
+port = 3306
+database = 'horoscope'
+connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
+            user, password, host, port, database)
+# connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
 
-engine = create_engine(LINK)
+engine = create_engine(
+    url=connection_string
+)
 
 DATE_FORMAT = '%d.%m.%Y'
 TIME_FORMAT = '%H:%M'

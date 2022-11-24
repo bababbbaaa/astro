@@ -25,6 +25,9 @@ class FriendHoroscope(StatesGroup):
 @dp.message_handler(commands=["gen_user_mes"])
 async def gen_user_mess(message):
     id = message.chat.id
+    if functions.ListUserName(inpTelegramID=id)[0] == "":
+        await wait_until_send(id,"Для того, чтобы воспользоваться данной функцией, сначала закончите регистрацию, нажав '/start'")
+        return 0
     horoscopeusr.RegTmpUser(id)
     is_user_already_in_handler[id] = True
     await FriendHoroscope.name.set()
@@ -35,6 +38,7 @@ async def gen_user_mess(message):
 @dp.message_handler(state=FriendHoroscope.name)
 async def enter_name(message: CallbackQuery, state: FSMContext):
     id=message.chat.id
+        
     async with state.proxy() as state_data:
         
 

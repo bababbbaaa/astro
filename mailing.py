@@ -3,7 +3,7 @@ import schedule
 from threading import Thread
 import time
 from for_payments import Get_Data
-import horoscopeproc as horoscopeproc
+import horoscopeproc
 from datetime import datetime, date, timedelta
 import config
 import telebot
@@ -70,7 +70,7 @@ def wait_until_send_photo(id,photo,caption,reply_markup=None,parse_mode=None,url
                 continue
 
             elif err.error_code==403:
-                handlers.horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
+                horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
                 return err
             else:
                 return err
@@ -89,17 +89,17 @@ def wait_until_send(id,text,reply_markup=None,parse_mode=None,url=None):
 
             elif err.error_code==400:
                 if url!=None:
-                    new_user_horo=handlers.horoscopeproc.GenTmpUsrMess(id)[0]
+                    new_user_horo=horoscopeproc.GenTmpUsrMess(id)[0]
                     gender=new_user_horo[4]
                     name=new_user_horo[1]
-                    handlers.horoscopeusr.RegTmpUser(id)
-                    handlers.horoscopeusr.ChTmpUserInfo(inpTelegramID=id,inpValue=name,inpFieldName="Name")
-                    handlers.horoscopeusr.ChTmpUserInfo(inpTelegramID=id,inpValue=gender,inpFieldName="Gender_ID")
+                    horoscopeusr.RegTmpUser(id)
+                    horoscopeusr.ChTmpUserInfo(inpTelegramID=id,inpValue=name,inpFieldName="Name")
+                    horoscopeusr.ChTmpUserInfo(inpTelegramID=id,inpValue=gender,inpFieldName="Gender_ID")
                     text=new_user_horo[2]+"\n\n"+new_user_horo[3]
                 else:
                     return err
             elif err.error_code==403:
-                handlers.horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
+                horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
                 return err
             else:
                 return err
@@ -117,7 +117,7 @@ def wait_until_copy(id,forward_id,mes_id,reply_markup=None):
             if 'error_code' not in vars(err):
                 return 0
             if err.error_code==403:
-                handlers.horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
+                horoscopeusr.ChUserInfo(inpValue=0,inpTelegramID=str(id),inpFieldName="IsActiveBot" )
                 return(err)
             if err.error_code==429:
                 return err
@@ -135,7 +135,7 @@ def morning_sender():
     #"date_pict\16.10.2022.png"
     path="date_pict/"+date_today+".png"
     pict=open(path,"rb").read()
-    posts=handlers.horoscopeproc.GenHourMessAll(0)
+    posts=horoscopeproc.GenHourMessAll(0)
     buttons=types.InlineKeyboardMarkup()
     but=types.InlineKeyboardButton(text="Получить персональный гороскоп",callback_data="SUBSCR_ACT")
     buttons.add(but)
@@ -165,7 +165,7 @@ def morning_sender():
     except:
         pass
     
-    users=handlers.horoscopeproc.GetListUsersOnDesTime(1)
+    users=horoscopeproc.GetListUsersOnDesTime(1)
     print(users)
 
     posts = get_posts(create_session(), Get_Data(), "person")
@@ -191,7 +191,7 @@ def morning_sender():
 
 def evening_sender():
     hour=1
-    posts=handlers.horoscopeproc.GenHourMessAll(1)
+    posts=horoscopeproc.GenHourMessAll(1)
     date=datetime.strftime(datetime.now()+timedelta(days=1), DATE_FORMAT)
     path="date_pict/"+date+".png"
     pict=open(path,"rb").read()
@@ -224,7 +224,7 @@ def evening_sender():
     except:
         pass
     
-    users=handlers.horoscopeproc.GetListUsersOnDesTime(0)
+    users=horoscopeproc.GetListUsersOnDesTime(0)
     # posts=horoscopeproc.GetFromAstroSchool(inpCategory="person",inpDateSend=Get_Data())
 
     posts = get_posts(create_session(), category='person', date=Get_Data())
@@ -254,8 +254,8 @@ def on_time_sender(time1 : str) -> bool:
         _button = Button(text=button.Source, url=button.Url)
         markup.add(_button)
     if posts[0].FilePath==None:
-        users=handlers.horoscopeproc.GetListUsersOnDesTime(1)
-        users.extend(handlers.horoscopeproc.GetListUsersOnDesTime(0))
+        users=horoscopeproc.GetListUsersOnDesTime(1)
+        users.extend(horoscopeproc.GetListUsersOnDesTime(0))
         for i in range(len(posts)):
             for j in range(len(users)):
                 managerID = posts[i].ManagerID
@@ -467,36 +467,13 @@ def service_message() -> None:
             print(pay.text)
             try:
                 if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
-                    # print("here")
-                    
-                    # id=recurent_subs[i].TelegramID
-
-                    # date_end=functions.GetUsers(id)[0]["ActiveUntil"]
-
-                    # end=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(30))
-
-                    # end_for_users=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(30),base="users")
-
-                    # ChUserInfo(inpTelegramID=id,inpFieldName="ActiveUntil",inpValue=end_for_users)
-
-                    # ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=3)
-                    # add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(functions.count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
-
-                    # Thread(target=wait_until_send,args=(id,"Ваша подписка была продлена, спасибо")).start()
-                    # pass
                     # set_field(id=int(recurent_subs[i].TelegramID),end=end)
 
-                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(functions.count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
+                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
 
-                    # Thread(target=wait_until_send,args=(id,"Ваша подписка была продлена, спасибо")).start()
                 else:
                     days=0
                     id=recurent_subs[i].TelegramID
-                    # active_until=functions.GetUsers(id)[0]["ActiveUntil"]
-                    # url="url"
-                    # delete_sub(id)
-                    # ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
-                    # add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(functions.count_payments()),active_until=1,days=30,payed=False,amount=69,link="mailing error",)
                     end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
                     Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],end_time)).start()
                     # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
@@ -597,13 +574,13 @@ def every_day_sheduler_maker():
  
     schedule.every().day.at("09:00").do(morning_sender)
     schedule.every().day.at("18:30").do(evening_sender)
-    schedule.every().day.at("00:00").do(handlers.horoscopeusr.DelTmpUser)
+    schedule.every().day.at("00:00").do(horoscopeusr.DelTmpUser)
     schedule.every().day.at("12:00").do(service_message)
 
 #  ------------------------------------------------------
 # ChUserInfo(/inpTelegramID="952863788",inpFieldName="SubscrType_ID",inpValue=5)
 # morning_sender()
-# evening_sender()
+evening_sender()
 # def change_sub_table():
 #     today=datetime.now()
 #     needed_day=today-datetime.timedelta(days=30)

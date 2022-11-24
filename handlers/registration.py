@@ -3,10 +3,21 @@ from asyncio import *
 from controller import *
 from utils import *
 import config
+from aiogram.dispatcher.filters.state import State, StatesGroup
+
 import functions
 
 # ----------------------------------------start
 
+class User(StatesGroup):
+    name = State()
+    birth_day = State()
+    gender = State()
+    birth_time=State()
+    destime_id=State()
+    birth_place=State()
+    
+    
 
 @dp.message_handler(commands=['start'])
 async def start(message):
@@ -43,18 +54,18 @@ async def start(message):
     elif text == "/start":
         await wait_until_send(
             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
-
+    
     else:
         await registartion1(int(id), text)
 
-
+@dp.message_handler(commands=["full_delete_user_uga_buga"])
 @dp.message_handler(text="full_delete_user", state="*")
 async def full_delete_user(message: Message):
     author = message.from_user.id
+    if author in config.managers:
+        functions.full_delete_user(author)
 
-    functions.full_delete_user(author)
-
-    await bot.send_message(author, "Аккаунт был успешно удален")
+        await bot.send_message(author, "Аккаунт был успешно удален")
 
 
 
@@ -120,7 +131,7 @@ async def registartion1(id: int, text: str):
                           types.InlineKeyboardButton(text="Вечер", callback_data="tim;evn"))
             await wait_until_send_photo(id, config.inter_time_option, photo=photos["inter_time_option"], reply_markup=keyboard1)
         else:
-            await wait_until_send_photo(id, config.inter_time, photo=photos["inter_time"])
+            await wait_until_send_photo(id, config.inter_time, photo=photos["inter_time"])        
     else:
         await bot.send_message(id, "Выберите в меню то, что вам необходимо")
 

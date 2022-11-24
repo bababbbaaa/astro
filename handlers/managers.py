@@ -178,12 +178,13 @@ async def send_post(message: CallbackQuery, state: FSMContext):
         post = state_data['content']
         buttons = state_data['buttons']
 
-        file = message
+        file = None
+        file_path=None
+
         if message.text is not None:
             file = None
 
     await state.finish()
-
     if file is not None:
         file_info = await bot.get_file(file.document.file_id)
         download = await bot.download_file(file_info.file_path)
