@@ -483,6 +483,20 @@ def add_source_route():
     except:
         return 'Some of the required keys were not passed', 400
 
+@app.route('/delete_source', methods=['POST'])
+def delete_source_route():
+    data = request.get_json()
+
+    title = data.get('title')
+    code = data.get('code')
+
+    try:
+        delete_source(code, title)
+
+        return 'Successfully deleted'
+    except:
+        return "Something went wrong", 400
+
 HOST = '195.2.79.3'
 PORT = '443'
 

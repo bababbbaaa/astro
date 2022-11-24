@@ -69,9 +69,6 @@ def delete_source(code: str = None, title: str = None) -> None:
         Session.commit()
         return
 
-    print('nothing to delete')    
-
-
 def get_sources(title: str = None) -> list:
     sources = _get_sources(title)
     return list(Session.scalars(sources))
