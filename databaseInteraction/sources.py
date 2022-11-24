@@ -36,7 +36,7 @@ def add_source(
         date : str,
         type : str) -> Source:
 
-    if not check_date(date):
+    if not basic_check_date(date):
         raise Exception("Invalid date")
 
     source = Source(

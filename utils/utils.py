@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime
 import os
 from re import X
@@ -24,7 +25,6 @@ from datetime import datetime as date_time
 from aiogram.dispatcher.storage import FSMContext
 from datetime import timedelta
 sys.path.append("../")
-import asyncio
 console = Console()
 
 
@@ -63,12 +63,43 @@ async def general_info(message: Message):
     return author, chat, me
 
 
+def parse_source_from_excel() -> list:
+    """
+
+    ВАЖНО !!!
+
+    Чтобы нормально конвертировать xlsx в xls, зайдите в эксель/либре и пересохраните
+    файл в другом формате, в ином случае ничего просто не будет работать, потому что
+    структура файла не поменяется, и он будет распознаваться, как xlsx
+
+    """
+
+    import xlrd
+    import datetime
+
+    book = xlrd.open_workbook('sources.xls')
+    page = book.sheet_by_index(1)
+    result = list()
+
+    for rx in range(1, page.nrows - 1):
+        error, date, title, code, type_, price = page.row(rx)
+
+        date = datetime.datetime(*xlrd.xldate_as_tuple(date.value,
+                                                       book.datemode))
+
+        result.append((date, title.value, code.value,
+                      type_.value, int(price.value)))
+
+    return result
+
+
 def generate_token(length):
     return ''.join(random.choice(
-                string.ascii_uppercase + string.digits) for _ in range(length))
+        string.ascii_uppercase + string.digits) for _ in range(length))
+
 
 def alchemy_to_dict(alchemy_object):
-    ignore_keys= ['_sa_instance_state']
+    ignore_keys = ['_sa_instance_state']
     result = dict()
 
     for key in vars(alchemy_object):
@@ -79,13 +110,15 @@ def alchemy_to_dict(alchemy_object):
 
     return result
 
-def alchemy_list_convert(objects : list) -> list:
+
+def alchemy_list_convert(objects: list) -> list:
     result = list()
 
     for object in objects:
         result.append(alchemy_to_dict(object))
 
     return result
+
 
 def create_session():
     user = 'admin2'
@@ -94,7 +127,7 @@ def create_session():
     port = 3306
     database = 'horoscope'
     connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
-                user, password, host, port, database)
+        user, password, host, port, database)
     # connection_string = 'sqlite:///' + abspath(join('../horoscope.db'))
 
     engine = create_engine(
@@ -188,6 +221,13 @@ def check_date(date_string: str) -> bool:
         return False
 
     return True
+
+def basic_check_date(date_string : str):
+    try:
+        date = date_time.strptime(date_string, DATE_FORMAT)
+        return True
+    except:
+        return False
 
 
 def check_time(time_string: str) -> bool:
@@ -381,9 +421,10 @@ async def send_natal_map(id):
 
 
 def count_payments():
-    session=Session
+    session = Session
     rows = session.query(Payment).count()
     return int(rows)+10000
+
 
 async def send_friend_horo(id, text):
 
@@ -421,10 +462,12 @@ async def send_mes(posts):
     except:
         pass
 
-def add_message_to_cache(id,message_id):
+
+def add_message_to_cache(id, message_id):
     if id not in delete_cache:
-            delete_cache[id]=list()
+        delete_cache[id] = list()
     delete_cache[id].append(message_id)
+
 
 async def show_log_(coro):
     @functools.wraps(coro)
