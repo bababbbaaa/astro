@@ -459,10 +459,10 @@ def get_payments():
         for i in range((limit+offset)/100):
             payments.extend(Pay.list(limit=limit+offset,status="succeeded"))
 # app.run(debug=True)
-HOST = '195.2.79.3'
-PORT = '443'
+# HOST = '195.2.79.3'
+# PORT = '443'
 
-app.run(host=HOST, port=PORT,debug=True)
+# app.run(host=HOST, port=PORT,debug=True)
 # #
-# app.run()
+app.run(debug=True)
 
