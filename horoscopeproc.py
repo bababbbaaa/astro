@@ -4,18 +4,21 @@ import random
 from datetime import date, datetime, timedelta
 
 
-# дней, дня
+
+# дней, дня 
 def strRusDays(inpDays):
-    strD = str(abs(inpDays))
-    S = strD[-1]
-    if (S == "1") and (inpDays != 11):
-        return "день"
-    elif (S in {"2", "3", "4"}) and (inpDays not in {12, 13, 15}):
-        return "дня"
-    else:
-        return "дней"
+   strD = str(abs(inpDays))
+   S = strD[-1]
+   if (S == "1")  and (inpDays!= 11):
+      return "день"
+   elif (S in {"2","3","4"})and (inpDays not in{12,13,15}) :
+      return "дня"
+   else:
+      return "дней" 
+   
+    
 
-
+ 
 #  количество строк в таблице
 
 def GetTbLen(conn,inpTbName):
@@ -422,47 +425,40 @@ def GenHourMessAll(inpDesTimeID,inpTelegramID=None):
 
 
 #  возвращает разницу в днях между тек датой и вх датой
-#  сколько осталось до вхдаты
-def durDays(now, inpDateStr):
-    try:
-        #  now  = date.today()
-        inpDate = datetime.strptime(inpDateStr, "%Y-%m-%d").date()
-        deltadays = (inpDate - now).days
-        return(deltadays)
-    except Exception as error:
-        HandleMess("Ошибка поиска разницы дат, дата: " +
-                   str(inpDateStr)+"\n" + str(error), 4, True)
-        return(None)
-
+#  сколько осталось до вхдаты 
+def durDays(now,inpDateStr):
+  try: 
+  #  now  = date.today()
+    inpDate = datetime.strptime(inpDateStr, "%Y-%m-%d").date()
+    deltadays = (inpDate- now).days
+    return(deltadays)
+  except  Exception as error:
+     HandleMess("Ошибка поиска разницы дат, дата: "+str(inpDateStr)+"\n"+ str(error),4,True)
+     return(None)   
+    
 # сформировать тело сообщения из отдельных текстов БД
-
-
-def formMess(Txt_1, Txt_2, Txt_3, Txt_4):
-
-    resStr = "<b>Твой персональный гороскоп.</b>\n\n🎯 🎯 🎯\n\n" + \
-        Txt_2  # "Возможности\n\n"+Txt_2
-
-    resStr = resStr + "\n\n❤ ❤ ❤\n\n"+Txt_1  # "\n\nОтношения\n\n"+Txt_1
-
-    resStr = resStr + "\n\n🍔 🥑 😊\n\n"+Txt_3  # "\n\nЗдоровье\n\n"+Txt_3
-
-    resStr = resStr + "\n\n💰 💰 💰\n\n"+Txt_4  # \n\nДеньги\n\n"+Txt_4
-
-    resStr = resStr + "\n\n\n <b>Прекрасного дня!</b> 🌸🌸🌸"
-
+def formMess(Txt_1,Txt_2,Txt_3,Txt_4):
+    
+    resStr =  "<b>Твой персональный гороскоп.</b>\n\n🎯 🎯 🎯\n\n"+Txt_2      #"Возможности\n\n"+Txt_2
+ 
+    resStr = resStr + "\n\n❤ ❤ ❤\n\n"+Txt_1 #"\n\nОтношения\n\n"+Txt_1
+    
+    resStr = resStr + "\n\n🍔 🥑 😊\n\n"+Txt_3      #"\n\nЗдоровье\n\n"+Txt_3
+    
+    resStr = resStr +"\n\n💰 💰 💰\n\n"+Txt_4   #\n\nДеньги\n\n"+Txt_4
+    
+   
+    
+    resStr = resStr +  "\n\n\n <b>Прекрасного дня!</b> 🌸🌸🌸"
+    
     return(resStr)
 
 
-# пользователям в спике проставить дату отправки для предохранения от повторной
-# удалить сработавшие сообщения по usrMessList из userMess
+## пользователям в спике проставить дату отправки для предохранения от повторной
+## удалить сработавшие сообщения по usrMessList из userMess
 
-def delAndUpdUsrInfo(conn, currDate, usrList, usrMessList, usrStopList, newTodayList):
-    try:
-
-        cur = conn.cursor()
-        cur.executemany("UPDATE Users SET DateSend = ? WHERE ID = ? ", usrList)
-
-        cur.executemany("DELETE FROM UserMess WHERE ID = ? ", usrMessList)
+def delAndUpdUsrInfo(conn,currDate,usrList,usrMessList,usrStopList,newTodayList):
+ try:
 
    
    cur = conn.cursor()
@@ -486,31 +482,21 @@ def delAndUpdUsrInfo(conn, currDate, usrList, usrMessList, usrStopList, newToday
     if cur:
        cur.close()
 
-        cur.execute("DELETE FROM UserSentMess WHERE DateSend <> ? ",
-                    (currDate,))  # удалить все несегодняшние сообщения
 
-        conn.commit()
-
-    except Exception as error:
-        HandleMess(
-            "Ошибка обновления даты отправки или списка сообщений пользователя \n" + str(error), 4, True)
-    finally:
-        if cur:
-            cur.close()
 
 
 # получить статус подписки пользователей
 def GetSubscrState(inpTelegramID=None):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(None)
+ try:
+    cur = False
+    conn = horoscopedb.ConnectDb()
+    if conn is None:      
+       return(None)
 
-        currNow = date.today()
-        cur = conn.cursor()
+    currNow = date.today()  
+    cur = conn.cursor()
 
-        txtQuery = """SELECT SubscrType_ID,
+    txtQuery = """SELECT SubscrType_ID,
                           ActiveUntil,
                           SubscrTypes.Days,
                           IsActiveSub,
@@ -560,101 +546,62 @@ def GetSubscrState(inpTelegramID=None):
           Mess = "Активирован пробный период на "
           Stat = 1
         else:
-            cur.execute(txtQuery + " AND TelegramID = ? ", (inpTelegramID,))
+          Mess = "Активирована подписка на "
+          Stat = 2
+          
+        if  leftDays<=3:
+          Stat = 6   
+          if SubscrType == 1:         
+             Mess = "Заканчивается пробный период на "          
+          else:
+            Mess = "Заканчивается подписка на "
+        
+        Mess = Mess + str(DaysSubscr)+" дней. Дней до окончания: "+str(leftDays)+"."
+      else:
 
-        records = cur.fetchall()
-        resList = list()  # список статусов
-        for row in records:
+        if TryPayRem<=0:
+          Stat = 5
+          Mess = "Не удалось продлить подписку"
+        else:   
+          if SubscrType == 1:
+            Mess = "Закончился пробный период"
+            Stat = 3
+          else:   
+            Mess = "Подписка неактивна"
+            Stat = 4
+            
+      if inpTelegramID  == None and Stat<=2:
+         continue
+      else:   
+        resList.append((TelegramID,SubscrType,ActiveUntil,DaysSubscr,leftDays,Mess,Stat,))
+	 
+    return(resList) 
 
-            SubscrType = row[0]
-            ActiveUntil = row[1]
-            DaysSubscr = row[2]
-            IsActiveSub = row[3]
-            IsActiveBot = row[4]
-            TryPayRem = row[5]  # осталось  попыток списать средства
-            TelegramID = row[6]
-            if DaysSubscr == None:
-                HandleMess(
-                    "У пользователя вообще нет подписки, ТЛГ ID: "+str(inpTelegramID), 4, True)
-                return(None)
-
-            if ActiveUntil == None:
-                HandleMess(
-                    "У пользователя не указана дата окончания подписки, ТЛГ ID: "+str(inpTelegramID), 4, True)
-                return(None)
-
-            leftDays = durDays(currNow, ActiveUntil)
-            if leftDays == None:
-                HandleMess("Ошибка поиска разницы дат, ТЛГ ID: " +
-                           str(inpTelegramID), 4, True)
-                return(None)
-
-            Stat = 0
-            if IsActiveSub != 0:
-
-                if SubscrType == 1:
-                    Mess = "Активирован пробный период на "
-                    Stat = 1
-                else:
-                    Mess = "Активирована подписка на "
-                    Stat = 2
-
-                if leftDays <= 3:
-                    Stat = 6
-                    if SubscrType == 1:
-                        Mess = "Заканчивается пробный период на "
-                    else:
-                        Mess = "Заканчивается подписка на "
-
-                Mess = Mess + str(DaysSubscr) + \
-                    " дней. Дней до окончания: "+str(leftDays)+"."
-            else:
-
-                if TryPayRem <= 0:
-                    Stat = 5
-                    Mess = "Не удалось продлить подписку"
-                else:
-                    if SubscrType == 1:
-                        Mess = "Закончился пробный период"
-                        Stat = 3
-                    else:
-                        Mess = "Подписка неактивна"
-                        Stat = 4
-
-            if inpTelegramID == None and Stat <= 2:
-                continue
-            else:
-                resList.append((TelegramID, SubscrType, ActiveUntil,
-                               DaysSubscr, leftDays, Mess, Stat,))
-
-        return(resList)
-
-    except Exception as error:
-        HandleMess("Ошибка процедуры получения статуса подписки " +
-                   str(inpTelegramID)+"\n" + str(error), 4, True)
-        return(None)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+ except Exception as error:
+    HandleMess("Ошибка процедуры получения статуса подписки "+str(inpTelegramID)+"\n"+ str(error),4,True)
+    return(None)
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
 
 
 # возвращает  гороскоп для временного пользователя, только на сегодня
 def GenTmpUsrMess(inpTelegramID):
-    # подключиться к базе
+  # подключиться к базе
 
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(None)
-        cur = conn.cursor()
-        DayHeaderTXT = GetCommonDayHeaderOnDate(conn, date.today())
+ try:
+    cur = False
+    conn = horoscopedb.ConnectDb()
+    if conn is None:      
+       return(None)
+    cur = conn.cursor()
+    DayHeaderTXT = GetCommonDayHeaderOnDate(conn,date.today())
+    
+    whatDay  = "сегодня"
 
-        whatDay = "сегодня"
-
-        txtQuery = """SELECT MainTb.TelegramID,
+    txtQuery = """SELECT MainTb.TelegramID,
                        MainTb.Name,
                        MainTb.Gender_ID,
                        MainTb.Birthday,
@@ -776,173 +723,165 @@ def GenTmpUsrMess(inpTelegramID):
 
 
 # записать данные в таблицу
-def AddToAstroSchool(inpCategory, inpDateSend, inpTimeSend, inpManagerID, inpMessageID):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return((False,))
-        cur = conn.cursor()
+def AddToAstroSchool(inpCategory,inpDateSend,inpTimeSend,inpManagerID,inpMessageID):
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return((False,))
+   cur = conn.cursor()
 
-        cur.execute("""SELECT 1 FROM AstroSchool              
+   cur.execute("""SELECT 1 FROM AstroSchool              
                   WHERE (DateSend = ? AND TimeSend = ? AND ManagerID  = ? AND MessageID = ? )                     
-               """, (inpDateSend, inpTimeSend, inpManagerID, inpMessageID,))
-        records = cur.fetchall()
-        if len(records) != 0:
-            return((False, "Запись с подобными ключевыми полями уже существует",))
+               """,(inpDateSend,inpTimeSend,inpManagerID,inpMessageID,))
+   records = cur.fetchall()
+   if len(records) != 0:
+      return((False,"Запись с подобными ключевыми полями уже существует",))
+    
 
-        cur.execute("INSERT INTO AstroSchool (Category,DateSend, TimeSend,ManagerID,MessageID)  VALUES (?,?,?,?,?) ",
-                    (inpCategory, inpDateSend, inpTimeSend, inpManagerID, inpMessageID,))
+   cur.execute("INSERT INTO AstroSchool (Category,DateSend, TimeSend,ManagerID,MessageID)  VALUES (?,?,?,?,?) ",
+               (inpCategory,inpDateSend,inpTimeSend,inpManagerID,inpMessageID,))
 
-        conn.commit()
-        return((True,))
-    except Exception as error:
-        HandleMess("Ошибка процедуры ""AddToAstroSchoo"" \n" +
-                   str(error), 4, True)
-        return((False,))
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+   conn.commit()
+   return((True,))
+ except Exception as error:
+    HandleMess("Ошибка процедуры ""AddToAstroSchoo"" \n"+ str(error),4,True)
+    return((False,))
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
 
-
+       
 # удалить данные из таблицы
 
-def DelFromAstroSchool(inpDateSend, inpCategory=None):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return((False,))
-        cur = conn.cursor()
+def DelFromAstroSchool(inpDateSend, inpCategory = None):
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return((False,))
+   cur = conn.cursor()
 
-        if inpCategory == None:
-            cur.execute("DELETE FROM AstroSchool WHERE  = ? ", (inpDateSend,))
-        else:
-            cur.execute("DELETE FROM AstroSchool WHERE (DateSend = ? AND Category = ?)",
-                        (inpDateSend, inpCategory,))
+   if inpCategory == None:
+     cur.execute("DELETE FROM AstroSchool WHERE  = ? ",(inpDateSend,)) 
+   else:      
+     cur.execute("DELETE FROM AstroSchool WHERE (DateSend = ? AND Category = ?)",(inpDateSend,inpCategory,))
 
-        conn.commit()
-        return((True,))
-    except Exception as error:
-        HandleMess("Ошибка процедуры ""DelFromAstroSchool"" \n" +
-                   str(error), 4, True)
-        return((False,))
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+   conn.commit()
+   return((True,))
+ except Exception as error:
+    HandleMess("Ошибка процедуры ""DelFromAstroSchool"" \n"+ str(error),4,True)
+    return((False,)) 
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
 
 
 # удалить данные из таблицы по MessageID
 
 def DelFromAstroSchoolOnMessID(inpMessageID):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return((False,))
-        cur = conn.cursor()
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return((False,))
+   cur = conn.cursor()
+  
+   cur.execute("DELETE FROM AstroSchool WHERE MessageID = ? ",(inpMessageID,))   
 
-        cur.execute("DELETE FROM AstroSchool WHERE MessageID = ? ",
-                    (inpMessageID,))
+   conn.commit()
+   return((True,))
+ except Exception as error:
+    HandleMess("Ошибка процедуры ""DelFromAstroSchoolOnMessID"" \n"+ str(error),4,True)
+    return((False,)) 
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
 
-        conn.commit()
-        return((True,))
-    except Exception as error:
-        HandleMess(
-            "Ошибка процедуры ""DelFromAstroSchoolOnMessID"" \n" + str(error), 4, True)
-        return((False,))
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
-
-
+       
+       
 # поменять данные в таблице AstroSchool
 
-def ChAstroSchool(inpMessageID, inpFieldName, inpValue):
+def ChAstroSchool(inpMessageID,inpFieldName, inpValue):
 
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return((False,))
-        cur = conn.cursor()
+ try:
+  cur = False
+  conn = horoscopedb.ConnectDb()
+  if conn is None:      
+        return((False,))
+  cur = conn.cursor()
 
-        UsrFields = ['Category',
-                     'DateSend',
-                     'TimeSend',
-                     'ManagerID']
+             
+  
+  UsrFields = ['Category',
+               'DateSend',
+               'TimeSend',
+               'ManagerID']
 
-        for i in range(len(UsrFields)):
-            # привести имена полей к единообразному виду
-            UsrFields[i] = UsrFields[i].capitalize()
+  for i in range(len(UsrFields)):
+     UsrFields[i] = UsrFields[i].capitalize() # привести имена полей к единообразному виду 
 
-        inpFieldName = inpFieldName.capitalize()
+  inpFieldName = inpFieldName.capitalize()
 
-        if not inpFieldName in UsrFields:
-            HandleMess(
-                "Ошибка имени поля для изменения AstroSchool : "+inpFieldName, 3, True)
-            return(False, "Ошибка имени поля для изменения AstroSchool: "+inpFieldName)
+  
+  if not inpFieldName in UsrFields:
+     HandleMess("Ошибка имени поля для изменения AstroSchool : "+inpFieldName,3,True)
+     return(False,"Ошибка имени поля для изменения AstroSchool: "+inpFieldName)
 
-        cur.execute(
-            "SELECT 1 FROM AstroSchool WHERE MessageID = ? ", (inpMessageID,))
-        records = cur.fetchall()
+  cur.execute("SELECT 1 FROM AstroSchool WHERE MessageID = ? " ,(inpMessageID,))
+  records = cur.fetchall()
+  
+  if len(records) == 0:  
+    HandleMess("В AstroSchool  не найден MessageID: "+ str(inpMessageID) ,3,True)
+    return(False,"В AstroSchool  не найден MessageID: "+str(inpMessageID),)
 
-        if len(records) == 0:
-            HandleMess("В AstroSchool  не найден MessageID: " +
-                       str(inpMessageID), 3, True)
-            return(False, "В AstroSchool  не найден MessageID: "+str(inpMessageID),)
+  cur.execute("UPDATE AstroSchool SET "+inpFieldName+" = ? WHERE MessageID = ?  " ,(inpValue,inpMessageID,))
 
-        cur.execute("UPDATE AstroSchool SET "+inpFieldName +
-                    " = ? WHERE MessageID = ?  ", (inpValue, inpMessageID,))
+  conn.commit()
+  return(True,)
+ except Exception as error:
+    HandleMess("Ошибка прцедуры изменения AstroSchool, MessageID: "+str(inpMessageID)+"\n"+str(error),3,True)
+    return(False,"Ошибка прцедуры изменения AstroSchool, MessageID: "+str(inpMessageID)+", поле :"+inpFieldName,)
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close() 
 
-        conn.commit()
-        return(True,)
-    except Exception as error:
-        HandleMess("Ошибка прцедуры изменения AstroSchool, MessageID: " +
-                   str(inpMessageID)+"\n"+str(error), 3, True)
-        return(False, "Ошибка прцедуры изменения AstroSchool, MessageID: "+str(inpMessageID)+", поле :"+inpFieldName,)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
-
+       
 
 # получить данные из таблицы
-def GetFromAstroSchool(inpDateSend, inpCategory=None):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(None)
-        cur = conn.cursor()
+def GetFromAstroSchool(inpDateSend, inpCategory = None):
+ try:
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return(None)
+   cur = conn.cursor()
 
-        if inpCategory == None:
-            cur.execute(
-                "SELECT Category,DateSend, TimeSend,ManagerID,MessageID FROM AstroSchool WHERE DateSend = ? ", (inpDateSend,))
-        else:
-            cur.execute("SELECT Category,DateSend, TimeSend,ManagerID,MessageID FROM AstroSchool WHERE (DateSend = ? AND Category = ?)",
-                        (inpDateSend, inpCategory,))
+   if inpCategory == None:
+     cur.execute("SELECT Category,DateSend, TimeSend,ManagerID,MessageID FROM AstroSchool WHERE DateSend = ? ",(inpDateSend,)) 
+   else:      
+     cur.execute("SELECT Category,DateSend, TimeSend,ManagerID,MessageID FROM AstroSchool WHERE (DateSend = ? AND Category = ?)",(inpDateSend,inpCategory,))
 
-        records = cur.fetchall()
-        return(records)
-    except Exception as error:
-        HandleMess("Ошибка процедуры ""GetFromAstroSchool"" \n" +
-                   str(error), 4, True)
-        return(None)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
+   records = cur.fetchall()
+   return(records)
+ except Exception as error:
+    HandleMess("Ошибка процедуры ""GetFromAstroSchool"" \n"+ str(error),4,True)
+    return(None)
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()   
 
-
+       
 # получить список всех тлг ID получающих сообщения в указанное время
 def GetListUsersOnDesTime(inpDesTimeID):
  try:
@@ -1015,52 +954,6 @@ def SelectDeleteFromTable(inpTbName,inpFilter, IsDel=False):
     if conn:  
        conn.close()   
 
-# все условия объединяются оператором AND
-# допускается предача пустого кортежа условия
-# IsDel = True - Удаляет данные по указанному признаку
-
-
-def SelectDeleteFromTable(inpTbName, inpFilter, IsDel=False):
-    try:
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(None)
-        cur = conn.cursor()
-        if IsDel:
-            Qtext = "DELETE FROM "+inpTbName
-        else:
-            Qtext = "SELECT * FROM "+inpTbName
-
-        QVal = list()
-        WhereText = " "
-        for onecond in inpFilter:
-            WhereText = WhereText + onecond[0] + onecond[1] + "? AND "
-            QVal.append(onecond[2])
-
-        WhereText = WhereText.rstrip(' AND ')  # удалить последнюю запятую
-
-        if len(inpFilter) != 0:
-            Qtext = Qtext+" WHERE "
-
-        Qtext = Qtext+WhereText
-
-        cur.execute(Qtext, tuple(QVal))
-        if IsDel:
-            conn.commit()
-            return(True)
-        else:
-            records = cur.fetchall()
-            return(records)
-
-    except Exception as error:
-        HandleMess("Ошибка унив. запроса к таблице " +
-                   inpTbName + "\n" + str(error), 4, True)
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
 
 
 # записать данные в таблицу,
@@ -1111,49 +1004,47 @@ def InsertIntoTable(inpTbName,inpValues):
        conn.close()
 
 # сохранить id пользователей в файл по заданным параметрам
-
-
 def SaveSegmentDb(inPar):
-    try:
-        if inPar == '1':  # платная
-            Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 3"
-        elif inPar == '2':  # триал
-            Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 1"
-        elif inPar == '3':  # отписан
-            Qfilter = " WHERE IsActiveBot = 0 AND  RegDateFin IS NOT NULL"
-        elif inPar == '4':  # не завершена рег
-            Qfilter = " WHERE RegDateFin IS NULL"
-        elif inPar == '5':  # завершена платная подписка
-            Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 5"
-        else:
-            inPar = '6'
-            Qfilter = ""
+ try:
+   if inPar == '1': # платная
+      Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 3"      
+   elif inPar == '2': # триал
+      Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 1"      
+   elif inPar == '3': # отписан
+      Qfilter = " WHERE IsActiveBot = 0 AND  RegDateFin IS NOT NULL"      
+   elif inPar == '4': # не завершена рег
+      Qfilter = " WHERE RegDateFin IS NULL"      
+   elif inPar == '5': # завершена платная подписка
+      Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 5"       
+   else:   
+       inPar = '6'
+       Qfilter = "" 
 
-        path = "static/Segment_"+inPar+".txt"
-        cur = False
-        conn = horoscopedb.ConnectDb()
-        if conn is None:
-            return(False)
+   path="static/Segment_"+inPar+".txt"
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return(False)
+      
+   f_out = open(path, 'w')   
+   cur = conn.cursor()
 
-        f_out = open(path, 'w')
-        cur = conn.cursor()
-
-        cur.execute("SELECT TelegramID FROM Users "+Qfilter)
-        records = cur.fetchall()
-        for row in records:
-            f_out.write(str(row[0])+'\n')
-
-        return(path)
-    except Exception as error:
-        return(error)
-
-    finally:
-        if cur:
-            cur.close()
-        if conn:
-            conn.close()
-        if f_out:
-            f_out.close()
+   cur.execute("SELECT TelegramID FROM Users "+Qfilter)
+   records = cur.fetchall()
+   for row in records:
+        f_out.write(str(row[0])+'\n')
+        
+   return(path)
+ except Exception as error:
+    return(error)
+    
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
+    if f_out:
+       f_out.close()
 
 
 def CopyUsrMess():
@@ -1218,28 +1109,32 @@ def CopyUsrMess():
        
 
 ##
-# Активна платная подписка: \n\
-# отбираются записи таблицы Users у которых \n\
-# ActiveBot = 1 и  SubscrType_ID=3\n\
-# файл: ..static/Segment_1.txt  \n\n\
-# 2. Триал активен  \n \
-# ActiveBot = 1 и  SubscrType_ID=1\n\
-# файл: ..static/Segment_2.txt  \n\n\
-# 3. Пользователь отписан  \n \
-# ActiveBot = 0 и RegDateFin<> NULL \n\
-# файл: ..static/Segment_3.txt  \n\n\
-# 4. Не завершена регистрация \n \
-# RegDateFin= NULL\n\
-# файл: ..static/Segment_4.txt  \n\n\
-# 5. Завершена платная подписка \n \
-# ActiveBot = 1 и  SubscrType_ID=5\n\
-# файл: ..static/Segment_5.txt  \n\n\
-# 6. Все пользователи \n\
-# Все записи таблицы Users\n\
-# файл: ..static/Segment_6.txt"
+## Активна платная подписка: \n\
+##                       отбираются записи таблицы Users у которых \n\
+##                       ActiveBot = 1 и  SubscrType_ID=3\n\
+##                       файл: ..static/Segment_1.txt  \n\n\
+##                    2. Триал активен  \n \
+##                       ActiveBot = 1 и  SubscrType_ID=1\n\
+##                       файл: ..static/Segment_2.txt  \n\n\
+##                    3. Пользователь отписан  \n \
+##                       ActiveBot = 0 и RegDateFin<> NULL \n\
+##                       файл: ..static/Segment_3.txt  \n\n\
+##                    4. Не завершена регистрация \n \
+##                       RegDateFin= NULL\n\
+##                       файл: ..static/Segment_4.txt  \n\n\
+##                    5. Завершена платная подписка \n \
+##                       ActiveBot = 1 и  SubscrType_ID=5\n\
+##                       файл: ..static/Segment_5.txt  \n\n\
+##                    6. Все пользователи \n\
+##                       Все записи таблицы Users\n\
+##                       файл: ..static/Segment_6.txt"
+
+   
 
 
-# print(InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"}))
+
+
+##print(InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"}))
 ##res = SelectDeleteFromTable("Users",(('ID','>',1000),("Gender_ID"," = ","2")))
 ##for row in res:
 ##   print(row)

@@ -35,13 +35,13 @@ def wait_until_send(id, text, reply_markup=None, parse_mode=None, url=None):
                         continue
                     elif err.error_code == 400:
                         if url != None:
-                            new_user_horo = handlers.horoscopeproc.GenTmpUsrMess(id)[0]
+                            new_user_horo = horoscopeproc.GenTmpUsrMess(id)[0]
                             gender = new_user_horo[4]
                             name = new_user_horo[1]
-                            handlers.horoscopeusr.RegTmpUser(id)
-                            handlers.horoscopeusr.ChTmpUserInfo(
+                            horoscopeusr.RegTmpUser(id)
+                            horoscopeusr.ChTmpUserInfo(
                                 inpTelegramID=id, inpValue=name, inpFieldName="Name")
-                            handlers.horoscopeusr.ChTmpUserInfo(
+                            horoscopeusr.ChTmpUserInfo(
                                 inpTelegramID=id, inpValue=gender, inpFieldName="Gender_ID")
                             text = new_user_horo[2]+"\n\n"+new_user_horo[3]
                             # wait_until_send(id,"Мы состоявляем гороскоп вашему другу, подождите некоторое время")
@@ -404,7 +404,7 @@ def set_table():
     params: dict=data["params"]
     for i in params:
         try:
-            handlers.horoscopeusr.ChUserInfo(id,i,params[i])
+            horoscopeusr.ChUserInfo(id,i,params[i])
         except Exception as err:
             err_log+=err
             pass
@@ -457,6 +457,7 @@ def get_payments():
         payments=Pay.list(limit=limit+offset,status="succeeded")
         for i in range((limit+offset)/100):
             payments.extend(Pay.list(limit=limit+offset,status="succeeded"))
+<<<<<<< HEAD
 
 @app.route('/get_sources', methods=['POST'])
 def get_sources_route():
@@ -469,3 +470,13 @@ HOST = '195.2.79.3'
 PORT = '443'
 
 app.run(host=HOST, port=PORT,debug=True)
+=======
+# app.run(debug=True)
+# HOST = '195.2.79.3'
+# PORT = '443'
+
+# app.run(host=HOST, port=PORT,debug=True)
+# #
+app.run(debug=True)
+
+>>>>>>> 04cb8d752c7e733f461d98a1f5b6b129b8a06895

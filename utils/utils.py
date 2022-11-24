@@ -74,7 +74,7 @@ def alchemy_to_dict(alchemy_object):
         if key in ignore_keys:
             continue
 
-        result[key] = alchemy_object[key]
+        result[key] = getattr(alchemy_object, key)
 
     return result
 

@@ -1,7 +1,7 @@
 # # from urllib import request
 # from re import X
 # import telebot 
-# # import requests
+import requests
 # # from threading import Thread
 # # import horoscopeusr
 # # import config
@@ -22,9 +22,10 @@
 # # from datetime import datetime as date_time
 
 # # from rich.console import Console
-# # request1=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
-# # "inv_id":10,"InvId":10919,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":952863788
-# # })
+request1=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
+"inv_id":10,"InvId":10919,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":952863788
+})
+print(request1)
 # # # import horoscopeproc
 
 # # from utils import *
