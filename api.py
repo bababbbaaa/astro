@@ -296,7 +296,7 @@ def get_tables(data=None):
                     "Birthday": row[5], "Gender_ID": row[3], 'Birthplace': row[6], "DesTime_ID": row[7],
                     "TimeZone": row[8], "TelegramID": row[9], "RegDate": row[10], "RegDateFin": row[11], "IsActiveBot": row[12],
                     "Balance": row[13], "IsActiveSub": row[14], "SubscrType_ID": row[15],
-                    "ActiveUntil": row[16], "DateSend": row[17], "Source_ID": row[22]
+                    "ActiveUntil": datetime.strftime(row[16],"%Y-%m-%d"), "DateSend": row[17], "Source_ID": row[22]
                     })
 
     conn.commit()

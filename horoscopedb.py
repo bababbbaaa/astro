@@ -6,16 +6,15 @@ from mysql.connector import connect, Error
 #  подключиться к базе данных
 
 def ConnectDb(): 
- try:
-    
-    conn =  connect(host = "185.209.29.236",
-                    user = "admin2",
+   try:
+      conn =  connect(host = "185.209.29.236",
+                   user = "admin2",
                     password="Sergey123",
-                    db = "horoscope")
-    return(conn)
- except Exception as error:
-    HandleMess("Ошибка подключения к базе: "+str(error),4)	
-    return(None)
+                    database = "horoscope")
+      return(conn)
+   except Exception as error:
+      HandleMess("Ошибка подключения к базе: "+str(error),4)	
+      return(None)
 
 
 #  создать структуру таблиц, некоторые заполнить
