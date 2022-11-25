@@ -6,15 +6,21 @@ from threading import Thread
 from time import sleep, time
 from pyrogram import Client, filters
 import pyrogram
+from sys import argv
 
 answers = open(path.join('static', 'new_answers.json'),
                'r', encoding='utf-8').read()
 answers = json.loads(answers)
 
+    
+
 WORKER = "SharapaGorg"
 MANAGERS = [ 778327202 ]
 
 IGNORE_WORDS = ['Дорог', 'Пока мы рассчитываем']
+
+if len(argv) > 1:
+    WORKER = argv[1]
 
 APP_ID, APP_HASH = users[WORKER]
 WARNING_DELAY = 30 # максимально допустимая задержка ответа от бота
