@@ -370,7 +370,10 @@ def get_payment():
                        inpFieldName="IsActiveSub", inpValue=1)
             ChUserInfo(inpTelegramID=id,
                        inpFieldName="SubscrType_ID", inpValue=3)
-            wait_until_send(id, text, parse_mode="html")
+            try:
+                wait_until_send(id, text, parse_mode="html")
+            except:
+                pass
             # signature = request.form.get['SignatureValue']
             pay = payments.get_payment(id)[0]
             print(pay, "PAYYY")

@@ -64,7 +64,8 @@ async def gen_user_mess(message):
             except:
                 pass
 
-        await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+        mes=await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
+        add_message_to_cache(id,mes.message_id)
         await UserReg.name.set()
     elif functions.ListUserName(inpTelegramID=id)[0] == "":
         if len(text1) == 2:
@@ -114,11 +115,25 @@ async def enter_name(message: CallbackQuery, state: FSMContext):
 
         keyboard.row(but1, but2)
         await delete_messages_from_cache(id)
-        await wait_until_send_photo(id, config.inter_gender, photo=photos["inter_gender"], reply_markup=keyboard)
+        mes = await wait_until_send_photo(id, config.inter_gender, photo=photos["inter_gender"], reply_markup=keyboard)
+        add_message_to_cache(id,mes.message_id)
 
 
+@dp.message_handler(state=UserReg.gender)
+async def if_problems_in_entering_gender(message: CallbackQuery, state: FSMContext):
+    id=message.chat.id
 
+    keyboard = types.InlineKeyboardMarkup()
+    but1 = types.InlineKeyboardButton(
+        text="Мужской", callback_data="ge1nder;1")
 
+    but2 = types.InlineKeyboardButton(
+        text="Женский", callback_data="ge1nder;2")
+
+    keyboard.row(but1, but2)
+    await delete_messages_from_cache(id)
+    mes = await wait_until_send_photo(id, config.inter_gender, photo=photos["inter_gender"], reply_markup=keyboard)
+    add_message_to_cache(mes,mes.message_id)
 #-------------------------------------пол
 
 @dp.callback_query_handler(state=UserReg.gender)

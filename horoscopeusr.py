@@ -462,15 +462,17 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
      HandleMess("Ошибка имени поля для изменения UsersTmp : "+inpFieldName,3,True)
      return((False,))
 
-  cur.execute("SELECT 1 FROM UsersTmp WHERE TelegramID = %s " ,(inpTelegramID,))
+  cur.execute("SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = %s " ,(inpTelegramID,))
   records = cur.fetchall()
   
   if len(records) == 0:  
     HandleMess("Не зарегистрирован временный ТЛГ ID: "+inpTelegramID ,3,True)
     return((False,"Не зарегистрирован временный ТЛГ ID: "+inpTelegramID,))
 
-
-  cur.execute("UPDATE UsersTmp SET "+inpFieldName+" = %s WHERE ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = %s)", (inpValue,inpTelegramID,))
+  tmpUsrID = records[0][0]
+##  print("UPDATE UsersTmp SET "+inpFieldName+" = %s WHERE ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = %s)") 
+   
+  cur.execute("UPDATE UsersTmp SET "+inpFieldName+" = %s WHERE ID = %s ", (inpValue,tmpUsrID,))
    
 
   conn.commit()
@@ -487,7 +489,7 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 
 
 
-
+#print(ChTmpUserInfo(952863788,"Name", "ewrewrqwerq"))
 
 ##print(RegUser(121212121237))
 ##inpValues = {"Name":"Sasa","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
