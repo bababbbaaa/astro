@@ -80,8 +80,8 @@ def delete_source(code: str = None, title: str = None) -> None:
         Session.commit()
         return
 
-def get_sources(title: str = None) -> list:
-    sources = _get_sources(title)
+def get_sources(title: str = None, code = None, price = None, type = None) -> list:
+    sources = _get_sources(title, code, price, type)
     return list(Session.scalars(sources))
 
 
@@ -105,11 +105,17 @@ def _get_source(code: str, title: str):
     return select(Source).where(Source.title == title)
 
 
-def _get_sources(title) -> list:
+def _get_sources(title, code, price, type) -> list:
     sources = select(Source)
 
     if title is not None:
-        sources = sources.where(Source.title == title)
+        sources = sources.where(Source.title.contains(title))
+
+    if code is not None:
+        sources = sources.where(Source.code.contains(code))
+
+    if type is not None:
+        sources = sources.where(Source.type.contains(type))
 
     return sources
 
