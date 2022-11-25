@@ -511,7 +511,7 @@ def get_sources_route():
         sources = get_sources(title, code, type=type)
         converted = alchemy_list_convert(sources)
 
-        return jsonify(converted)
+        return jsonify(converted[::-1])
     except Exception as e:
         return str(e)
 
@@ -532,8 +532,9 @@ def add_source_route():
 
         converted = alchemy_to_dict(new_source)
         return jsonify(converted)
-    except:
-        return 'Some of the required keys were not passed', 400
+    except Exception as e:
+        print(e)
+        return str(e), 400
 
 
 @app.route('/delete_source', methods=['POST'])

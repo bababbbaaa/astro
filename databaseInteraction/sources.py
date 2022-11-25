@@ -1,7 +1,16 @@
 from sqlalchemy import *
 from controller import engine, Base, Session
+from datetime import datetime as date_time
 from utils import *
 
+DATE_FORMAT = '%d.%m.%Y'
+
+def basic_check_date(date_string : str):
+    try:
+        date = date_time.strptime(date_string, DATE_FORMAT)
+        return True
+    except:
+        return False
 
 class Source(Base):
     """
