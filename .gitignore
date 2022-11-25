@@ -18,4 +18,3 @@ error.log
 .vscode/
 post_files/
 horoscope.db
-test.py
