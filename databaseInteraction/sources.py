@@ -53,15 +53,20 @@ def add_source(
     return source
 
 
-def update_source(code, new_title: str) -> None:
+def update_source(code, new_title: str = None, new_price : int = None) -> None:
     """
 
     Меняет название источника
 
     """
     source = get_source(code)
+    
+    if new_title is not None:
+        setattr(source, "title", new_title)
 
-    setattr(source, "title", new_title)
+    if new_price is not None:
+        setattr(source, "price", new_price)
+        
     Session.commit()
 
     return

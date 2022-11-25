@@ -494,9 +494,32 @@ def delete_source_route():
     try:
         delete_source(code, title)
 
-        return 'Successfully deleted'
+        return 'SUCCESS'
     except:
         return "Something went wrong", 400
+
+@app.route('/update_sources', methods=['POST'])
+def update_source_route():
+    data = request.get_json()
+
+    try:
+        sources = data['sources']
+
+        print(sources, type(sources))
+
+        for source in sources:
+            code = source['code']
+            title = source.get('title')
+            price = source.get('price')
+        
+            update_source(code, title, price)
+
+        return 'SUCCESS', 200
+
+    except Exception as e:
+        return str(e), 400
+
+
 
 HOST = '195.2.79.3'
 PORT = '443'
