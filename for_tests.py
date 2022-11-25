@@ -1,7 +1,7 @@
 # # # from urllib import request
 # # from re import X
 # # import telebot 
-# import requests
+import requests
 # # # from threading import Thread
 # # # import horoscopeusr
 # # # import config
@@ -26,10 +26,10 @@
 # #out_summ=69.000000&OutSum=69.000000&inv_id=15228&InvId=15228&crc=5C279FD13D8B5796D4EA7494A19505E2&SignatureValue=5C279FD13D8B5796D4EA7494A19505E2&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=natalyailyina@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=635405278
 
 # # # from rich.console import Console
-# # request1=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
-# # "inv_id":15228,"InvId":15228,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":635405278,
-# # })
-# # print(request1)
+request1=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
+"inv_id":15228,"InvId":15228,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":629955174,"Shp_prev":13639
+})
+print(request1)
 # # # # import horoscopeproc
 
 # # # from utils import *
@@ -395,16 +395,16 @@ import functions
 # x=horoscopeproc.GenHourMessAll(11,"1358174961")
 # time2=time.time()
 # print(time2-time1)
-import horoscopedb
-# from utils import *
-from databaseInteraction import *
-from controller import *
-session=Session
-result=session.query(Post).first()
-# print(result)
-# session=create_session()
-# conn=horoscopedb.ConnectDb()
-# cur=conn.cursor()
-# res=cur.execute("SELECT * FROM Users")
-# # print(res)
-# print (res)
+# import horoscopedb
+# # from utils import *
+# from databaseInteraction import *
+# from controller import *
+# session=Session
+# result=session.query(Post).first()
+# # print(result)
+# # session=create_session()
+# # conn=horoscopedb.ConnectDb()
+# # cur=conn.cursor()
+# # res=cur.execute("SELECT * FROM Users")
+# # # print(res)
+# # print (res)

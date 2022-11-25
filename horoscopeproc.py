@@ -276,7 +276,7 @@ def GenHourMessAll(inpDesTimeID,inpTelegramID=None):
                                           DesTime_ID = %s  AND
                                      /* TelegramID = 5560719600  AND*/
                                          
-                                        (Users.DateSend<>CURRENT_DATE()) )
+                                        (Users.DateSend<>CURRENT_DATE()))
                                ORDER BY SubscrTypeForORDER """,(inpDesTimeID,))#(datetime.strftime(datetime.now(), "%Y-%m-%d"),inpDesTimeID,))
 
        records = cur.fetchall() 
@@ -1145,10 +1145,10 @@ def CopyUsrMess():
 
 
 ##old = datetime.now()
-
-##print(GenHourMessAll(0,121212121237))
-##print(GenHourMessAll(1,))#5560719600
-#5392589497
+####
+##print(GenHourMessAll(1,121212121237))
+####GenHourMessAll(1,)#5560719600
+#####5392589497
 ##print("tot="+str(datetime.now()-old))
 ##for row in res:
 ##   print(row[2])

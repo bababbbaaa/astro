@@ -9,8 +9,8 @@ bot = Bot(token=config.TOKEN, parse_mode="html")
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
 
 user = 'admin2'
-password = "Sergey123"
-host = '185.209.29.236'
+password = "Sergey123()"
+host = '195.2.79.3'
 port = 3306
 database = 'horoscope'
 connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
