@@ -20,8 +20,8 @@ COMMANDS = [
     '12:00', 
     'Махачкала',
     'empty message',
-    'full_delete_user_uga_buga',
-    'start'
+    'full_delete_user',
+    'something'
     ]
 
 answers_file = os.path.join('static', 'answers.json')
@@ -38,8 +38,8 @@ ANSWERS = {
     '12:00' : answers["time"], 
     'Махачкала' : answers["place"],
     'empty message' : answers["default"],
-    'full_delete_user_uga_buga' : answers["finish"],
-    'start' : answers["start"]
+    'full_delete_user' : answers["finish"],
+    'something' : answers["something"]
 }
 
 INCORRECT_FORMAT = answers["incorrect"]
@@ -58,13 +58,13 @@ logger.info(f'Current app: {USER} : [{APP_ID}, {APP_HASH}]')
 
 app = Client(USER, APP_ID, APP_HASH, workdir='sessions')
 
-last_command = 'start'
+last_command = 'something'
 last_answer = str()
 
 last_reply = time.time()
 last_sent = time.time()
 
-def check_interval() -> None:
+def check_interval() -> None: 
     delay = .125
     while True:
         if update_checker:
@@ -113,13 +113,17 @@ def get_message(client : Client, message : Message):
     last_reply = time.time()
     update_checker = True
 
-    if message.text is not None and 'Дорог' in message.text:
+    if message.text is not None and 'Дорог' in message.text :
         return
+    
+    content = message.text
+    if content is None:
+        content = message.caption
 
-    if message.text != INCORRECT_FORMAT:
-        last_answer = message.text
+    if content != INCORRECT_FORMAT:
+        last_answer = content
     else:
-        warning = f"Something wrong: Message : {last_command} | Answer : " + message.text.replace('\n', ' ')
+        warning = f"Something wrong: Message : {last_command} | Answer : " + content.replace('\n', ' ')
         logger.warning(warning)
         message = key_by_value(last_answer)
 
@@ -128,13 +132,14 @@ def get_message(client : Client, message : Message):
 
     expected_answer = ANSWERS.get(last_command)
     if last_answer != expected_answer:
-        expected_answer_ = expected_answer[30:] if expected_answer is not None else "BUTTONS"
-        last_command_ = last_command[30:] if last_command is not None else "BUTTONS"
-
+        expected_answer_ = expected_answer[:60] if expected_answer is not None else "BUTTONS"
+        last_answer_ = last_answer[:60] if last_answer is not None else "BUTTONS"
         
-        warn_ = f"```Message : {last_command}\nWarning : Unexpected answer\nAnswer  : {last_command_}\nExpected: {expected_answer_}```"
+        warn_ = f"```Message : {last_command}\nWarning : Unexpected answer\nAnswer  : {last_answer_}\nExpected: {expected_answer_}```"
 
         logger.warning(warn_.replace('```', ''))
+
+        return
 
         # warn_managers(error_, [952863788])
 
@@ -148,6 +153,7 @@ def get_message(client : Client, message : Message):
     
     if 'button' in current_command:
         button_index = int(current_command.split(' : ')[1])
+
 
         try:
             message.click(button_index)
@@ -167,7 +173,7 @@ def get_message(client : Client, message : Message):
 
 def start():
     time.sleep(3)
-    app.send_message(CHAT, "full_delete_user_uga_buga")
+    app.send_message(CHAT, "full_delete_user")
     app.send_message(CHAT, "something")
 
 logger.info(f"Sender: {USER} | Receiver : {CHAT} ")
