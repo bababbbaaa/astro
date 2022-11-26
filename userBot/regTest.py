@@ -18,9 +18,9 @@ answers = parse_json("answers")
 WORKER = "SharapaGorg"
 MANAGERS = [778327202]
 
-IGNORE_WORDS = ['Дорог', 'Пока мы рассчитываем']
+IGNORE_WORDS = ['Дорог', 'Пока мы рассчитываем', 'Твой персональный']
 
-def update_states(status: str, last_message: str = None):
+def update_states(status: str, last_message: str = None, last_answer : str = None):
     """"
 
     Заполняет states.json, чтобы потом можно было смотреть в мониторе, 
@@ -30,9 +30,9 @@ def update_states(status: str, last_message: str = None):
 
     states = parse_json("states")
     if last_message is None:
-        states[WORKER] = (status, states[WORKER][1])
+        states[WORKER] = (status, states[WORKER][1], last_answer)
     else:
-        states[WORKER] = (status, last_message)
+        states[WORKER] = (status, last_message, last_answer)
 
     json.dump(
         states,
@@ -46,11 +46,11 @@ def update_states(status: str, last_message: str = None):
 if len(argv) > 1:
     WORKER = argv[1]
 
-update_states("[yellow]ACTIVATING", "NONE")
+update_states("[yellow]ACTIVATING", "NONE", "NONE")
 
 # APP_ID, APP_HASH = users[WORKER]
 APP_ID, APP_HASH = (14478686, 'c0bafcc69071170e7a7772b506aee680')
-WARNING_DELAY = 30  # максимально допустимая задержка ответа от бота
+WARNING_DELAY = 10  # максимально допустимая задержка ответа от бота
 RECEIVER = 'TotalDBbot'
 DELAY = 6
 
@@ -67,6 +67,8 @@ def warn_managers(message, managers=MANAGERS):
 
 
 def check_delay():
+    global last_msg, last_ans
+
     # проверка задержки ответа от бота
     delay = .125
     while True:
@@ -77,7 +79,7 @@ def check_delay():
 
         if during > WARNING_DELAY:
             logger.warning(f"Bot is sleeping (DELAY)")
-            update_states("[yellow]DELAY")
+            update_states("[yellow]DELAY", last_msg, last_ans)
             # warn_managers(
             #     f"Бот не отвечает уже больше {WARNING_DELAY} секунд!")
 
@@ -89,13 +91,14 @@ def check_delay():
 last_sent = time()
 update = True
 
+last_msg = last_ans = "NONE"
 
 @app.on_message(filters.bot)
 def get_messages(
         client: pyrogram.client.Client,
         message: pyrogram.types.messages_and_media.message.Message):
 
-    global last_sent, update
+    global last_sent, update, last_msg, last_ans
 
     last_sent = time()
     update = True
@@ -110,6 +113,8 @@ def get_messages(
 
     content = content.split('\n')[0]
 
+    last_ans = content
+
     for word in IGNORE_WORDS:
         if word in content:
             return
@@ -117,8 +122,9 @@ def get_messages(
     suitable_answer = answers.get(content)
 
     if suitable_answer is None:
-        # logger.warning(f"Не найдено подходящего ответа: ({content})")
-        warn_managers(f"Не найдено подходящего ответа: ({content})")
+        logger.warning(f"Не найдено подходящего ответа: ({content})")
+        # warn_managers(f"Не найдено подходящего ответа: ({content})")
+        update_states("[red]UNEXPECTED", "NONE", last_ans)
 
         return
 
@@ -136,7 +142,9 @@ def get_messages(
         return
 
     app.send_message(RECEIVER, suitable_answer)
-    update_states("[green]ACTIVATED", suitable_answer[:30])
+    last_msg = suitable_answer
+
+    update_states("[green]ACTIVATED", suitable_answer[:30], last_ans[:30])
 
     checker = Thread(target=check_delay, args=[], daemon=True)
     update = False
@@ -150,7 +158,7 @@ def trigger_receiver():
     message = "проснись и пой"
 
     app.send_message(RECEIVER, message)
-    update_states("[green]LAUNCHED", message)
+    update_states("[green]LAUNCHED", message, "NONE")
 
 
 Thread(target=trigger_receiver, args=[], name="Trigger").start()

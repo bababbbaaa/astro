@@ -1,10 +1,12 @@
 {
     "SergoAlgeria": [
         "[green]ACTIVATED",
-        "12:00"
+        "full_delete_user",
+        "Твой персональный гороскоп."
     ],
     "SharapaGorg": [
         "[green]ACTIVATED",
-        "12:00"
+        "full_delete_user",
+        "Дорогая name, завтра 27 ноября"
     ]
 }

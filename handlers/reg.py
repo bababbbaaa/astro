@@ -18,11 +18,24 @@ class UserReg(StatesGroup):
     birth_place=State()
 
 
+@dp.message_handler(state='*', text='cancel')
+async def cancel_handler(message: Message, state: FSMContext):
+    """
+    Allow user to cancel any action
+    """
+
+    current_state = await state.get_state()
+    if current_state is None:
+        return
+
+    await state.finish()
+    await message.reply('Действие было прервано', reply_markup=ReplyKeyboardRemove())
+
 
 @dp.message_handler(text="full_delete_user", state="*")
 async def full_delete_user(message: Message):
     author = message.from_user.id
-    if author in config.managers:
+    if author in config.managers or author in config.user_bots:
         functions.full_delete_user(author)
 
         await bot.send_message(author, "Аккаунт был успешно удален")
