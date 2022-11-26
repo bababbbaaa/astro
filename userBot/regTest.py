@@ -1,6 +1,5 @@
 import json
 from os import path
-from data import users
 import logger
 from threading import Thread
 from time import sleep, time
@@ -8,22 +7,50 @@ from pyrogram import Client, filters
 import pyrogram
 from sys import argv
 
-answers = open(path.join('static', 'new_answers.json'),
-               'r', encoding='utf-8').read()
-answers = json.loads(answers)
 
-    
+def parse_json(file_name):
+    data = open(path.join('static', f'{file_name}.json'),
+                'r', encoding='utf-8').read()
+    return json.loads(data)
+
+answers = parse_json("answers")
 
 WORKER = "SharapaGorg"
-MANAGERS = [ 778327202 ]
+MANAGERS = [778327202]
 
 IGNORE_WORDS = ['Дорог', 'Пока мы рассчитываем']
+
+def update_states(status: str, last_message: str = None):
+    """"
+
+    Заполняет states.json, чтобы потом можно было смотреть в мониторе, 
+    как аккаунты работают
+
+    """
+
+    states = parse_json("states")
+    if last_message is None:
+        states[WORKER] = (status, states[WORKER][1])
+    else:
+        states[WORKER] = (status, last_message)
+
+    json.dump(
+        states,
+        open(path.join('static', 'states.json'), 'w', encoding='utf-8'),
+        indent=4,
+        sort_keys=True,
+        ensure_ascii=False
+    )
+
 
 if len(argv) > 1:
     WORKER = argv[1]
 
-APP_ID, APP_HASH = users[WORKER]
-WARNING_DELAY = 30 # максимально допустимая задержка ответа от бота
+update_states("[yellow]ACTIVATING", "NONE")
+
+# APP_ID, APP_HASH = users[WORKER]
+APP_ID, APP_HASH = (14478686, 'c0bafcc69071170e7a7772b506aee680')
+WARNING_DELAY = 30  # максимально допустимая задержка ответа от бота
 RECEIVER = 'TotalDBbot'
 DELAY = 6
 
@@ -31,30 +58,37 @@ logger.info(f'LAUNCHED: {WORKER}')
 
 app = Client(WORKER, APP_ID, APP_HASH, workdir='sessions')
 
-
 def warn_managers(message, managers=MANAGERS):
     for manager in managers:
-        app.send_message(manager, message)
+        try:
+            app.send_message(manager, message)
+        except:
+            logger.warning(f"Bot must not send any message to this manager : {manager}")
+
 
 def check_delay():
     # проверка задержки ответа от бота
     delay = .125
     while True:
         if update:
-            return 
+            return
 
         during = time() - last_sent
 
         if during > WARNING_DELAY:
             logger.warning(f"Bot is sleeping (DELAY)")
-            warn_managers(f"Бот не отвечает уже больше {WARNING_DELAY} секунд!")
+            update_states("[yellow]DELAY")
+            # warn_managers(
+            #     f"Бот не отвечает уже больше {WARNING_DELAY} секунд!")
 
             return
 
         sleep(delay)
 
+
 last_sent = time()
 update = True
+
 
 @app.on_message(filters.bot)
 def get_messages(
@@ -83,7 +117,7 @@ def get_messages(
     suitable_answer = answers.get(content)
 
     if suitable_answer is None:
-        logger.warning(f"Не найдено подходящего ответа: ({content})")
+        # logger.warning(f"Не найдено подходящего ответа: ({content})")
         warn_managers(f"Не найдено подходящего ответа: ({content})")
 
         return
@@ -92,23 +126,31 @@ def get_messages(
 
     if 'button' in suitable_answer:
         # значит, вместо текста, нужно нажать на кнопку
-        button_index = int(suitable_answer.split(' : ')[1])
+        try:
+            button_index = int(suitable_answer.split(' : ')[1])
 
-        message.click(button_index)
+            message.click(button_index)
+        except:
+            pass
+
         return
 
     app.send_message(RECEIVER, suitable_answer)
+    update_states("[green]ACTIVATED", suitable_answer[:30])
 
     checker = Thread(target=check_delay, args=[], daemon=True)
     update = False
 
     checker.start()
 
+
 def trigger_receiver():
     # чтобы обрабатывать сообщения от бота сначала нужно ему что-то написать
     sleep(DELAY)
+    message = "проснись и пой"
 
-    app.send_message(RECEIVER, "проснись и пой")
+    app.send_message(RECEIVER, message)
+    update_states("[green]LAUNCHED", message)
 
 
 Thread(target=trigger_receiver, args=[], name="Trigger").start()
