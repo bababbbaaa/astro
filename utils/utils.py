@@ -197,7 +197,6 @@ def parse_buttons(scheme: str) -> "None | list[tuple['title', 'link']]":
 
     return result
 
-
 def get_today():
     today_string = date_time.strftime(date_time.today(), DATE_FORMAT)
     return today_string

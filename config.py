@@ -1,10 +1,17 @@
 SUPPORT="ИМЯ ПОДДЕРЖКИ"
 import horoscopedb as horoscopedb
 from datetime import datetime
+<<<<<<< HEAD
 # MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
 TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"#astrologyEveryDay
 # TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
 # TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM" # Sharapa bot
+=======
+MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
+# TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"#astrologyEveryDay
+# TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
+TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM" # Sharapa bot
+>>>>>>> e38d3245bfb97b456af6dea3b3046e061f75b499
 
 photos={"inter_name":"days/name.png",
 "inter_gender":"days/gender.png",
@@ -47,7 +54,10 @@ def select_all_active_until_table(id=None):
             conn.close()
 
 text_for_friends="текст для друга "
+
 managers=[952863788,214207257, 778327202,5312336082,1098353716]
+user_bots = [778327202, 5463088269]
+
 bots=["5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"]
 bot_name="@EveryDayAstrologyBot"
 cost={30:69,

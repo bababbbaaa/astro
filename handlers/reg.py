@@ -18,11 +18,11 @@ class UserReg(StatesGroup):
     birth_place=State()
 
 
-@dp.message_handler(commands=["full_delete_user_uga_buga"])
+
 @dp.message_handler(text="full_delete_user", state="*")
 async def full_delete_user1(message: Message):
     author = message.from_user.id
-    if author in config.managers:
+    if author in config.managers or author in config.user_bots:
         functions.full_delete_user(author)
 
         await bot.send_message(author, "Аккаунт был успешно удален")
