@@ -1,0 +1,3 @@
+
+import horoscopeusr
+horoscopeusr.DelTmpUser()

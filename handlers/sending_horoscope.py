@@ -11,14 +11,32 @@ sys.path.append("../")
 @dp.message_handler(commands=["send"])
 async def send(message):
     id=message.chat.id
-    js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
-    txt = js[0]
+    try:
+        
+        js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
+        txt = js[0]
+        today_send = txt[6]
+
+    except:
+        horoscopeusr.GenNewUserMess(id)
+        js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
+        txt = js[0]
+        today_send = txt[6]
+    
     today_send = txt[6]
+    is_active_bot=functions.GetUsers(id)[0]["IsActiveBot"]
+
+    if is_active_bot==0:
+        try:
+            horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="isActiveBot",inpValue=1)   
+        except:
+            pass     
     if functions.select_all_active_until_table(id)["days_till_end"]+1<=0:
         horoscopeusr.ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
         horoscopeusr.ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
-        subscribe1(message)
-        return 0                                                                                                                                                                                                      
+        await subscribe1(message)
+        return 0 
+                                                                                                                                                                                       
     elif today_send:
         
         text = ""
@@ -41,27 +59,11 @@ async def send(message):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 async def subscribe1(message):
     
     id=message.chat.id
-    print(functions.GetUsers(id)[0]["SubscrType_ID"])
-    sub_type=int(functions.GetUsers(id)[0]["SubscrType_ID"])
+    sub_type=functions.GetUsers(id)[0]
+    sub_type=int(sub_type["SubscrType_ID"])
     try:
         if id in delete_cache:
             for i in delete_cache[id]:
@@ -99,3 +101,5 @@ async def subscribe1(message):
             text="Активировать подписку", callback_data="2opt;"+str(sub_type))
         keyboard.row(but1)
         await wait_until_send(id, config.sub_type4_text(id), reply_markup=keyboard)
+
+

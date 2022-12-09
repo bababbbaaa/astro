@@ -17,13 +17,20 @@ import for_payments
 def Get_Data():
     return datetime.strftime(datetime.now(), DATE_FORMAT)
 
-    
-from telebot import types
+# from telebot import telebot.types
 from databaseInteraction import *
 from utils import *
+import telebot
 import random
 import string
-class Button(types.InlineKeyboardButton):
+
+
+
+
+
+
+
+class Button(telebot.types.InlineKeyboardButton):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -131,61 +138,57 @@ def wait_until_copy(id,forward_id,mes_id,reply_markup=None):
 
 
 def morning_sender():
-    date_today=Get_Data()
-    #"date_pict\16.10.2022.png"
-    path="date_pict/"+date_today+".png"
-    pict=open(path,"rb").read()
-    posts=horoscopeproc.GenHourMessAll(0)
-    buttons=types.InlineKeyboardMarkup()
-    but=types.InlineKeyboardButton(text="Получить персональный гороскоп",callback_data="SUBSCR_ACT")
-    buttons.add(but)
-    if posts[0][0]=='952863788':
-        posts[0]=list(posts[0])
-        posts[0][3]=""
-
-    # for i in range(30):
     try:
-        for i in range(len(posts)):
+        date_today=Get_Data()
+        #"date_pict\16.10.2022.png"
+        path="date_pict/"+date_today+".png"
+        pict=open(path,"rb").read()
+        posts=horoscopeproc.GenHourMessAll(0)
+        buttons=telebot.types.InlineKeyboardMarkup()
+        but=telebot.types.InlineKeyboardButton(text="Получить персональный гороскоп",callback_data="SUBSCR_ACT")
+        buttons.add(but)
+        if posts[0][0]=='952863788':
+            posts[0]=list(posts[0])
+            posts[0][3]=""
+
+        # for i in range(30):
+        try:
+            for i in range(len(posts)):
+                
+                first_part=posts[i][2]
+                second_part=posts[i][3]
+                id=posts[i][0]
+                if second_part!="":
+                    
+                    txt=posts[i][2]+"\n\n"+posts[i][3]
+                    Thread(target=mail_horoscope_after_photo,args=(id,pict,first_part,second_part)).start()
+
+                    
+                else:
+                    Thread(target=wait_until_send_photo,args=(id,pict,first_part,buttons,"html")).start()
+                # Thread(target=wait_until_send,args=(id,txt),kwargs={"parse_mode":"html"}, daemon=True).start()
+                time.sleep(1/30)
             
-            first_part=posts[i][2]
-            second_part=posts[i][3]
-            id=posts[i][0]
-            if second_part!="":
-                
-                txt=posts[i][2]+"\n\n"+posts[i][3]
-                
-                Thread(target=wait_until_send_photo,args=(id,pict,first_part,None,"html")).start()
-                time.sleep(1/10)
-                Thread(target=wait_until_send,args=(id,second_part,None,"html")).start()
-            else:
-                Thread(target=wait_until_send_photo,args=(id,pict,first_part,buttons,"html")).start()
-            # Thread(target=wait_until_send,args=(id,txt),kwargs={"parse_mode":"html"}, daemon=True).start()
-            time.sleep(1/30)
+        except:
+            pass
         
+        users=horoscopeproc.GetListUsersOnDesTime(1)
+
+
+        posts = get_posts(sessionmaker(engine)(), category='person', date=Get_Data())
+        for j in range(len(users)):
+            for i in range(len(posts)): # get_posts -> (category, date, time, managerId, postId)
+
+                managerID = posts[i].ManagerID
+                postID = posts[i].PostID
+                Thread(target=wait_until_copy,args=(users[j][0],managerID,postID), daemon=True).start()
+                time.sleep(1/15)
+        return True
+
+
     except:
-        pass
-    
-    users=horoscopeproc.GetListUsersOnDesTime(1)
-    print(users)
+        return False
 
-    posts = get_posts(create_session(), Get_Data(), "person")
-
-    for j in range(len(users)):
-        for i in range(len(posts)):
-            managerID = posts[i].ManagerID
-            postID = posts[i].PostID
-
-            buttons = get_buttons(create_session(), postID)
-            markup = types.InlineKeyboardMarkup()
-
-            for button in buttons:
-                _button = Button(text=button.Source, url=button.Url)
-                markup.add(_button)
-
-            Thread(target=wait_until_copy,args=(users[j][0],managerID,postID, markup), daemon=True).start()
-            time.sleep(1/28)
-
-    return True
 
 
 
@@ -195,9 +198,11 @@ def evening_sender():
     date=datetime.strftime(datetime.now()+timedelta(days=1), DATE_FORMAT)
     path="date_pict/"+date+".png"
     pict=open(path,"rb").read()
+    posts=list(posts)
+    posts[0]=list(posts[0])
     # posts=horoscopeproc.GenHourMessAll(0)
-    buttons=types.InlineKeyboardMarkup()
-    but=types.InlineKeyboardButton(text="Получить персональный гороскоп",callback_data="SUBSCR_ACT")
+    buttons=telebot.types.InlineKeyboardMarkup()
+    but=telebot.types.InlineKeyboardButton(text="Получить персональный гороскоп",callback_data="SUBSCR_ACT")
     buttons.add(but)
     if posts[0][0]=='952863788':
         posts[0]=list(posts[0])
@@ -213,21 +218,21 @@ def evening_sender():
             if second_part!="":
                 
                 txt=posts[i][2]+"\n\n"+posts[i][3]
-                
-                Thread(target=wait_until_send_photo,args=(id,pict,first_part,None,"html")).start()
-                time.sleep(1/10)
-                Thread(target=wait_until_send,args=(id,second_part,None,"html")).start()
+                Thread(target=mail_horoscope_after_photo,args=(id,pict,first_part,second_part)).start()
+                # Thread(target=wait_until_send_photo,args=(id,pict,first_part,None,"html")).start()
+                # time.sleep(1/10)
+                # Thread(target=wait_until_send,args=(id,second_part,None,"html")).start()
             else:
                 Thread(target=wait_until_send_photo,args=(id,pict,first_part,buttons,"html")).start()
             # Thread(target=wait_until_send,args=(id,txt),kwargs={"parse_mode":"html"}, daemon=True).start()
-            time.sleep(1/30)
+            time.sleep(1/15)
     except:
         pass
     
     users=horoscopeproc.GetListUsersOnDesTime(0)
     # posts=horoscopeproc.GetFromAstroSchool(inpCategory="person",inpDateSend=Get_Data())
 
-    posts = get_posts(create_session(), category='person', date=Get_Data())
+    posts = get_posts(sessionmaker(engine)(), category='person', date=Get_Data())
     for j in range(len(users)):
         for i in range(len(posts)): # get_posts -> (category, date, time, managerId, postId)
 
@@ -244,11 +249,11 @@ def evening_sender():
 
 def on_time_sender(time1 : str) -> bool:
     # all_days_posts=horoscopeproc.GetFromAstroSchool(inpDateSend=Get_Data())
-    posts = get_posts(create_session(), Get_Data(), time=time1)
+    posts = get_posts(sessionmaker(engine)(), Get_Data(), time=time1)
     managerID = posts[0].ManagerID
     postID = posts[0].PostID
-    buttons = get_buttons(create_session(), postID)
-    markup = types.InlineKeyboardMarkup()
+    buttons = get_buttons(sessionmaker(engine)(), postID)
+    markup = telebot.types.InlineKeyboardMarkup()
 
     for button in buttons:
         _button = Button(text=button.Source, url=button.Url)
@@ -317,16 +322,16 @@ def text_for_notifications(day):
 
 Прекрасного дня! 🌸'''
 def make_notificartion_with_keyboard(id,photo,end_time,caption=None):
-    keyboard=types. InlineKeyboardMarkup()
-    but1 = types.InlineKeyboardButton(
+    keyboard=telebot.types.InlineKeyboardMarkup()
+    but1 = telebot.types.InlineKeyboardButton(
         text="30 дней", callback_data="agr;30")
-    but2 = types.InlineKeyboardButton(
+    but2 = telebot.types.InlineKeyboardButton(
         text="180 дней", callback_data="agr;180")
-    but3 = types.InlineKeyboardButton(
+    but3 = telebot.types.InlineKeyboardButton(
         text="365 дней", callback_data="agr;365")
-    but4 = types.InlineKeyboardButton(
+    but4 = telebot.types.InlineKeyboardButton(
         text="Что входит в подписку?", callback_data="inf")
-    but5 = types.InlineKeyboardButton(
+    but5 = telebot.types.InlineKeyboardButton(
         text="Назад", callback_data="full_back")
     keyboard.row(but1, but2, but3)
     keyboard.add(but4)
@@ -344,29 +349,29 @@ def make_notificartion_with_keyboard(id,photo,end_time,caption=None):
         x=wait_until_send_photo(id,caption=text_for_notifications(end_time),photo=photo,reply_markup=keyboard,parse_mode="html")
     # if sub_type==1 or sub_type==2:
     #     end_time=functions.select_all_active_until_table(id)["days_till_end"]
-    #     keyboard=types.InlineKeyboardMarkup()
-    #     but1=types.InlineKeyboardButton(text="Активировать подписку", callback_data="2opt;"+str(sub_type))
+    #     keyboard=telebot.types.InlineKeyboardMarkup()
+    #     but1=telebot.types.InlineKeyboardButton(text="Активировать подписку", callback_data="2opt;"+str(sub_type))
     #     keyboard.row(but1)
     #     wait_until_send(id, config.sub_type1_text(id), reply_markup=keyboard)
 
     # if sub_type == 100:
-    #     keyboard = types.InlineKeyboardMarkup()
-    #     but1 = types.InlineKeyboardButton(text="Активировать подписку", callback_data="2opt;"+str(sub_type))
+    #     keyboard = telebot.types.InlineKeyboardMarkup()
+    #     but1 = telebot.types.InlineKeyboardButton(text="Активировать подписку", callback_data="2opt;"+str(sub_type))
     #     keyboard.row(but1)
     #     wait_until_send(id, config.sub_type3_text(id), reply_markup=keyboard)
 
     # if sub_type == 3:
-    #     keyboard = types.InlineKeyboardMarkup()
-    #     but1 = types.InlineKeyboardButton(
+    #     keyboard = telebot.types.InlineKeyboardMarkup()
+    #     but1 = telebot.types.InlineKeyboardButton(
     #         text="Продлить подписку", callback_data="2opt;"+str(sub_type))
-    #     but2 = types.InlineKeyboardButton(
+    #     but2 = telebot.types.InlineKeyboardButton(
     #         text="Отказаться от подписки", callback_data="end")
     #     keyboard.row(but1, but2)
     #     wait_until_send(id, config.sub_type3_text(), reply_markup=keyboard)
 
     # if sub_type == 4 or sub_type == 5:
-    #     keyboard = types.InlineKeyboardMarkup()
-    #     but1 = types.InlineKeyboardButton(
+    #     keyboard = telebot.types.InlineKeyboardMarkup()
+    #     but1 = telebot.types.InlineKeyboardButton(
     #         text="Активировать подписку", callback_data="2opt;"+str(sub_type))
     #     keyboard.row(but1)
     #     wait_until_send(id, config.sub_type4_text(), reply_markup=keyboard)
@@ -380,7 +385,15 @@ def service_message() -> None:
         cool_subs=get_subs()
         already_registr_subs=[]
         recurent_subs=[]
-        # console.log(1)
+        try:
+            wait_until_send(952863788,"функция началась")
+            # breakpoint()
+
+            wait_until_send(5127634821,"рассылка началась")
+        except:
+            pass
+        # breakpoint()
+        # return("end")
         for i in range(len(cool_subs)):
             try:
                 already_registr_subs.append(cool_subs[i].TelegramID)#формируем список тех, кто уже подписался
@@ -391,6 +404,7 @@ def service_message() -> None:
             except:
                 continue
         all_service_messages=functions.select_all_active_until_table()
+        
         i=0
         if all_service_messages==None:
             all_service_messages=[]
@@ -415,7 +429,7 @@ def service_message() -> None:
 
         photos["1"]=open("days/"+"1.jpg","rb").read()
         photos["10"]=open("days/"+"10.png","rb").read()
-        # breakpoint()
+#         # breakpoint()
 
         for i in range(len(all_service_messages)):
             try:
@@ -423,29 +437,31 @@ def service_message() -> None:
                 # if days==7:
                 #     print(days)
                 if days in config.days_for_mailing:
+                    
                     # end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
                     try:
-                        
-                        Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(days)],days)).start()#Отправляем в процесс id
+                        id=all_service_messages[i]["id"]
+                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],days)).start()#Отправляем в процесс id
                     except:
-                        Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(0)],days)).start()#Отправляем в процесс id
+                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(0)],days)).start()#Отправляем в процесс id
                         # make_notificartion_with_keyboard(all_service_messages[i]["id"],photos[str(days)])
                     finally:
                         time.sleep(1/15)
                 if days==-3:
-                    print(all_service_messages[i]["id"],all_service_messages[i])
+                    id=all_service_messages[i]["id"]
+                    # print(all_service_messages[i]["id"],all_service_messages[i])
                     caption="""Заметили, что последние 3 дня даются вам тяжелее обычного? 
 Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
 
 Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
-                    Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start()
+                    Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(3)],days,caption)).start()
                     time.sleep(1/15)  
                 if days==-10:
+                    id=all_service_messages[i]["id"]
                     caption="""Заметили, что последние 10 дней даются вам тяжелее обычного? 
 Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
 
 Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
-                    print(all_service_messages[i]["id"],all_service_messages[i])
                     Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start() 
                     time.sleep(1/15)
             except:
@@ -453,7 +469,11 @@ def service_message() -> None:
 #         print(recurent_subs)
         # breakpoint()  
 
-        # print(10)
+        print(10)
+        try:
+            wait_until_send(952863788,"рассылка закончилась")
+        except:
+            pass
         for i in range(len(recurent_subs)):
             
             # print(0)
@@ -464,7 +484,7 @@ def service_message() -> None:
             else:
                 amount=config.cost
             pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=69,days=30,test=0,tg_id=recurent_subs[i].TelegramID)
-            print(pay.text)
+            # print(pay.text)
             try:
                 if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
                     # set_field(id=int(recurent_subs[i].TelegramID),end=end)
@@ -472,13 +492,21 @@ def service_message() -> None:
                     add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
 
                 else:
-                    days=0
-                    id=recurent_subs[i].TelegramID
-                    end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
-                    Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],end_time)).start()
+                    try:
+                        days=0
+                        id=recurent_subs[i].TelegramID
+                        end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
+                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],end_time)).start()
+                    except:
+                        pass
                     # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
             except:
                 continue
+        try:
+            wait_until_send(952863788,"списание закончилось")
+        except:
+            pass
+
     except Exception as err:
         
         print("errr")
@@ -490,16 +518,16 @@ def service_message() -> None:
 def mail_after_err():
     try:
         all_service_messages=functions.select_all_active_until_table()
-        keyboard=types. InlineKeyboardMarkup()
-        but1 = types.InlineKeyboardButton(
+        keyboard=telebot.types. InlineKeyboardMarkup()
+        but1 = telebot.types.InlineKeyboardButton(
             text="30 дней", callback_data="agr;30")
-        but2 = types.InlineKeyboardButton(
+        but2 = telebot.types.InlineKeyboardButton(
             text="180 дней", callback_data="agr;180")
-        but3 = types.InlineKeyboardButton(
+        but3 = telebot.types.InlineKeyboardButton(
             text="365 дней", callback_data="agr;365")
-        but4 = types.InlineKeyboardButton(
+        but4 = telebot.types.InlineKeyboardButton(
             text="Что входит в подписку?", callback_data="inf")
-        but5 = types.InlineKeyboardButton(
+        but5 = telebot.types.InlineKeyboardButton(
             text="Назад", callback_data="full_back")
         keyboard.row(but1, but2, but3)
         keyboard.add(but4)
@@ -525,6 +553,10 @@ from utils import logger
 
 DATE_FORMAT = '%d.%m.%Y'
 
+from apscheduler.schedulers.background import BackgroundScheduler
+
+scheduler = BackgroundScheduler()
+
 def remind_managers():
     tomorrow = date.today() + timedelta(days=1)
     tomorrow_date = datetime.strftime(tomorrow, DATE_FORMAT)
@@ -544,78 +576,7 @@ def remind_managers():
 
 REMIND_TIME = '20:00'
 
-def every_day_sheduler_maker():
-    for i in schedule.get_jobs():
-        schedule.cancel_job(i)
-
-    # posts=horoscopeproc.GetFromAstroSchool(inpDateSend=Get_Data())
-
-    posts = get_posts(create_session(), date=Get_Data())
-
-    schedule.every().day.at("00:00").do(every_day_sheduler_maker)
-    
-    schedule.every().day.at(REMIND_TIME).do(remind_managers)
-
-    for i in range(len(posts)):
-        
-        managerID = posts[i].ManagerID
-
-        category = posts[i].Category
-        
-        time = posts[i].Time
-        
-        postID = posts[i].PostID
-
-        if category == "none":
-            time = datetime.strptime(time, TIME_FORMAT)
-            time = datetime.strftime(time, TIME_FORMAT)
-
-            schedule.every().day.at(time).do(on_time_sender, time)
- 
-    schedule.every().day.at("09:00").do(morning_sender)
-    schedule.every().day.at("18:30").do(evening_sender)
-    schedule.every().day.at("00:00").do(horoscopeusr.DelTmpUser)
-    schedule.every().day.at("12:00").do(service_message)
-
-#  ------------------------------------------------------
-# ChUserInfo(/inpTelegramID="952863788",inpFieldName="SubscrType_ID",inpValue=5)
-# morning_sender()
-evening_sender()
-# def change_sub_table():
-#     today=datetime.now()
-#     needed_day=today-datetime.timedelta(days=30)
-# service_message()
-# mail_after_err()
-# print("end_hehe")
-# print("end")
-every_day_sheduler_maker()
-# print(evening_sender())
-# date_end=functions.GetUsers(952863788)[0]["ActiveUntil"]
-# reccurent_subs=get_sub(0,id=952863788)
-# # date_end=reccurent_subs.
-# end=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(30))
-# print(end)
-# set_field(id=int(reccurent_subs.TelegramID),end=end)
-# print(Get_Data())
-# breakpoint()
-# morning_sender()
-# service_message()# morning_sender()
-# schedule.every().day.at("00:00").do(every_day_sheduler_maker)
-# while True: 
-# service_message()
-# print("enddd")
-#     # time.sleep(5)
-# on_time_sender("00:10")
-while True:
-    try:
-        data1=datetime.now()
-        hour=data1.hour
-        schedule.run_pending()
-        sec=data1.second
-
-        # print(schedule.get_jobs())
-
-        time.sleep(60-sec)
-    except Exception as e:
-        logger.error(e)
-        continue
+def mail_horoscope_after_photo(id,pict,first_part,second_part):
+    wait_until_send_photo(id,pict,first_part,parse_mode="html")
+    time.sleep(1/10)
+    wait_until_send(id,second_part,parse_mode="html")

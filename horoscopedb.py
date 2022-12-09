@@ -7,9 +7,9 @@ from mysql.connector import connect, Error
 
 def ConnectDb(): 
    try:
-      conn =  connect(host = "195.2.79.3",
+      conn =  connect(host = "185.209.29.236",
                    user = "admin2",
-                    password="Sergey123()",
+                    password="Sergey123",
                     database = "horoscope")
       return(conn)
    except Exception as error:

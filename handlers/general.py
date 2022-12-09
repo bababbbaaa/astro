@@ -77,7 +77,7 @@ async def change_tim(message):
         return 1
 
 
-@dp.message_handler(content_types=["text"])
+@dp.message_handler(state="*")
 async def main(message):
     id = message.chat.id
     is_user_already_in_handler[id] = True

@@ -18,9 +18,9 @@ class UserReg(StatesGroup):
     birth_place=State()
 
 
-
+@dp.message_handler(commands=["full_delete_user_uga_buga"])
 @dp.message_handler(text="full_delete_user", state="*")
-async def full_delete_user(message: Message):
+async def full_delete_user1(message: Message):
     author = message.from_user.id
     if author in config.managers:
         functions.full_delete_user(author)
@@ -58,6 +58,9 @@ async def gen_user_mess(message):
     text = message.text
     if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
         if len(text1) == 2:
+
+            update_price_list_with_id(id,"new_person")
+
             try:
                 horoscopeusr.ChUserInfo(inpValue=int(
                     text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
@@ -69,16 +72,14 @@ async def gen_user_mess(message):
         await UserReg.name.set()
     elif functions.ListUserName(inpTelegramID=id)[0] == "":
         if len(text1) == 2:
-            try:
-                horoscopeusr.ChUserInfo(inpValue=int(
-                    text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
-            except:
-                pass
+            horoscopeusr.ChUserInfo(inpValue=int(
+                text1[1]), inpTelegramID=str(id), inpFieldName="Source_ID")
+            
         mes=await wait_until_send_photo(id, config.inter_name, photo=photos["inter_name"])
 
         add_message_to_cache(id,mes.message_id)
         await UserReg.name.set()
-    elif text == "/start":
+    elif text1[0] == "/start":
         await wait_until_send(
             id, 'Здравствуйте.\n\nСпасибо,что вернулись в нашего бота. Вы получите гороскоп по расписанию.\n\nЕсли хотите получить его сейчас нажмите на соответствующую кнопку в меню')
 
@@ -291,6 +292,7 @@ async def end_registartion(message: CallbackQuery, state: FSMContext,destime_id)
     # Удаляем сообщение, чтобы юзер не игрался с выбором времени
         js = horoscopeproc.GenHourMessAll(
                         11, inpTelegramID=str(id))
+        update_price_list_with_id(str(id),"new_ended_reg")
         txt = js[0]
         await state.finish()
         await send_mes(txt)

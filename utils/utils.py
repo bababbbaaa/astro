@@ -46,10 +46,11 @@ class InlineButton(InlineKeyboardButton):
 
 async def startup(message):
     suggesting_commands = [
-        BotCommand("/start", description="Старт"),
-        BotCommand("/send", description="Отправить гороскоп"),
-        BotCommand("/calendar", description="Календарь постов"),
-        BotCommand("/manager_access", description="Модерирование постов"),
+    BotCommand(command="send",description="Получить гороскоп сейчас"),
+    BotCommand(command="gen_user_mes",description="Гороскоп другу"),
+    BotCommand(command="subscribe",description="Подписка"),
+    BotCommand(command="support",description="Поддержка"),
+    BotCommand(command="change",description="Изменить данные"),
     ]
 
     await bot.set_my_commands(suggesting_commands)
@@ -364,8 +365,10 @@ async def send_natal_map(id):
 
 
 def count_payments():
-    session = Session
+    session = sessionmaker(engine)()
     rows = session.query(Payment).count()
+    session.commit()
+
     return int(rows)+10000
 
 
@@ -391,12 +394,17 @@ async def send_mes(posts):
     # print(posts)
 
     first_part = posts[2]
+    
     second_part = posts[3]
     id = posts[0]
     id = int(id)
-    date = datetime.strftime(datetime.now()+timedelta(days=1), DATE_FORMAT)
+    delta=1
+    if "сегодня" in first_part :
+        delta=0
+    date=datetime.strftime(datetime.now()+timedelta(days=delta), DATE_FORMAT)
     path = "date_pict/"+date+".png"
     pict = open(path, "rb").read()
+
     await asyncio.sleep(5)
     await wait_until_send_photo(id, photo=pict, caption=first_part, parse_mode="html")
     await wait_until_send(id, second_part, parse_mode="html")
@@ -439,3 +447,5 @@ async def generate_token_second_part(message):
         "Name": public_name, "Token": str(token)})
     await wait_until_send(id, "Паблик записан, вот ссылка для "+public_name +
                           " https://t.me/"+config.bot_name[1:]+"?start="+str(token))
+
+

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime , timedelta
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -42,23 +42,78 @@ class User(Base):
 
 
 
-class SuccessPayments(Base):
+class SuccessPayment(Base):
     __tablename__="success_payments"
 
     ID = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
-    sub_type = Column(Integer, nullable=False)
-    telegram_id = Column(String, nullable=False)
-    payment_id = Column(String, nullable=False)
-    active_until = Column(String, nullable=False)
+    telegram_id = Column(Text)
+    payment_id = Column(Text, nullable=False)
+    active_until = Column(Date, nullable=False)
     days = Column(Integer, nullable=False)
     payed = Column(Boolean, nullable=False)
     amount = Column(Integer, nullable=False)
-    link = Column(String, nullable=False)
+    type_of_payment = Column(Text, nullable=False)
     source_id=Column(BIGINT)
-
+    user_name=Column(Text)
+    birth_day=Column(Date)
+    payment_date=Column(Date)
 
 
     def get_user(self):
         session=sessionmaker(engine)()
         user=session.query(User).filter_by(TelegramID=self.telegram_id)
         return user
+
+def add_success_payment(**kwargs) -> None:
+    telegram_id=str(kwargs["telegram_id"])
+    payment_id=str(kwargs["payment_id"])
+    days=int(kwargs["days"])
+    amount=int(float(kwargs["price"]))
+    type_of_payment=str(kwargs["type_of_payment"])
+
+    payment_date=datetime.today()
+    active_until=payment_date+timedelta(days=days)
+
+    session=sessionmaker(engine)()
+    user=session.query(User).filter_by(TelegramID=telegram_id).first()
+    user_name=user.Name
+    source_id=user.Source_ID
+    payed=1
+    if source_id==None or source_id=="":
+        source_id=0
+    birth_day=user.Birthday
+
+    if birth_day=="" or birth_day==None:
+        birth_day=datetime.strptime("00:00","%H:%M")
+
+    else:
+        birth_day=datetime.strptime(birth_day,"%d.%m.%Y")
+    new_success_payment=SuccessPayment(
+        telegram_id=telegram_id,
+        payment_id=payment_id,
+        days=days,
+        amount=amount,
+        payment_date=payment_date,
+        active_until=active_until,
+        user_name=user_name,
+        source_id=source_id,
+        payed=payed,
+        type_of_payment=type_of_payment,
+        birth_day=birth_day
+
+    )
+
+    session=sessionmaker(engine)()
+    session.add(new_success_payment)
+    session.commit()
+
+    return new_success_payment
+
+    
+def get_payments(telegram_id):
+    session=sessionmaker(engine)()
+
+    payments=session.query(SuccessPayment).filter_by(telegram_id=telegram_id).all()
+    return payments
+# SuccessPayment.__table__.drop(engine)
+Base.metadata.create_all(engine)

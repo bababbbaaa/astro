@@ -11,7 +11,8 @@ import for_payments
 async def subscribe(message):
     
     id=message.chat.id
-    sub_type=int(functions.GetUsers(id)[0]["SubscrType_ID"])
+    sub_type=functions.GetUsers(id)[0]
+    sub_type=int(sub_type["SubscrType_ID"])
     try:
         if id in delete_cache:
             for i in delete_cache[id]:

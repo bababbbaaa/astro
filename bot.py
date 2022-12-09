@@ -1,6 +1,7 @@
 
 from controller import *
 from asyncio import *
+import commands
 
 from utils import *
 from aiogram import *

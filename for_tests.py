@@ -1,7 +1,7 @@
 # # # from urllib import request
 # # from re import X
 # # import telebot 
-import requests
+# import requests
 # # # from threading import Thread
 # # # import horoscopeusr
 # # # import config
@@ -24,12 +24,26 @@ import requests
 
 # #out_summ=69.000000&OutSum=69.000000&inv_id=17574&InvId=17574&crc=A22A6FAD29799C1B21B12A2D5F79B773&SignatureValue=A22A6FAD29799C1B21B12A2D5F79B773&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=1707910@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=629955174&Shp_prev=13639
 # #out_summ=69.000000&OutSum=69.000000&inv_id=15228&InvId=15228&crc=5C279FD13D8B5796D4EA7494A19505E2&SignatureValue=5C279FD13D8B5796D4EA7494A19505E2&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=natalyailyina@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=635405278
+#out_summ=69.000000&OutSum=69.000000&inv_id=19811&InvId=19811&crc=2062FC7FA250F008BC58873A8CEB35DA&SignatureValue=2062FC7FA250F008BC58873A8CEB35DA&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=serg3jk0zl@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=952863788
+# import requests
+# #out_summ=69.000000&OutSum=69.000000&inv_id=16896&InvId=16896&crc=861B8AA4513C4A71900631C364E27121&SignatureValue=861B8AA4513C4A71900631C364E27121&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=bobalinaa@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=297067072&Shp_prev=14763
+# import requests
+# # # # # # from rich.console import Console
+# request1=requests.post("http://195.2.79.3:443/get_payment",data={"out_summ":330.000000,"OutSum":330.000000,
+# "inv_id":17992,"InvId":17992,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7A922835773700B51A21FF20B69BDB84","PaymentMethod":"BankCard","IncSum":330.000000,"Shp_days":210,"Shp_id":970984910,
+# })
+# print(request1.text)
+# from databaseInteraction import * 970984910
+#out_summ=69.000000&OutSum=69.000000&inv_id=19553&InvId=19553&crc=DBACC458D2042EADEB0FC221324A0B04&SignatureValue=DBACC458D2042EADEB0FC221324A0B04&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Pabra1976@icloud.com&Fee=2.690000&Shp_days=30&Shp_id=808266836
 
-# # # from rich.console import Console
-request1=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
-"inv_id":15228,"InvId":15228,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","PaymentMethod":"BankCard","IncSum":69.000000,"Shp_days":30,"Shp_id":629955174,"Shp_prev":13639
-})
-print(request1)
+# x=add_success_payment(telegram_id=0,payment_id=10,days=int(0),price=0,type_of_payment="SELF PAID")
+# print(x)
+
+# try:
+#     x=10/0
+# except Exception as err:
+#     er=err
+#     print(err)
 # # # # import horoscopeproc
 
 # # # from utils import *
@@ -371,12 +385,12 @@ print(request1)
 # #         time.sleep(1/28)
 # import datetime
 # # print(datetime.datetime.strftime(datetime.datetime.now(),"%H:%M"))
-import horoscopeusr as horoscopeusr
-import horoscopeproc
-import functions
-# print(horoscopeproc.GenHourMessAll(11,"245188029"))1358174961
-import time
-import functions
+# import horoscopeusr as horoscopeusr
+# import horoscopeproc
+# import functions
+# # print(horoscopeproc.GenHourMessAll(11,"245188029"))1358174961
+# import time
+# import functions
 # time1=time.time()
 # x=functions.GetUsers("952863788")
 # time2=time.time()
@@ -399,12 +413,280 @@ import functions
 # # from utils import *
 # from databaseInteraction import *
 # from controller import *
+# from utils import *
 # session=Session
 # result=session.query(Post).first()
 # # print(result)
+# for i in range(100):
+#     res=add_payment(sub_type=3,telegram_id="952863788",payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="UNSUB")
+# print(session.query(Payment).count())
 # # session=create_session()
 # # conn=horoscopedb.ConnectDb()
 # # cur=conn.cursor()
 # # res=cur.execute("SELECT * FROM Users")
 # # # print(res)
 # # print (res)
+# from mailing import *
+
+# photos={}
+# photos["0"]=open("days/"+"0.jpg","rb").read()
+
+# photos["3"]=open("days/"+"3.jpg","rb").read()
+
+# photos["7"]=open("days/"+"7.jpg","rb").read()
+
+# photos["1"]=open("days/"+"1.jpg","rb").read()
+# photos["10"]=open("days/"+"10.png","rb").read()
+# x=make_notificartion_with_keyboard(id=952863788,photo=photos["3"],end_time=3)
+# x=make_notificartion_with_keyboard(id=952863788,photo=photos["3"],end_time=3)
+
+# y=make_notificartion_with_keyboard(952863788,photos[str(0)],0)
+# z=make_notificartion_with_keyboard(952863788,photos[str(1)],1)
+# caption="""Заметили, что последние 3 дня даются вам тяжелее обычного? 
+# Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
+
+# Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
+# make_notificartion_with_keyboard(952863788,photos[str(3)],3,caption)
+
+# caption="""Заметили, что последние 10 дней даются вам тяжелее обычного? 
+# Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
+
+# Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
+# # # print(id,all_service_messages[i])
+# # u=make_notificartion_with_keyboard(952863788,photos[str(10)],10,caption) 
+
+
+
+# # print(x)
+
+# # import horoscopeproc
+# # x=horoscopeproc.GenHourMessAll(1,788258764)
+# # # print(x)
+# # import controller
+# # from databaseInteraction import *
+
+# # from threading import Thread 
+# # import horoscopedb
+# # TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"
+# # import telebot
+# # conn=horoscopedb.ConnectDb()
+# # cursor=conn.cursor()
+# # bot = telebot.TeleBot(TOKEN, parse_mode=None)
+# # import time
+# # list_of_users=cursor.execute("SELECT TelegramID FROM horoscope.Users WHERE SubscrType_ID=3 or SubscrType_ID=1;")
+# # list_of_users=cursor.fetchall()
+# # conn.commit()
+# # for i in range(len(list_of_users)):
+# #     Thread(target=bot.send_message,args=(list_of_users[i][0],"""
+# #     Уважаемые подписчики, к сожалению, сегодня в нашем боте произошел технический сбой, в связи с чем утренние гороскопы не были разосланы вовремя. Сейчас все исправлено и вы должны были получить ваш гороскоп. Если все-таки он вам не пришел, просим написать в поддержку или воспользоваться командой /send в меню. Приносим свои извинения за случившееся, постараемся избежать повторения в дальнейшем. Приятного дня!
+# #     """)).start()
+# #     time.sleep(1/15)
+# # session=sessionmaker(engine)()
+
+# # x=session.query(User).filter_by(TelegramID="952863788").update({"TelegramID":"0"})
+# # session.commit()
+
+# # session.delete(x)
+# # session.commit()
+
+
+# # import horoscopeusr
+# # x=horoscopeusr.ChUserInfo(inpValue=int(
+# #                     298208027), inpTelegramID=str(952863788), inpFieldName="Source_ID")
+# # # print(x)
+# # import horoscopeusr
+
+# # x=horoscopeusr.DelTmpUser()
+# # print(x)
+# from datetime import datetime,timedelta
+# from databaseInteraction import *
+# from openpyxl import *
+# def transfer_to_success_payment(file):
+#     workbook = load_workbook(file)
+#     sheet=workbook.get_sheet_by_name('users')
+#     i=2
+#     session=sessionmaker(engine)()
+#     while True:
+        
+#         inv_id=str(sheet["A"+str(i)].value)
+#         if inv_id=="" or inv_id=="None":
+#             break
+
+
+#         x=session.query(SuccessPayment).filter_by(payment_id=inv_id).all()
+#         if len(x)==0:
+            
+#             price=int(str(sheet["C"+str(i)].value))
+#             date=sheet["J"+str(i)].value
+#             # date=datetime.strptime(date,"%d.%m.%y %H:%M")
+#             params=str(sheet["L"+str(i)].value)
+#             params=params.split("&")
+#             kwargs={}
+
+
+#             for i in range(len(params)):
+#                 params[i]=params[i].split("=")
+#                 dictionary=params[i]
+#                 kwargs[dictionary[0]]=dictionary[1]
+
+#             days=int(kwargs["Shp_days"])
+
+#             active_until=date+timedelta(days=days)
+#             telegram_id=kwargs["Shp_id"]
+#             if "Shp_prev" in kwargs.keys():
+#                 prev_id=kwargs["Shp_prev"]
+#             else:
+#                 prev_id=None
+#             all_success_payments=session.query(SuccessPayment).filter_by(telegram_id=telegram_id).all()
+
+#             user=session.query(User).filter_by(TelegramID=telegram_id).first()
+
+#             try:
+#                 payment_id=int(all_success_payments[0].payment_id)
+#                 for i in range(len(all_success_payments)):
+#                     if all_success_payments[0].payment_id<payment_id:
+#                         payment_id=all_success_payments[0].payment_id
+#             except:
+#                 payment_id=100000
+#             if prev_id!=None:
+
+
+#                 new_payments=SuccessPayment(
+#                     telegram_id=telegram_id,
+#                     payment_id=inv_id,
+#                     days=days,
+#                     amount=price,
+#                     payment_date=date,
+#                     active_until=active_until,
+#                     user_name=user.Name,
+#                     source_id=user.Source_ID,
+#                     payed=1,
+#                     type_of_payment="REC",
+#                     birth_day=datetime.strptime(user.Birthday,"%d.%m.%Y")
+#                 )
+
+#                 session.add(new_payments)
+#             elif int(payment_id)>int(inv_id):
+
+                
+#                 try:
+#                     session.query(SuccessPayment).filter_by(payment_id=all_success_payments[0].payment_id).update({
+#                     "type_of_payment":"SELF PAID"
+#                 })
+#                 except:
+#                     pass
+
+
+#                 new_payments=SuccessPayment(
+#                     telegram_id=telegram_id,
+#                     payment_id=inv_id,
+#                     days=days,
+#                     amount=price,
+#                     payment_date=date,
+#                     active_until=active_until,
+#                     user_name=user.Name,
+#                     source_id=user.Source_ID,
+#                     payed=1,
+#                     type_of_payment="FIRST PAY",
+#                     birth_day=datetime.strptime(user.Birthday,"%d.%m.%Y")
+#                 )
+#                 session.add(new_payments)
+
+
+#             else:
+
+
+#                 new_payments=SuccessPayment(
+#                     telegram_id=telegram_id,
+#                     payment_id=inv_id,
+#                     days=days,
+#                     amount=price,
+#                     payment_date=date,
+#                     active_until=active_until,
+#                     user_name=user.Name,
+#                     source_id=user.Source_ID,
+#                     payed=1,
+#                     type_of_payment="SELF PAID",
+#                     birth_day=datetime.strptime(user.Birthday,"%d.%m.%Y")
+#                 )
+#                 session.add(new_payments)
+#         i+=1
+#     print(workbook)
+#     session.commit()
+# x=transfer_to_success_payment("Astrobot_07.11.2022-13.11.2022.xlsx")
+# # # print(x)
+# import horoscopeproc
+# import horoscopeusr
+# # first_part=horoscopeproc.GenHourMessAll(0,850703853)[0][2]
+# # # for i in range(len(x)):
+# # #     if x[i][0]==850703853:
+# # #         print(1)
+# # from threading import Thread
+# # import telebot
+# # # import sys 
+# # # print (sys.path)
+# # import morning  
+# # date_today=morning.Get_Data()
+# # #"date_pict\16.10.2022.png"
+# # path="date_pict/"+date_today+".png"
+# # pict=open(path,"rb").read()
+# # buttons=telebot.types.InlineKeyboardMarkup()
+# # but=telebot.types.InlineKeyboardButton(text="Получить персональный гороскоп",callback_data="SUBSCR_ACT")
+
+# # Thread(target=morning.wait_until_send_photo,args=(850703853,pict,first_part,None,"html")).start()
+# x=horoscopeproc.GenHourMessAll(0,9090909090909090)
+# print(x)
+
+
+
+
+
+
+
+import horoscopedb
+import config
+import telebot
+from telebot import types
+bot=telebot.TeleBot(token=config.TOKEN)
+# from datetime import datetime
+# from threading import Thread
+# import time
+# conn=horoscopedb.ConnectDb()
+# cur=conn.cursor()
+# cur.execute("SELECT * FROM Users WHERE IsActiveBot=1 AND SubscrType_ID=5")
+# res=cur.fetchall()
+# mark_up=types.ReplyKeyboardRemove()
+# today=datetime.now().date()
+# # days_till_end=end_date-today_data
+# # days_till_end=days_till_end.days
+# bot.send_message(5127634821,"рассылка началась")
+
+# text='''Добрый день! Наверняка, вы убедились, что последнее время вам гораздо сложнее принимать решения, возникают непредвиденные трудности, да и в общем жизнь дается вам тяжелее обычного? 
+
+# Оформите прямо сейчас подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня! Чтобы подписаться нажмите /subscribe'''
+# with open("05_12_test.jpg","rb") as photo:
+#     photo=photo.read()
+# # bot.send_photo(952863788,caption=text,photo=photo,reply_markup=mark_up)
+# # bot.send_photo(952863788,caption=text,photo=photo,reply_markup=mark_up)
+# res=list(res)
+# res=res[::-1]
+# # breakpoint()
+# for i in range(len(res)):
+#     x=res[i]
+#     date=x[16]-today
+#     days=date.days
+#     if days not in config.days_for_mailing and days!=-10 and days!=-3:
+#         Thread(target=bot.send_photo,args=(x[9],photo,text),kwargs={"reply_markup":mark_up}).start()
+#         time.sleep(1/10)
+
+# bot.send_message(5127634821,"рассылка закончилась")
+
+
+
+
+# # import horoscopeproc
+# # id=5432089379
+# # js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
+# # print(js)\
+x=bot.get_chat("573614210")
+print(x)

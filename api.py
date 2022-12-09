@@ -96,7 +96,7 @@ CORS(app)
 
 @app.route("/get_all_subsrcibes", methods=['GET', 'POST'])
 def get_all_subs():
-    conn = ConnectDb(subscribe=True)
+    conn = ConnectDb()
     path = "static/Output.xlsx"
     cur = conn.cursor()
     with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
@@ -322,26 +322,7 @@ def get_payment():
             prev_id = request.form.get('Shp_prev')
         except:
             pass
-        # try:
-        #     rec=request.form.get("Shp_rec")
-        #     id=id
-
-        #     date_end=functions.GetUsers(id)[0]["ActiveUntil"]
-
-        #     end=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(30))
-
-        #     end_for_users=change_active_until_date(start=Get_Data(),date_end=date_end,days=int(30),base="users")
-
-        #     ChUserInfo(inpTelegramID=id,inpFieldName="ActiveUntil",inpValue=end_for_users)
-
-        #     ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=3)
-        #     add_payment(sub_type=3,telegram_id=id,payment_id=str(count_payments()),active_until=end,days=30,payed=True,amount=69,link="REC")
-
-        #     wait_until_send(id,"Ваша подписка была продлена, спасибо")        # username = request.args.get('username')
-        # except Exception as err:
-        #     print(err)
-        # username = request.args.get('username')
-        # username = request.args.get('username')
+        
         date_end = functions.GetUsers(id)[0]["ActiveUntil"]
         date_end = datetime.strftime(date_end, "%Y-%m-%d")
         end = change_active_until_date(
@@ -370,16 +351,36 @@ def get_payment():
                        inpFieldName="IsActiveSub", inpValue=1)
             ChUserInfo(inpTelegramID=id,
                        inpFieldName="SubscrType_ID", inpValue=3)
+            
+            # signature = request.form.get['SignatureValue']
+            pay = payments.get_payment(id)[0]
+            #print(pay, "PAYYY")
+            try:
+                if prev_id!=0 and prev_id!=None:
+                    x=add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="REC")
+                    
+                    update_price_list_with_id(id,"new_payment",price)
+                else:
+                    if len(only_succesfull_payments.get_payments(telegram_id=id))==0:
+                        add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="FIRST PAY")
+                        update_price_list_with_id(id,"new_customer",price)
+                        
+                    else:
+                        add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="SELF PAID")
+                        
+                        update_price_list_with_id(id,"new_payment",price)
+            except Exception as err:
+                try:
+                    wait_until_send(952863788,err.args[0])
+                except:
+                    wait_until_send(952863788,"ошибка была")
+            # payment=add_payment(sub_type=3,telegram_id=str(id),active_until=end,days=days,payed=True,amount=price,link="None",payment_id=InvId)
+            # signature = robokassa.calculate_signature(cost, id, signature)
+            # if robokassa.check_signature_result(id, cost, signature, merchant_password_2):
             try:
                 wait_until_send(id, text, parse_mode="html")
             except:
                 pass
-            # signature = request.form.get['SignatureValue']
-            pay = payments.get_payment(id)[0]
-            print(pay, "PAYYY")
-            # payment=add_payment(sub_type=3,telegram_id=str(id),active_until=end,days=days,payed=True,amount=price,link="None",payment_id=InvId)
-            # signature = robokassa.calculate_signature(cost, id, signature)
-            # if robokassa.check_signature_result(id, cost, signature, merchant_password_2):
             return f'OK{InvId}'
         except Exception as err:
             console.log(err)
@@ -580,5 +581,5 @@ def update_source_route():
 HOST = '195.2.79.3'
 PORT = '443'
 
-# app.run(host=HOST, port=PORT,debug=True)
-app.run(debug=True)
+app.run(host=HOST, port=PORT,debug=True)
+# app.run(debug=True)
