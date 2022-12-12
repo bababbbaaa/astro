@@ -502,6 +502,22 @@ def get_payments():
         for i in range((limit+offset)/100):
             payments.extend(Pay.list(limit=limit+offset, status="succeeded"))
 
+@app.route('/get_success_payments', methods=['POST', 'GET'])
+def get_sucess_payments_route():
+    data = request.get_json()
+
+    try:
+        telegram_id = data.get('telegram_id')
+        print(telegram_id)
+
+        payments = get_success_payments(telegram_id)
+        converted = alchemy_list_convert(payments)
+
+        return jsonify(converted[:100])
+
+    except Exception as e:
+        return str(e)
+
 
 @app.route('/get_sources', methods=['POST', 'GET'])
 def get_sources_route():
@@ -518,6 +534,7 @@ def get_sources_route():
         return jsonify(converted[::-1])
     except Exception as e:
         return str(e)
+
 
 
 @app.route('/add_source', methods=['POST'])
@@ -537,7 +554,6 @@ def add_source_route():
         converted = alchemy_to_dict(new_source)
         return jsonify(converted)
     except Exception as e:
-        print(e)
         return str(e), 400
 
 
@@ -581,5 +597,5 @@ def update_source_route():
 HOST = '195.2.79.3'
 PORT = '443'
 
-app.run(host=HOST, port=PORT,debug=True)
-# app.run(debug=True)
+# app.run(host=HOST, port=PORT,debug=True)
+app.run(debug=True)

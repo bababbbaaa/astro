@@ -1,4 +1,5 @@
 from datetime import datetime , timedelta
+from itertools import tee
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -110,10 +111,14 @@ def add_success_payment(**kwargs) -> None:
     return new_success_payment
 
     
-def get_payments(telegram_id):
-    session=sessionmaker(engine)()
+def get_success_payments(telegram_id = None) -> list:
+    payments = select(SuccessPayment)
 
-    payments=session.query(SuccessPayment).filter_by(telegram_id=telegram_id).all()
-    return payments
+    if telegram_id is not None:
+        payments = payments.where(SuccessPayment.telegram_id.contains(telegram_id))
+
+
+    return list(Session.scalars(payments))
+
 # SuccessPayment.__table__.drop(engine)
 Base.metadata.create_all(engine)
