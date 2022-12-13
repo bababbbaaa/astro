@@ -508,14 +508,16 @@ def get_sucess_payments_route():
 
     try:
         telegram_id = data.get('telegram_id')
-        print(telegram_id)
+        source_id = data.get('source_id')
+        payment_type = data.get('payment_type')
 
-        payments = get_success_payments(telegram_id)
+        payments = get_success_payments(telegram_id, source_id, payment_type)
         converted = alchemy_list_convert(payments)
 
         return jsonify(converted[:100])
 
     except Exception as e:
+        print(e)
         return str(e)
 
 
