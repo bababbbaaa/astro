@@ -126,7 +126,7 @@ def get_success_payments(
         payments = payments.where(SuccessPayment.telegram_id.contains(telegram_id))
 
     if source_id is not None:
-        payments = payments.where(SuccessPayment.source_id == source_id)
+        payments = payments.where(SuccessPayment.source_id.contains(source_id))
 
     if payment_type is not None and payment_type != 3:
         type_ = payment_types[payment_type]
