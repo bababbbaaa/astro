@@ -1,6 +1,6 @@
 from datetime import datetime , timedelta
 from sqlalchemy import *
-from sqlalchemy.orm import SessionWebmaker
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from posixpath import abspath
 from os.path import join
