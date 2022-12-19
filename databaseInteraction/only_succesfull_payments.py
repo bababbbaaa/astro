@@ -1,4 +1,5 @@
 from datetime import datetime , timedelta
+from itertools import tee
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -119,11 +120,30 @@ def add_success_payment(**kwargs) -> None:
 
     return new_success_payment
 
-    
-def get_payments(telegram_id):
-    session=sessionmaker(engine)()
+payment_types = ['FIRST PAY', 'SELF PAID', 'REC']
 
-    payments=session.query(SuccessPayment).filter_by(telegram_id=telegram_id).all()
-    return payments
+def get_success_payments(
+    telegram_id = None,
+    source_id = None,
+    payment_type = None,
+    rec_available = None, # возможнен ли рекуррент
+    ) -> list:
+
+    session = sessionmaker(engine)()
+    payments = select(SuccessPayment)
+
+    if telegram_id is not None:
+        payments = payments.where(SuccessPayment.telegram_id.contains(telegram_id))
+
+    if source_id is not None:
+        payments = payments.where(SuccessPayment.source_id.contains(source_id))
+
+    if payment_type is not None and payment_type != 3:
+        type_ = payment_types[payment_type]
+
+        payments = payments.where(SuccessPayment.type_of_payment == type_)
+
+    return list(session.scalars(payments))
+
 # SuccessPayment.__table__.drop(engine)
 Base.metadata.create_all(engine)
