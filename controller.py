@@ -20,7 +20,7 @@ Base = declarative_base()
 
 
 engine = create_engine(
-    url=connection_string,pool_size=30,max_overflow=5
+    url=connection_string,pool_size=100,max_overflow=10
 )
 
 Session = sessionmaker(engine)()
@@ -31,6 +31,19 @@ delete_cache = dict()
 Base.metadata.create_all(engine)
 photos = {}
 
+BaseWeb=declarative_base()
+database="WEB"
+
+connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
+    user, password, host, port, database)
+
+engine_web = create_engine(
+    url=connection_string,pool_size=100,max_overflow=10
+)
+
+SessionWeb = sessionmaker(engine_web)()
+
+BaseWeb.metadata.create_all(engine_web)
 for i in config.photos:
     photos[i] = open(config.photos[i], "rb").read()
 

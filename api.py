@@ -311,13 +311,11 @@ def get_payment():
         # print(json.loads(request.get_data()))
         # print(request.get_json())
         price = request.form.get("OutSum")
-        print(price)
         days = request.form.get("Shp_days")
-        print(days)
         id = int(request.form.get('Shp_id'))
-        print(id)
         InvId = request.form.get('InvId')
         prev_id = 0
+        payment_type=request.form.get("IncCurrLabel")
         try:
             prev_id = request.form.get('Shp_prev')
         except:
@@ -325,16 +323,20 @@ def get_payment():
         
         date_end = functions.GetUsers(id)[0]["ActiveUntil"]
         date_end = datetime.strftime(date_end, "%Y-%m-%d")
+
         end = change_active_until_date(
             start=Get_Data(), date_end=date_end, days=int(days))
+
         end_for_users = change_active_until_date(
             start=Get_Data(), date_end=date_end, days=int(days), base="users")
+
         if get_sub(id) != None:
             delete_sub(id)
             if prev_id != None and prev_id != 0:
                 x = prev_id
             else:
                 x = InvId
+
             add_sub(id=id, start=Get_Data(), end=end, pay_id=x, type=price)
             add_payment(sub_type=3, telegram_id=id, payment_id=str(
                 count_payments()), active_until=end, days=30, payed=True, amount=69, link="REC")
@@ -357,18 +359,18 @@ def get_payment():
             #print(pay, "PAYYY")
             try:
                 if prev_id!=0 and prev_id!=None:
-                    x=add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="REC")
+                    change_unsuccesful_to_succesful(id)
                     
-                    update_price_list_with_id(id,"new_payment",price)
+                    # update_price_list_with_id(id,"new_payment",price)
                 else:
                     if len(only_succesfull_payments.get_payments(telegram_id=id))==0:
                         add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="FIRST PAY")
-                        update_price_list_with_id(id,"new_customer",price)
+                        # update_price_list_with_id(id,"new_customer",price)
                         
                     else:
                         add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="SELF PAID")
                         
-                        update_price_list_with_id(id,"new_payment",price)
+                        # update_price_list_with_id(id,"new_payment",price)
             except Exception as err:
                 try:
                     wait_until_send(952863788,err.args[0])

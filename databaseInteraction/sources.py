@@ -53,6 +53,7 @@ class Source(Base):
     price_for_ended_reg=Column(Integer)
     payment_exists=Column(Boolean)
     customer_exists=Column(Boolean)
+    
 def add_person_to_source(source_id):
     session=Session()
     source=session.query(Source).filter_by(code=source_id).first()

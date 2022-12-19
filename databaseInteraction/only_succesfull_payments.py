@@ -57,20 +57,29 @@ class SuccessPayment(Base):
     user_name=Column(Text)
     birth_day=Column(Date)
     payment_date=Column(Date)
-
+    # is_reccurent_success=Column(Integer)
 
     def get_user(self):
         session=sessionmaker(engine)()
         user=session.query(User).filter_by(TelegramID=self.telegram_id)
         return user
-
+def change_unsuccesful_to_succesful(id):
+    session=Session()
+    today=datetime.today()
+    session.query(SuccessPayment).filter_by(type_of_payment="REC",payment_date=today,telegram_id=id).update(
+        {"amount":69,"is_reccurent_success":1,}
+    )
+    session.commit()
+    return None
 def add_success_payment(**kwargs) -> None:
     telegram_id=str(kwargs["telegram_id"])
     payment_id=str(kwargs["payment_id"])
     days=int(kwargs["days"])
     amount=int(float(kwargs["price"]))
     type_of_payment=str(kwargs["type_of_payment"])
-
+    # is_reccurent_success=-1
+    # if type_of_payment=="REC":
+    #     is_reccurent_success=kwargs["is_reccurent_success"]
     payment_date=datetime.today()
     active_until=payment_date+timedelta(days=days)
 
@@ -99,7 +108,8 @@ def add_success_payment(**kwargs) -> None:
         source_id=source_id,
         payed=payed,
         type_of_payment=type_of_payment,
-        birth_day=birth_day
+        birth_day=birth_day,
+        # is_reccurent_success=is_reccurent_success
 
     )
 

@@ -27,12 +27,12 @@
 #out_summ=69.000000&OutSum=69.000000&inv_id=19811&InvId=19811&crc=2062FC7FA250F008BC58873A8CEB35DA&SignatureValue=2062FC7FA250F008BC58873A8CEB35DA&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=serg3jk0zl@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=952863788
 # import requests
 # #out_summ=69.000000&OutSum=69.000000&inv_id=16896&InvId=16896&crc=861B8AA4513C4A71900631C364E27121&SignatureValue=861B8AA4513C4A71900631C364E27121&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=bobalinaa@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=297067072&Shp_prev=14763
-# import requests
+import requests
 # # # # # # from rich.console import Console
-# request1=requests.post("http://195.2.79.3:443/get_payment",data={"out_summ":330.000000,"OutSum":330.000000,
-# "inv_id":17992,"InvId":17992,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7A922835773700B51A21FF20B69BDB84","PaymentMethod":"BankCard","IncSum":330.000000,"Shp_days":210,"Shp_id":970984910,
-# })
-# print(request1.text)
+request1=requests.post("http://195.2.79.3:443/get_payment",data={"out_summ":330.000000,"OutSum":330.000000,
+"inv_id":18434,"InvId":18434,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7A922835773700B51A21FF20B69BDB84","PaymentMethod":"BankCard","IncSum":330.000000,"Shp_days":180,"Shp_id":367565935,
+})
+print(request1.text)
 # from databaseInteraction import * 970984910
 #out_summ=69.000000&OutSum=69.000000&inv_id=19553&InvId=19553&crc=DBACC458D2042EADEB0FC221324A0B04&SignatureValue=DBACC458D2042EADEB0FC221324A0B04&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Pabra1976@icloud.com&Fee=2.690000&Shp_days=30&Shp_id=808266836
 
@@ -643,11 +643,11 @@
 
 
 
-import horoscopedb
-import config
-import telebot
-from telebot import types
-bot=telebot.TeleBot(token=config.TOKEN)
+# import horoscopedb
+# import config
+# import telebot
+# from telebot import types
+# bot=telebot.TeleBot(token=config.TOKEN)
 # from datetime import datetime
 # from threading import Thread
 # import time
@@ -688,5 +688,5 @@ bot=telebot.TeleBot(token=config.TOKEN)
 # # id=5432089379
 # # js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
 # # print(js)\
-x=bot.get_chat("573614210")
-print(x)
+# x=bot.get_chat("573614210")
+# print(x)

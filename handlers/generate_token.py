@@ -28,9 +28,12 @@ async def enter_token_name(message: CallbackQuery, state: FSMContext):
     public_name = message.text
     # InsertIntoTable("AstroSchool",(("Category","334234423"),("MessageID",555)),)
     token = random.randint(100000000, 999999999)
-    
-    horoscopeproc.InsertIntoTable(inpTbName="Sources", inpValues={
-                                    "Name": public_name, "Token": str(token)})
+    date=datetime.now().date()
+    date=datetime.strftime(date,"%d.%m.%Y")
+    add_source(title=public_name,code=token,price=0,date=date,
+    type="канал")
+    add_web_source(title=public_name,code=token,price=0,date=date,
+    type="канал")
     await wait_until_send(id, "Паблик записан, вот ссылка для "+public_name +
-                    " https://t.me/"+config.bot_name[1:]+"?start="+str(token))
+                    " https://t.me/"+config.bot_name[1:]+"?start="+str(token)+"\n\nавтоматически тип источника записался как канал, если необходимо, заменить в вэбе инфу")
     await state.finish()

@@ -4,3 +4,4 @@ from .payments import *
 from .buttons import *
 from .sources import *
 from .only_succesfull_payments import *
+from .web_anouther_database import *

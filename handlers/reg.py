@@ -59,7 +59,7 @@ async def gen_user_mess(message):
     if horoscopeusr.RegUser(inpTelegramID=str(id))[0]:
         if len(text1) == 2:
 
-            update_price_list_with_id(id,"new_person")
+            # update_price_list_w/ith_id(id,"new_person")
 
             try:
                 horoscopeusr.ChUserInfo(inpValue=int(
@@ -94,8 +94,10 @@ async def gen_user_mess(message):
 @dp.message_handler(state=UserReg.name)
 async def enter_name(message: CallbackQuery, state: FSMContext):
     id=message.chat.id
-
+    
     add_message_to_cache(id,message_id=message.message_id)
+    if "start" in message.text:
+        return None
     async with state.proxy() as state_data:
         
 
@@ -292,7 +294,7 @@ async def end_registartion(message: CallbackQuery, state: FSMContext,destime_id)
     # Удаляем сообщение, чтобы юзер не игрался с выбором времени
         js = horoscopeproc.GenHourMessAll(
                         11, inpTelegramID=str(id))
-        update_price_list_with_id(str(id),"new_ended_reg")
+        # update_price_list_with_id(str(id),"new_ended_reg")
         txt = js[0]
         await state.finish()
         await send_mes(txt)

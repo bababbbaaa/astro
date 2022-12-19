@@ -1,17 +1,10 @@
 SUPPORT="ИМЯ ПОДДЕРЖКИ"
 import horoscopedb as horoscopedb
 from datetime import datetime
-<<<<<<< HEAD
-# MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
-TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"#astrologyEveryDay
+MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
+TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"#astrologyEveryDay
 # TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
 # TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM" # Sharapa bot
-=======
-MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
-# TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"#astrologyEveryDay
-# TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
-TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM" # Sharapa bot
->>>>>>> e38d3245bfb97b456af6dea3b3046e061f75b499
 
 photos={"inter_name":"days/name.png",
 "inter_gender":"days/gender.png",
