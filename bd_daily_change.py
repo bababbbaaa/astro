@@ -5,21 +5,21 @@ from databaseInteraction import *
 import databaseInteraction
 
 def upload_information_to_source():
-    session=Session()
-    session_web=SessionWeb()
-    sources=session.query(Source).all()
+    # session=Session()
+    # session_web=SessionWeb()
+    sources=Session.query(Source).all()
     for i in range(len(sources)):
         try:
             code=sources[i].code
         except:
             code=0
-        users_who_started_registration=session.query(databaseInteraction.User).filter_by(Source_ID=code).count()
-        users_who_didint_ended_reg=session.query(databaseInteraction.User).filter_by(DesTime_ID=None,Source_ID=code).count()
-        all_costumers=session.query(SuccessPayment).filter_by(type_of_payment="FIRST PAY",source_id=code).count()
-        all_payments=session.query(SuccessPayment).filter_by(source_id=code).count()
+        users_who_started_registration=Session.query(databaseInteraction.User).filter_by(Source_ID=code).count()
+        users_who_didint_ended_reg=Session.query(databaseInteraction.User).filter_by(DesTime_ID=None,Source_ID=code).count()
+        all_costumers=Session.query(SuccessPayment).filter_by(type_of_payment="FIRST PAY",source_id=code).count()
+        all_payments=Session.query(SuccessPayment).filter_by(source_id=code).count()
         all_profit=0
 
-        all_pay=session.query(SuccessPayment).filter_by(source_id=code).all()
+        all_pay=Session.query(SuccessPayment).filter_by(source_id=code).all()
         for pay in all_pay:
             all_profit+=int(pay.amount)
 
@@ -42,17 +42,17 @@ def upload_information_to_source():
         kwargs["amount_of_persons_who_ended_registr"]=amount_of_persons_who_ended_registr
         kwargs["amount_of_payments"]=all_payments
         kwargs["amount_of_customers"]=all_costumers
-        session_web.query(Source).filter_by(code=sources[i].code).update(kwargs)
-    session.commit()   
-    session_web.commit()
+        SessionWeb.query(Source).filter_by(code=sources[i].code).update(kwargs)
+    Session.commit()   
+    SessionWeb.commit()
 
 def tranfer_payments(date=None):
-    session=Session()
+    # session=Session()
     if date!=None:
-        list_of_pay=session.query(SuccessPayment).filter_by(payment_date=date).all()
+        list_of_pay=Session.query(SuccessPayment).filter_by(payment_date=date).all()
     else:
-        list_of_pay=session.query(SuccessPayment).all()
-    session_web=SessionWeb()
+        list_of_pay=Session.query(SuccessPayment).all()
+    # session_web=SessionWeb()
     for pay in list_of_pay:
         telegram_id=pay.telegram_id
         payment_id=pay.payment_id
@@ -69,7 +69,7 @@ def tranfer_payments(date=None):
             is_reccurent_success=0
         else:
             is_reccurent_success=1
-        payments=session_web.query(WebSuccessPayment).filter_by(payment_id=payment_id).first()
+        payments=SessionWeb.query(WebSuccessPayment).filter_by(payment_id=payment_id).first()
         if payments==None:
             pay=WebSuccessPayment(
                 telegram_id=telegram_id,
@@ -85,10 +85,10 @@ def tranfer_payments(date=None):
                 payment_date=payment_date,
                 is_reccurent_success=is_reccurent_success
             )
-            session_web.add(pay)
-    session_web.commit()
-    session.commit()
+            SessionWeb.add(pay)
+    SessionWeb.commit()
+    Session.commit()
 
-tranfer_payments(date=datetime.today())
-
+# tranfer_payments(date=datetime.today())
+tranfer_payments()
 upload_information_to_source()
