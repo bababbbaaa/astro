@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from sqlalchemy.orm import sessionmaker
 import config
+import logging
 
 bot = Bot(token=config.TOKEN, parse_mode="html")
 dp = Dispatcher(bot=bot, storage=MemoryStorage())
@@ -17,6 +18,11 @@ connection_string = "mysql+pymysql://{0}:{1}@{2}:{3}/{4}".format(
     user, password, host, port, database)
 
 Base = declarative_base()
+
+###### LOGGING ######
+LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
+logging.basicConfig(filename='app.log', filemode='a', format=LOG_FORMAT)
+logger = logging.getLogger()
 
 
 engine = create_engine(

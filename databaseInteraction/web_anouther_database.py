@@ -22,7 +22,6 @@ class WebSuccessPayment(BaseWeb):
     payed = Column(Boolean, nullable=False)
     amount = Column(Integer, nullable=False)
     type_of_payment = Column(Text, nullable=False)
-    source_id=Column(BIGINT)
     user_name=Column(Text)
     birth_day=Column(Date)
     payment_date=Column(Date)
@@ -137,7 +136,6 @@ def get_web_source(code: str = None, title: str = None) -> WebSource:
 
 def _get_source(code: str, title: str):
     if code is not None:
-        print(code)
         return select(WebSource).where(WebSource.code == code)
 
     return select(WebSource).where(WebSource.title == title)
@@ -223,7 +221,7 @@ def get_success_web_payments(
     rec_available = None, # возможнен ли рекуррент
     ) -> list:
 
-    SessionWeb=sessionmaker(engine_web)()
+    session = SessionWeb
     payments = select(WebSuccessPayment)
 
     if telegram_id is not None:
@@ -239,9 +237,8 @@ def get_success_web_payments(
 
     return list(SessionWeb.scalars(payments))
 
-# SuccessPayment.__table__.drop(engine)
+# WebSuccessPayment.__table__.drop(engine)
 # Base.metadata.create_all(engine)
-
 
 
 BaseWeb.metadata.create_all(engine_web)

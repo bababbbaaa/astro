@@ -18,7 +18,6 @@ import horoscopeproc
 from rich.console import Console
 import string
 from databaseInteraction import *
-from utils import logger
 from aiogram.types import InlineKeyboardButton
 import requests
 from datetime import datetime as date_time
@@ -41,7 +40,8 @@ class InlineButton(InlineKeyboardButton):
                 return await coro(call, *args, **kwargs)
 
         except Exception as e:
-            logger.error(f'{coro} - handler exception --> {e}')
+            pass
+            # logger.error(f'{coro} - handler exception --> {e}')
 
 
 async def startup(message):

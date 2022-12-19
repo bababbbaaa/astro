@@ -16,6 +16,7 @@ from horoscopedb import ConnectDb
 import json
 import functions
 from horoscopeusr import ChUserInfo
+from controller import logger
 
 from for_payments import *
 # additional tools
@@ -508,19 +509,15 @@ def get_payments():
 def get_sucess_payments_route():
     data = request.get_json()
 
-    try:
-        telegram_id = data.get('telegram_id')
-        source_id = data.get('source_id')
-        payment_type = data.get('payment_type')
+    telegram_id = data.get('telegram_id')
+    source_id = data.get('source_id')
+    payment_type = data.get('payment_type')
 
-        payments = get_success_web_payments(telegram_id, source_id, payment_type)
-        converted = alchemy_list_convert(payments)
+    payments = get_success_web_payments(telegram_id, source_id, payment_type)
+    converted = alchemy_list_convert(payments)
 
-        return jsonify(converted[:100])
+    return jsonify(converted[:100])
 
-    except Exception as e:
-        print(e)
-        return str(e)
 
 
 @app.route('/get_sources', methods=['POST', 'GET'])
