@@ -42,7 +42,7 @@ def upload_information_to_source():
         kwargs["amount_of_persons_who_ended_registr"]=amount_of_persons_who_ended_registr
         kwargs["amount_of_payments"]=all_payments
         kwargs["amount_of_customers"]=all_costumers
-        SessionWeb.query(Source).filter_by(code=sources[i].code).update(kwargs)
+        SessionWeb.query(WebSource).filter_by(code=sources[i].code).update(kwargs)
     Session.commit()   
     SessionWeb.commit()
 
