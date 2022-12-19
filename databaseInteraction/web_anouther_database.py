@@ -24,6 +24,7 @@ class WebSuccessPayment(BaseWeb):
     type_of_payment = Column(Text, nullable=False)
     source_id=Column(BIGINT)
     user_name=Column(Text)
+    source_id = Column(BIGINT)
     birth_day=Column(Date)
     payment_date=Column(Date)
     is_reccurent_success=Column(Integer)
