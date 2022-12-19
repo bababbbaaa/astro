@@ -697,4 +697,4 @@
 # requets=requests.post("http://127.0.0.1:5000/get_success_payments")
 # print(requets.text)
 from databaseInteraction import *
-print(get_success_web_payments(payment_type=746146307))
+print(get_success_web_payments(payment_type=2))
