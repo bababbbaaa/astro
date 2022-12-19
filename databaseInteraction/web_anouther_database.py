@@ -28,7 +28,7 @@ class WebSuccessPayment(BaseWeb):
     is_reccurent_success=Column(Integer)
 
 class WebSource(BaseWeb):
-    __tablename__="websources"
+    __tablename__="web_sources"
     
     ID = Column(Integer, nullable=False, unique=True, primary_key=True)
     title = Column(Text, nullable=False)
@@ -235,7 +235,7 @@ def get_success_web_payments(
 
         payments = payments.where(WebSuccessPayment.type_of_payment == type_)
 
-    return list(session.scalars(payments))
+    return list(SessionWeb.scalars(payments))
 
 # WebSuccessPayment.__table__.drop(engine)
 # Base.metadata.create_all(engine)
