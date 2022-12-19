@@ -513,7 +513,7 @@ def get_sucess_payments_route():
         source_id = data.get('source_id')
         payment_type = data.get('payment_type')
 
-        payments = get_success_payments(telegram_id, source_id, payment_type)
+        payments = get_success_web_payments(telegram_id, source_id, payment_type)
         converted = alchemy_list_convert(payments)
 
         return jsonify(converted[:100])
@@ -532,7 +532,7 @@ def get_sources_route():
         code = data.get('code')
         type = data.get('type')
 
-        sources = get_sources(title, code, type=type)
+        sources = get_web_sources(title, code, type=type)
         converted = alchemy_list_convert(sources)
 
         return jsonify(converted[::-1])
@@ -552,7 +552,7 @@ def add_source_route():
         date: str = data['date']
         type: str = data['type']
 
-        new_source = add_source(title, code, price, date, type)
+        new_source = add_web_source(title, code, price, date, type)
         t = new_source.title
 
         converted = alchemy_to_dict(new_source)
@@ -569,7 +569,7 @@ def delete_source_route():
     code = data.get('code')
 
     try:
-        delete_source(code, title)
+        delete_web_source(code, title)
 
         return 'SUCCESS'
     except:
@@ -590,7 +590,7 @@ def update_source_route():
             title = source.get('title')
             price = source.get('price')
 
-            update_source(code, title, price)
+            update_web_source(code, title, price)
 
         return 'SUCCESS', 200
 
