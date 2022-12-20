@@ -17,7 +17,7 @@ import json
 import functions
 from horoscopeusr import ChUserInfo
 from controller import logger
-
+from random import randint
 from for_payments import *
 # additional tools
 import random
@@ -360,11 +360,14 @@ def get_payment():
             #print(pay, "PAYYY")
             try:
                 if prev_id!=0 and prev_id!=None:
+                    # try:
                     change_unsuccesful_to_succesful(id)
-                    
+                        
+                    # except:
+                    #     pass
                     # update_price_list_with_id(id,"new_payment",price)
                 else:
-                    if len(only_succesfull_payments.get_payments(telegram_id=id))==0:
+                    if len(only_succesfull_payments.get_success_payments(telegram_id=id))==0:
                         add_success_payment(telegram_id=id,payment_id=InvId,days=int(days),price=price,type_of_payment="FIRST PAY")
                         # update_price_list_with_id(id,"new_customer",price)
                         
@@ -511,10 +514,36 @@ def get_sucess_payments_route():
 
     telegram_id = data.get('telegram_id')
     source_id = data.get('source_id')
-    payment_type = data.get('payment_type')
 
-    payments = get_success_web_payments(telegram_id, source_id, payment_type)
+    payment_type = data.get('payment_type')
+    rec_available=data.get("rec_available")
+
+    to_date=data.get("to_date")
+    from_date=data.get("from_date")
+    return_excel=data.get("return_excel")
+
+
+    if to_date is not None:
+        to_date=datetime.strptime(to_date,DATE_FORMAT)
+    if from_date is not None:
+        from_date=datetime.strptime(from_date,DATE_FORMAT)
+
+    payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date)
     converted = alchemy_list_convert(payments)
+
+
+    if return_excel==True:
+        path='static/payments.xlsx'
+        with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
+            try:
+
+                df=alchemy_tuple(payments)
+                df = pd.DataFrame(df)
+                df.to_excel(writer, sheet_name='name')
+                return path
+            except Exception as err:
+                return(err)
+
 
     return jsonify(converted[:100])
 
@@ -528,10 +557,24 @@ def get_sources_route():
         title = data.get('title')
         code = data.get('code')
         type = data.get('type')
-
+        return_excel=data.get("return_excel")
+        
         sources = get_web_sources(title, code, type=type)
         converted = alchemy_list_convert(sources)
 
+
+
+        if return_excel==True:
+            path='static/sources.xlsx'
+            with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
+                try:
+
+                    df=alchemy_tuple(sources,"sources")
+                    df = pd.DataFrame(df)
+                    df.to_excel(writer, sheet_name='name')
+                    return path
+                except Exception as err:
+                    return(err)
         return jsonify(converted[::-1])
     except Exception as e:
         return str(e)
@@ -593,6 +636,7 @@ def update_source_route():
 
     except Exception as e:
         return str(e), 400
+
 
 
 HOST = '195.2.79.3'

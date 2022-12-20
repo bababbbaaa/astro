@@ -111,6 +111,39 @@ def alchemy_to_dict(alchemy_object):
 
     return result
 
+payment_keys=[
+    "ID","telegram_id",	"payment_id","user_name",
+    "days",	"amount","birth_day","is_reccurent_success","active_until",
+    "payed"	,"type_of_payment",	"source_id"	,"payment_date"
+            ]
+source_keys=[
+    "ID","title","code","price","date",
+    "type","price_for_person","price_for_customer","profit","amount_of_persons",
+    "amount_of_customers","amount_of_persons_who_ended_registr","amount_of_payments","price_for_ended_reg",
+]
+def _make_tuple(object,keys):
+    result=list()
+    for key in keys:
+        result.append(getattr(object,key))
+    return tuple(result)
+
+
+def alchemy_tuple(objects:list,type:str="payment")->tuple:
+    result=list()
+
+    if type=="payment":
+        keys=payment_keys
+    else:
+        keys=source_keys
+
+    result.append(tuple(keys))
+
+    for object in objects:
+        result.append(_make_tuple(object,keys))
+    return result
+    
+
+
 
 def alchemy_list_convert(objects: list) -> list:
     result = list()

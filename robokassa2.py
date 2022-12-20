@@ -191,8 +191,8 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
         merchant_login,
         cost,
         number1,
+        nomenklatura[days],
         merchant_password_1,
-
         "Shp_days="+str(days),
         "Shp_id="+str(tg_id),
         # "Shp_id":number,
@@ -210,6 +210,7 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
         'Description': description,
         'SignatureValue': signature,
         'IsTest': is_test,
+        "receipt":nomenklatura[days],
         "Shp_id":tg_id,
         "Shp_days":days,
         # "Shp_Rec":1,
@@ -233,4 +234,4 @@ def check_success_payment(merchant_password_1: str, request: str) -> str:
         return "Thank you for using our service"
     return "bad sign"
 # x=earn_recurrent_pay("Astrobot","ygAdIPC6I1c1qxER1Iu8",cost=69,number=952863788,description="Оплата подписки на астробота",is_test=0)
-# print(x.text)
+

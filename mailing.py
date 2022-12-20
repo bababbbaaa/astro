@@ -488,7 +488,10 @@ def service_message() -> None:
             try:
                 if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
                     # set_field(id=int(recurent_subs[i].TelegramID),end=end)
-                    add_success_payment(telegram_id=id,payment_id=str(count_payments()),days=30,price=69,type_of_payment="TRY REC")
+                    try:
+                        add_success_payment(telegram_id=id,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+                    except:
+                        pass
                     add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
 
                 else:

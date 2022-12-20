@@ -64,14 +64,18 @@ class SuccessPayment(Base):
         session=sessionmaker(engine)()
         user=session.query(User).filter_by(TelegramID=self.telegram_id)
         return user
+
+
 def change_unsuccesful_to_succesful(id):
-    session=Session()
-    today=datetime.today()
-    session.query(SuccessPayment).filter_by(type_of_payment="REC",payment_date=today,telegram_id=id).update(
-        {"amount":69,"is_reccurent_success":1,}
+    session=sessionmaker(engine)()
+    today=datetime.now().date()
+    session.query(SuccessPayment).filter_by(type_of_payment="TRY REC",payment_date=today,telegram_id=id).update(
+        {"amount":69,"type_of_payment":"REC"}
     )
     session.commit()
     return None
+
+
 def add_success_payment(**kwargs) -> None:
     telegram_id=str(kwargs["telegram_id"])
     payment_id=str(kwargs["payment_id"])

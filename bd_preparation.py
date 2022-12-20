@@ -1,4 +1,3 @@
-from datetime import datetime,timedelta
 from databaseInteraction import *
 from openpyxl import *
 from horoscopedb import *
@@ -6,6 +5,8 @@ import sys
 # import parse_sources
 from controller import *
 import databaseInteraction
+from datetime import datetime,timedelta
+
 def transfer_to_success_payment(file):
     workbook = load_workbook(file)
     sheet=workbook.get_sheet_by_name('base')

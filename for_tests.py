@@ -696,5 +696,17 @@
 
 # requets=requests.post("http://127.0.0.1:5000/get_success_payments")
 # print(requets.text)
-from databaseInteraction import *
-print(get_success_web_payments(payment_type=2))
+# from databaseInteraction import *
+# print(get_success_web_payments())
+# from for_payments import *
+
+
+# x=robokassa.generate_payment_link_recurse(LOGIN,MAIN_PASSWORD,cost=69,number=952863788,description="Оплата подписки на астробота",is_test=0,days=30)
+# print(x)
+
+
+
+import requests
+import json
+requets=requests.post("http://127.0.0.1:5000/get_sources",json={"return_excel":True})
+print(requets.text)

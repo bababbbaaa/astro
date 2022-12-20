@@ -26,6 +26,6 @@ for rx in range(1, page.nrows - 1):
     code = code.value
     type_ = type_.value
     price = int(price.value)
-    add_web_source(title=title,code=code,price=price,type=type_,date=date)
+    add_source(title=title,code=code,price=price,type=type_,date=date)
     
     print(date, title, code, type_, price)

@@ -67,6 +67,7 @@ def tranfer_payments(date=None):
         payment_date=pay.payment_date
         if type_of_payment=="TRY REC":
             is_reccurent_success=0
+            type_of_payment="REC"
         else:
             is_reccurent_success=1
         payments=SessionWeb.query(WebSuccessPayment).filter_by(payment_id=payment_id).first()
@@ -89,6 +90,6 @@ def tranfer_payments(date=None):
     SessionWeb.commit()
     Session.commit()
 
-# tranfer_payments(date=datetime.today())
+# tranfer_payments(date=datetime.now().date())
 tranfer_payments()
 upload_information_to_source()

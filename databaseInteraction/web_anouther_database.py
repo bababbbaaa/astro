@@ -69,7 +69,7 @@ def add_web_source(
     # if not basic_check_date(date):
     #     raise Exception("Invalid date")
 
-    WebSource = WebSource(
+    web_source = WebSource(
         title=title,
         code=code,
         price=price,
@@ -87,10 +87,10 @@ def add_web_source(
         customer_exists=False
         )
 
-    SessionWeb.add(WebSource)
+    SessionWeb.add(web_source)
     SessionWeb.commit()
 
-    return WebSource
+    return web_source
 
 def update_web_source(code, new_title: str = None, new_price : int = None) -> None:
     """
@@ -143,9 +143,8 @@ def _get_source(code: str, title: str):
     return select(WebSource).where(WebSource.title == title)
 
 
-def _get_sources(title, code, price, type) -> list:
-    WebSources = select(WebSource)
-
+def _get_sources(title, code, price, type):
+    WebSources=select(WebSource)
     if title is not None:
         WebSources = WebSources.where(WebSource.title.contains(title))
 
@@ -155,64 +154,9 @@ def _get_sources(title, code, price, type) -> list:
     if type is not None:
         WebSources = WebSources.where(WebSource.type.contains(type))
 
+    
     return WebSources
-# def update_price_list(code,type:str,delta_profit:int=0):
-#     """
-#     types:
-#     new_person(who start registration)
-#     new_ended_reg(who end registration)
-#     new_customer(who paid first time)
-#     new_payment(payment with WebSource)
-    
-#     """
-    
-#     SessionWeb=SessionWebmaker(engine)()
-#     WebSource=SessionWeb.query(WebSource).filter_by(code=code).first()
-#     kwarks={}
 
-
-#     if type=="new_person":
-#         new_amount_of_persons=WebSource.amount_of_persons+1
-#         kwarks["amount_of_persons"]=new_amount_of_persons
-
-
-#     elif type=="new_ended_reg":
-#         new_amount_of_ended_registr=WebSource.amount_of_persons_who_ended_registr+1
-#         kwarks["amount_of_persons_who_ended_registr"]=new_amount_of_ended_registr
-
-
-#     elif type=="new_payment":
-#         if WebSource.payment_exists==False:#Если платежа не существует , то у нас и так по умолчанию стоит 1. ничего не меняем
-#             kwarks["payment_exists"]=True
-#             kwarks["profit"]=new_profit
-
-#         else:
-#             new_amount_of_payment=WebSource.amount_of_persons_who_ended_registr+1
-#             new_profit=WebSource.profit+delta_profit
-#             kwarks["amount_of_payments"]=new_amount_of_payment
-#             kwarks["profit"]=new_profit
-        
-
-#     elif type=="new_customer":#Если подписчика не существует , то у нас и так по умолчанию стоит 1. ничего не меняем
-
-#         if WebSource.customer_exists==False:
-#             kwarks["customer_exists"]=True
-#             kwarks["payment_exists"]=True
-#         else:
-
-#             new_amount_of_payment=WebSource.amount_of_persons_who_ended_registr+1#Если у нас появился подписчик, то автоматом появился и платеж, что не всегда верно в обратную строну,
-#                                                                             #  поэтому добавляем платеж в бд автоматически
-#             new_amount_of_customers=WebSource.amount_of_customers+1
-#             kwarks["amount_of_payments"]=new_amount_of_payment
-#             new_profit=WebSource.profit+delta_profit
-
-#             kwarks["profit"]=new_profit
-
-#             kwarks["amount_of_customers"]=new_amount_of_customers
-
-#     SessionWeb.query(WebSource).filter_by(code=code).update(kwarks)
-
-#     SessionWeb.commit()
 
 payment_types = ['FIRST PAY', 'SELF PAID', 'REC']
 
@@ -221,6 +165,8 @@ def get_success_web_payments(
     source_id = None,
     payment_type = None,
     rec_available = None, # возможнен ли рекуррент
+    from_date=None,
+    to_date=None
     ) -> list:
 
     session = SessionWeb
@@ -236,7 +182,16 @@ def get_success_web_payments(
         type_ = payment_types[payment_type]
 
         payments = payments.where(WebSuccessPayment.type_of_payment == type_)
+    if rec_available is not None:
+        payments=payments.where(WebSuccessPayment.is_reccurent_success==rec_available)
 
+    if from_date is not None:
+        payments=payments.where(WebSuccessPayment.payment_date>=from_date)
+
+    if to_date is not None:
+        payments=payments.where(WebSuccessPayment.payment_date<=to_date)
+
+    
     return list(SessionWeb.scalars(payments))
 
 # WebSuccessPayment.__table__.drop(engine)
