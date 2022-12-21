@@ -192,7 +192,7 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
         cost,
         number1,
         nomenklatura[days],
-        merchant_password_1,
+        # merchant_password_1,
         "Shp_days="+str(days),
         "Shp_id="+str(tg_id),
         # "Shp_id":number,

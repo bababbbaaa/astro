@@ -701,14 +701,15 @@
 # from for_payments import *
 
 
-# x=robokassa.generate_payment_link_recurse(LOGIN,MAIN_PASSWORD,cost=69,number=952863788,description="Оплата подписки на астробота",is_test=0,days=30)
-# print(x)
+# pay=get_money_for_sub(id=int(28104),amount=69,days=30,test=0,tg_id=952863788)
+# # pay=robokassa.generate_payment_link_recurse(LOGIN,MAIN_PASSWORD,cost=69,number=952863788,description="Оплата подписки на астробота",is_test=0,days=30)
+# print(pay.text)
 
 
 
 import requests
-import json
-requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={"from_date":"20.12.2022"})
+# import json
+requets=requests.post("http://127.0.0.1:5000/get_amount_of_payments",json={})
 print(requets.text)
 
 # from threading import Thread

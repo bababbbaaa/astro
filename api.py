@@ -687,5 +687,5 @@ def update_source_route():
 HOST = '195.2.79.3'
 PORT = '443'
 
-# app.run(host=HOST, port=PORT,debug=True)
-app.run(debug=True)
+app.run(host=HOST, port=PORT,debug=True)
+# app.run(debug=True)
