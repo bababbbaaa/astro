@@ -92,10 +92,10 @@ def add_web_source(
 
     return web_source
 
-def update_web_source(code, new_title: str = None, new_price : int = None) -> None:
+def update_web_source(code, new_title: str = None, new_price : int = None, new_type : str = None) -> None:
     """
 
-    Меняет название источника
+    Меняет название/цену/тип источника
 
     """
     WebSource = get_web_source(code)
@@ -106,6 +106,9 @@ def update_web_source(code, new_title: str = None, new_price : int = None) -> No
     if new_price is not None:
         setattr(WebSource, "price", new_price)
         
+    if new_type is not None:
+        setattr(WebSource, "type", new_type)
+
     SessionWeb.commit()
 
     return

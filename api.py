@@ -668,14 +668,13 @@ def update_source_route():
     try:
         sources = data['sources']
 
-        print(sources, type(sources))
-
         for source in sources:
             code = source['code']
             title = source.get('title')
             price = source.get('price')
+            type_ = source.get('type')
 
-            update_web_source(code, title, price)
+            update_web_source(code, title, price, type_)
 
         return 'SUCCESS', 200
 
