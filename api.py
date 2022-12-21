@@ -514,7 +514,7 @@ def get_sucess_payments_route():
 
     telegram_id = data.get('telegram_id')
     source_id = data.get('source_id')
-
+    amount=data.get("amount")
     payment_type = data.get('payment_type')
     rec_available=data.get("rec_available")
 
@@ -528,7 +528,7 @@ def get_sucess_payments_route():
     if from_date is not None:
         from_date=datetime.strptime(from_date,DATE_FORMAT)
 
-    payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date)
+    payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date,amount)
     converted = alchemy_list_convert(payments)
 
 
@@ -615,13 +615,13 @@ def get_amount_of_payments():
         to_date=data.get("to_date")
         from_date=data.get("from_date")
 
-
+        amount=data.get("amount")
         if to_date is not None:
             to_date=datetime.strptime(to_date,DATE_FORMAT)
         if from_date is not None:
             from_date=datetime.strptime(from_date,DATE_FORMAT)
 
-        payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date)
+        payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date,amount)
 
     
         return str(len(payments))
@@ -686,5 +686,5 @@ def update_source_route():
 HOST = '195.2.79.3'
 PORT = '443'
 
-app.run(host=HOST, port=PORT,debug=True)
-# app.run(debug=True)
+# app.run(host=HOST, port=PORT,debug=True)
+app.run(debug=True)

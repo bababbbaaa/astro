@@ -709,7 +709,7 @@
 
 import requests
 # import json
-requets=requests.post("http://127.0.0.1:5000/get_amount_of_payments",json={})
+requets=requests.post("http://127.0.0.1:5000/get_amount_of_payments",json={"amount":69})
 print(requets.text)
 
 # from threading import Thread

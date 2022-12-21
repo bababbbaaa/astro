@@ -169,7 +169,8 @@ def get_success_web_payments(
     payment_type = None,
     rec_available = None, # возможнен ли рекуррент
     from_date=None,
-    to_date=None
+    to_date=None,
+    amount=None,
     ) -> list:
 
     session = SessionWeb
@@ -187,7 +188,10 @@ def get_success_web_payments(
         payments = payments.where(WebSuccessPayment.type_of_payment == type_)
     if rec_available is not None:
         payments=payments.where(WebSuccessPayment.is_reccurent_success==rec_available)
-
+    
+    if amount is not None:
+        payments=payments.where(WebSuccessPayment.amount==amount)
+        
     if from_date is not None:
         payments=payments.where(WebSuccessPayment.payment_date>=from_date)
 
