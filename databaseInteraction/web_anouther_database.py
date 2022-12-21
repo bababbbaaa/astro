@@ -176,10 +176,10 @@ def get_success_web_payments(
     session = SessionWeb
     payments = select(WebSuccessPayment)
 
-    if telegram_id is not None or telegram_id=="":
+    if telegram_id is not None and telegram_id!="":
         payments = payments.where(WebSuccessPayment.telegram_id.contains(telegram_id))
 
-    if source_id is not None or source_id=="":
+    if source_id is not None and source_id!="":
         payments = payments.where(WebSuccessPayment.source_id.contains(source_id))
 
     if payment_type is not None and payment_type != 3:
