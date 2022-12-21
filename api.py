@@ -601,6 +601,51 @@ def add_source_route():
         return str(e), 400
 
 
+
+@app.route("/get_amount_of_payments", methods=['POST'])
+def get_amount_of_payments():
+    data = request.get_json()
+    try:
+        telegram_id = data.get('telegram_id')
+        source_id = data.get('source_id')
+
+        payment_type = data.get('payment_type')
+        rec_available=data.get("rec_available")
+
+        to_date=data.get("to_date")
+        from_date=data.get("from_date")
+
+
+        if to_date is not None:
+            to_date=datetime.strptime(to_date,DATE_FORMAT)
+        if from_date is not None:
+            from_date=datetime.strptime(from_date,DATE_FORMAT)
+
+        payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date)
+
+    
+        return str(len(payments))
+    except Exception as err:
+        return str(err)
+
+
+@app.route("/get_amount_of_sources", methods=['POST'])
+def get_amount_of_sources():
+
+    data = request.get_json()
+
+    try:
+        title = data.get('title')
+        code = data.get('code')
+        type = data.get('type')
+        
+        sources = get_web_sources(title, code, type=type)
+        
+        return str(len(sources))
+    except Exception as err:
+        return str(err)
+
+
 @app.route('/delete_source', methods=['POST'])
 def delete_source_route():
     data = request.get_json()

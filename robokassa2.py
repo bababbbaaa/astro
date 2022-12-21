@@ -14,7 +14,7 @@ nomenklarue_30={
           "sno":"usn_income",
           "items": [
             {
-              "name": "Подписка на астробот 30 дней",
+              "name": "Подписка на астробот на 30 дней",
               "quantity": 1,
               "sum": 69,
               "payment_method": "full_payment",
@@ -25,7 +25,7 @@ nomenklarue_180={
           "sno":"usn_income",
           "items": [
             {
-              "name": "Подписка на астробот 180 дней",
+              "name": "Подписка на астробот на 180 дней",
               "quantity": 1,
               "sum": 330,
               "payment_method": "full_payment",
@@ -37,7 +37,7 @@ nomenklarue_365={
           "sno":"usn_income",
           "items": [
             {
-              "name": "Подписка на астробот (год)",
+              "name": "Подписка на астробот на 365 дней",
               "quantity": 1,
               "sum": 580,
               "payment_method": "full_payment",

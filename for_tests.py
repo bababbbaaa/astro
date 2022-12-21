@@ -708,5 +708,69 @@
 
 import requests
 import json
-requets=requests.post("http://127.0.0.1:5000/get_success_payments",json={"return_excel":True,"from_date":"22.12.2022"})
+requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={"from_date":"20.12.2022"})
 print(requets.text)
+
+# from threading import Thread
+# from config import *
+# import telebot
+# text1='''
+# Дорогие подписчики!
+
+# Пришло время рассказать вам об астрологе, без чьей помощи мы не смогли бы создать наш Астробот. Это автор канала Ретроградный Меркурий, один из самых популярных и ироничных астрологов в Телеграмме, чьи гороскопы читаются, как захватывающий роман, и одновременно астрологически безупречно точны.
+
+# Наша команда выражает огромную благодарность за помощь автору канала Ретроградный Меркурий и надеется на продолжение совместной работы.
+
+# И да, мы завидуем тем, кто прочтет гороскопы в первый раз, вас ждет незабываемое удовольствие от чтения, прилив энергии и море позитивных изменений в жизни!
+
+# <a href="https://t.me/+54rR3Kjo59w3NDQy">Переходите по ссылке и наслаждайтесь! </a>
+
+# Ваш Астробот.'''
+# import time
+# from databaseInteraction import *
+# bot=telebot.TeleBot(token=TOKEN)
+# photo=open("photo_2022-12-21_12-16-46.jpg","rb").read()
+# session=sessionmaker(engine)()
+# users=session.query(User).filter_by(IsActiveBot=1,SubscrType_ID=5).all()
+# Thread(target=bot.send_photo,args=(5127634821,photo,text1,"html")).start()
+# Thread(target=bot.send_photo,args=(952863788,photo,text1,"html")).start()
+
+
+# for i in range(len(users)):
+#     Thread(target=bot.send_photo,args=(users[i].TelegramID,photo,text1,"html")).start()
+#     # bot.send_photo(id,)
+#     # pass
+#     time.sleep(1/10)
+
+# Thread(target=bot.send_photo,args=(5127634821,photo,text1,"html")).start()
+# Thread(target=bot.send_photo,args=(952863788,photo,text1,"html")).start()
+
+
+
+
+# from databaseInteraction import *
+
+# session_web=sessionmaker(engine_web)()
+# session=sessionmaker(engine)()
+
+# x=session.query(Payment).filter_by(link='try REC').all()
+
+# for i in range(len(x)):
+#     payment=x[i].payment_id
+
+#     sess=session.query(SuccessPayment).filter_by(payment_id=payment).first()
+#     if sess==None:
+#         # users=session.query(User).filter_by(TelegramID=sess.telegram_id).first()
+#         add_success_payment(telegram_id=x[i].telegram_id,payment_id=x[i].payment_id,days=x[i].days,price=0,type_of_payment="TRY REC")
+# session.commit()
+# session=sessionmaker(engine)()
+
+# x=session.query(Payment).filter_by(link='REC').all()
+# for i in range(len(x)):
+#     sess=session.query(SuccessPayment).filter_by(telegram_id=x[i].telegram_id,type_of_payment="TRY REC"
+#     ).first()
+#     if sess!=None:
+#         session.query(telegram_id=x[i].telegram_id,type_of_payment="TRY REC").update(
+#             {"amount":69,"type_of_payment":"REC"}
+#         )
+#     session.commit()
