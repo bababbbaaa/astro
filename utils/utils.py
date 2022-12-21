@@ -138,6 +138,8 @@ def alchemy_tuple(objects:list,type:str="payment")->tuple:
 
     result.append(tuple(keys))
 
+    if objects==[]:
+        return []
     for object in objects:
         result.append(_make_tuple(object,keys))
     return result

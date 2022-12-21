@@ -708,5 +708,5 @@
 
 import requests
 import json
-requets=requests.post("http://127.0.0.1:5000/get_sources",json={"return_excel":True})
+requets=requests.post("http://127.0.0.1:5000/get_success_payments",json={"return_excel":True,"from_date":"22.12.2022"})
 print(requets.text)
