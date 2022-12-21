@@ -19,3 +19,5 @@ error.log
 post_files/
 horoscope.db
 date_pict/
+*.xlsx
+*.xls
