@@ -16,7 +16,7 @@ from horoscopedb import ConnectDb
 import json
 import functions
 from horoscopeusr import ChUserInfo
-from controller import logger
+# from controller import logger
 from random import randint
 from for_payments import *
 # additional tools
@@ -542,6 +542,7 @@ def get_sucess_payments_route():
                 df.to_excel(writer, sheet_name='name')
                 return path
             except Exception as err:
+                logger.error(err)
                 return(err)
 
 

@@ -172,7 +172,6 @@ def get_success_web_payments(
     to_date=None
     ) -> list:
 
-    session = SessionWeb
     payments = select(WebSuccessPayment)
 
     if telegram_id is not None:
@@ -185,16 +184,20 @@ def get_success_web_payments(
         type_ = payment_types[payment_type]
 
         payments = payments.where(WebSuccessPayment.type_of_payment == type_)
-    if rec_available is not None:
-        payments=payments.where(WebSuccessPayment.is_reccurent_success==rec_available)
+
+    if rec_available is not None and rec_available != 2:
+        print(rec_available)
+        rec_ = True if rec_available == 0 else False
+
+        payments=payments.where(WebSuccessPayment.is_reccurent_success==int(rec_))
 
     if from_date is not None:
         payments=payments.where(WebSuccessPayment.payment_date>=from_date)
 
     if to_date is not None:
         payments=payments.where(WebSuccessPayment.payment_date<=to_date)
-
     
+
     return list(SessionWeb.scalars(payments))
 
 # WebSuccessPayment.__table__.drop(engine)
