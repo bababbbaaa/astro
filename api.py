@@ -26,9 +26,12 @@ DATE_FORMAT = '%d.%m.%Y'
 console = Console
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
 
-
-HOST = '195.2.79.3'
-PORT = '443'
+if sys.platform == 'win32':
+    HOST = '127.0.0.1'
+    PORT = 5000
+else:
+    HOST = '195.2.79.3'
+    PORT = '443'
 
 def wait_until_send(id, text, reply_markup=None, parse_mode=None, url=None):
     while True:
@@ -640,8 +643,9 @@ def get_amount_of_sources():
         title = data.get('title')
         code = data.get('code')
         type = data.get('type')
+        price = data.get('price')
         
-        sources = get_web_sources(title, code, type=type)
+        sources = get_web_sources(title, code, price, type)
         
         return str(len(sources))
     except Exception as err:

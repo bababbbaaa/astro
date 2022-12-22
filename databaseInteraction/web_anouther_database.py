@@ -129,7 +129,7 @@ def delete_web_source(code: str = None, title: str = None) -> None:
 
 def get_web_sources(title: str = None, code=None, price=None, type=None) -> list:
     WebSources = _get_sources(title, code, price, type)
-    return list(SessionWeb.scalars(WebSources))
+    return list(sessionmaker(engine_web)().scalars(WebSources))
 
 
 def get_web_source(code: str = None, title: str = None) -> WebSource:
