@@ -191,7 +191,7 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
         merchant_login,
         cost,
         number1,
-        nomenklatura[days],
+        # nomenklatura[days],
         merchant_password_1,
 
         "Shp_days="+str(days),
@@ -211,7 +211,7 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
         'Description': description,
         'SignatureValue': signature,
         'IsTest': is_test,
-        "receipt":nomenklatura[days],
+        # "receipt":nomenklatura[days],
         "Shp_id":tg_id,
         "Shp_days":days,
         # "Shp_Rec":1,
