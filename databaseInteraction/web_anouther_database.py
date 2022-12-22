@@ -169,15 +169,16 @@ def get_success_web_payments(
     payment_type = None,
     rec_available = None, # возможнен ли рекуррент
     from_date=None,
-    to_date=None
+    to_date=None,
+    amount=None,
     ) -> list:
 
     payments = select(WebSuccessPayment)
 
-    if telegram_id is not None:
+    if telegram_id is not None and telegram_id!="":
         payments = payments.where(WebSuccessPayment.telegram_id.contains(telegram_id))
 
-    if source_id is not None:
+    if source_id is not None and source_id!="":
         payments = payments.where(WebSuccessPayment.source_id.contains(source_id))
 
     if payment_type is not None and payment_type != 3:

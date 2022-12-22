@@ -651,7 +651,7 @@ def GetUsers(inpTelegramID):
     try:
         conn=horoscopedb.ConnectDb()
         cur = conn.cursor()   
-        cur.execute("SELECT * FROM Users WHERE (TelegramID = %s)" ,(str(inpTelegramID),))
+        cur.execute("SELECT * FROM Users WHERE (TelegramID = %s)" ,(inpTelegramID,),)
         res = list()
         records = cur.fetchall()
         cur.close()
