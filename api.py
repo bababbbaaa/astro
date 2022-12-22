@@ -93,8 +93,6 @@ def change_active_until_date(start, date_end, days, base="subs"):
 
 
 app = Flask(__name__)
-HOST = ''
-PORT = ''
 CORS(app)
 
 
@@ -685,5 +683,5 @@ def update_source_route():
     except Exception as e:
         return str(e), 400
 
-# app.run(host=HOST, port=PORT,debug=True)
-app.run(debug=True)
+app.run(host=HOST, port=PORT,debug=True)
+# app.run(debug=True)
