@@ -321,10 +321,11 @@ def get_payment():
             prev_id = request.form.get('Shp_prev')
         except:
             pass
-        
-        date_end = functions.GetUsers(id)[0]["ActiveUntil"]
+        session=sessionmaker(engine)()
+        date_end =session.query(User).filter_by(TelegramID=id).first()
+        date_end=date_end.ActiveUntil
         date_end = datetime.strftime(date_end, "%Y-%m-%d")
-
+        session.commit()
         end = change_active_until_date(
             start=Get_Data(), date_end=date_end, days=int(days))
 
@@ -398,11 +399,11 @@ def get_payment():
             return "bad sign"
             pass
     except Exception as err:
-        console.log(err)
+        # console.log(err)
         print(err)
-        logger.error(err)
-        wait_until_send(
-            id, "Что-то пошло не так, попробуйте оплатить снова или напишите в поддержку")
+        # logger.error(err)
+        # wait_until_send(
+        #     id, "Что-то пошло не так, попробуйте оплатить снова или напишите в поддержку")
         return "bad sign"
         pass
     return json.dumps(0)
@@ -686,5 +687,5 @@ def update_source_route():
 HOST = '195.2.79.3'
 PORT = '443'
 
-# app.run(host=HOST, port=PORT,debug=True)
-app.run(debug=True)
+app.run(host=HOST, port=PORT,debug=True)
+# app.run(debug=True)

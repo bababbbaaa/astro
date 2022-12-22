@@ -705,11 +705,21 @@
 # # pay=robokassa.generate_payment_link_recurse(LOGIN,MAIN_PASSWORD,cost=69,number=952863788,description="Оплата подписки на астробота",is_test=0,days=30)
 # print(pay.text)
 
+# out_summ=69.000000&OutSum=69.000000&inv_id=28212&InvId=28212&crc=FB6DDBFABEE9AD2D2942B120852FFB3E&SignatureValue=FB6DDBFABEE9AD2D2942B120852FFB3E&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=katrin.kachalina@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=773884210
 
+# out_summ=69.000000&OutSum=69.000000&inv_id=28243&InvId=28243&crc=4AFF5E05601D1EDB2E881578BDC2F114&SignatureValue=4AFF5E05601D1EDB2E881578BDC2F114&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=shyrpaliza@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=410566780&Shp_prev=16791
 
 import requests
 # import json
-requets=requests.post("http://127.0.0.1:5000/get_amount_of_payments",json={"telegram_id": "", "source_id": "", })
+requets=requests.post("http://127.0.0.1:5000/get_payment",data={"out_summ":69.000000,"OutSum":69.000000,
+"inv_id":28243,"InvId":28243,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7A922835773700B51A21FF20B69BDB84","PaymentMethod":"BankCard","IncSum":330.000000,"Shp_days":30,"Shp_id":410566780,"Shp_prev":16791
+})
+
+# data={"out_summ":330.000000,"OutSum":330.000000,
+# "inv_id":18434,"InvId":18434,"crc":"7B9A8D50DF7D3F8EF9338CBD8AE1E127","SignatureValue":"7A922835773700B51A21FF20B69BDB84","PaymentMethod":"BankCard","IncSum":330.000000,"Shp_days":180,"Shp_id":367565935,
+# })
+
+
 print(requets.text)
 
 # from threading import Thread
