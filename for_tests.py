@@ -692,20 +692,20 @@
 # print(x)
 
 
-# import requests
+import requests
 
-# requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
-# print(requets.text)
-from databaseInteraction import *
-import time
+requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
+print(requets.text)
+# from databaseInteraction import *
+# import time
 
-x=SessionWeb.query(WebSource).all()
-print(len(x))
-Session.commit()
-time.sleep(60)
+# x=SessionWeb.query(WebSource).all()
+# print(len(x))
+# Session.commit()
+# time.sleep(60)
 
-x=SessionWeb.query(WebSource).all()
-print(len(x))
+# x=SessionWeb.query(WebSource).all()
+# print(len(x))
 # print(get_success_web_payments())
 # from for_payments import *
 

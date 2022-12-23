@@ -86,9 +86,9 @@ def add_web_source(
         payment_exists=False,
         customer_exists=False
         )
-
-    SessionWeb.add(web_source)
-    SessionWeb.commit()
+    session_web=sessionmaker(engine_web)()
+    session_web.add(web_source)
+    session_web.commit()
 
     return web_source
 
@@ -108,7 +108,7 @@ def update_web_source(code, new_title: str = None, new_price : int = None, new_t
         
     if new_type is not None:
         setattr(WebSource, "type", new_type)
-    session_web=create_engine(engine_web)()
+    session_web=sessionmaker(engine_web)()
 
     session_web.commit()
 
@@ -117,7 +117,7 @@ def update_web_source(code, new_title: str = None, new_price : int = None, new_t
 
 def delete_web_source(code: str = None, title: str = None) -> None:
     WebSource = get_web_source(code, title)
-    session_web=create_engine(engine_web)()
+    session_web=sessionmaker(engine_web)()
 
     if WebSource is not None:
         session_web.delete(WebSource)
@@ -126,7 +126,7 @@ def delete_web_source(code: str = None, title: str = None) -> None:
 
 def get_web_sources(title: str = None, code = None, price = None, type = None) -> list:
     WebSources = _get_sources(title, code, price, type)
-    session_web=create_engine(engine_web)()
+    session_web=sessionmaker(engine_web)()
     return list(session_web.scalars(WebSources))
 
 
