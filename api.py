@@ -691,15 +691,5 @@ def update_source_route():
     except Exception as e:
         return str(e), 400
 
-<<<<<<< HEAD
-
-
-HOST = '195.2.79.3'
-PORT = '443'
-
-# app.run(host=HOST, port=PORT,debug=True)
-app.run(debug=True)
-=======
 app.run(host=HOST, port=PORT,debug=True)
 # app.run(debug=True)
->>>>>>> ae7e03be836d35faf8d4f3cbcb4011c47d61e505
