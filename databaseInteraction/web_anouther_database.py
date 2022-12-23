@@ -108,23 +108,26 @@ def update_web_source(code, new_title: str = None, new_price : int = None, new_t
         
     if new_type is not None:
         setattr(WebSource, "type", new_type)
+    session_web=create_engine(engine_web)()
 
-    SessionWeb.commit()
+    session_web.commit()
 
     return
 
 
 def delete_web_source(code: str = None, title: str = None) -> None:
     WebSource = get_web_source(code, title)
+    session_web=create_engine(engine_web)()
 
     if WebSource is not None:
-        SessionWeb.delete(WebSource)
-        SessionWeb.commit()
+        session_web.delete(WebSource)
+        session_web.commit()
         return
 
 def get_web_sources(title: str = None, code = None, price = None, type = None) -> list:
     WebSources = _get_sources(title, code, price, type)
-    return list(SessionWeb.scalars(WebSources))
+    session_web=create_engine(engine_web)()
+    return list(session_web.scalars(WebSources))
 
 
 def get_web_source(code: str = None, title: str = None) -> WebSource:
@@ -198,8 +201,8 @@ def get_success_web_payments(
     if to_date is not None:
         payments=payments.where(WebSuccessPayment.payment_date<=to_date)
     
-
-    return list(SessionWeb.scalars(payments))
+    session_web=create_engine(engine_web)()
+    return list(session_web.scalars(payments))
 
 # WebSuccessPayment.__table__.drop(engine)
 # Base.metadata.create_all(engine)

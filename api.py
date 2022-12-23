@@ -511,45 +511,48 @@ def get_payments():
 
 @app.route('/get_success_payments', methods=['POST', 'GET'])
 def get_sucess_payments_route():
-    data = request.get_json()
+    try:
+        print("dfdfdfdfdf")
+        data = request.get_json()
 
-    telegram_id = data.get('telegram_id')
-    source_id = data.get('source_id')
-    amount=data.get("amount")
-    payment_type = data.get('payment_type')
-    rec_available=data.get("rec_available")
+        telegram_id = data.get('telegram_id')
+        source_id = data.get('source_id')
+        amount=data.get("amount")
+        payment_type = data.get('payment_type')
+        rec_available=data.get("rec_available")
 
-    to_date=data.get("to_date")
-    from_date=data.get("from_date")
-    return_excel=data.get("return_excel")
-
-
-    if to_date is not None:
-        to_date=datetime.strptime(to_date,DATE_FORMAT)
-    if from_date is not None:
-        from_date=datetime.strptime(from_date,DATE_FORMAT)
-
-    payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date,amount)
-    converted = alchemy_list_convert(payments)
+        to_date=data.get("to_date")
+        from_date=data.get("from_date")
+        return_excel=data.get("return_excel")
 
 
-    if return_excel==True:
-        path='static/payments.xlsx'
-        with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
-            try:
+        if to_date is not None:
+            to_date=datetime.strptime(to_date,DATE_FORMAT)
+        if from_date is not None:
+            from_date=datetime.strptime(from_date,DATE_FORMAT)
 
-                df=alchemy_tuple(payments)
-                df = pd.DataFrame(df)
-                df.to_excel(writer, sheet_name='name')
-                return path
-            except Exception as err:
-                logger.error(err)
-                return(err)
+        payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date,amount)
+        converted = alchemy_list_convert(payments)
 
 
-    return jsonify(converted[:100])
+        if return_excel==True:
+            path='static/payments.xlsx'
+            with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
+                try:
+
+                    df=alchemy_tuple(payments)
+                    df = pd.DataFrame(df)
+                    df.to_excel(writer, sheet_name='name')
+                    return path
+                except Exception as err:
+                    logger.error(err)
+                    return(err)
 
 
+        return jsonify(converted[:100])
+
+    except Exception as err:
+        print(err)
 
 @app.route('/get_sources', methods=['POST', 'GET'])
 def get_sources_route():
@@ -688,5 +691,5 @@ def update_source_route():
 HOST = '195.2.79.3'
 PORT = '443'
 
-app.run(host=HOST, port=PORT,debug=True)
-# app.run(debug=True)
+# app.run(host=HOST, port=PORT,debug=True)
+app.run(debug=True)

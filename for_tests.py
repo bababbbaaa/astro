@@ -694,9 +694,18 @@
 
 # import requests
 
-# requets=requests.post("http://127.0.0.1:5000/get_success_payments")
+# requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
 # print(requets.text)
-# from databaseInteraction import *
+from databaseInteraction import *
+import time
+
+x=SessionWeb.query(WebSource).all()
+print(len(x))
+Session.commit()
+time.sleep(60)
+
+x=SessionWeb.query(WebSource).all()
+print(len(x))
 # print(get_success_web_payments())
 # from for_payments import *
 
@@ -785,54 +794,55 @@
 #             {"amount":69,"type_of_payment":"REC"}
 #         )
 #     session.commit()
-# lists=[
+# lists=["out_summ=69.000000&OutSum=69.000000&inv_id=28288&InvId=28288&crc=84C3943C9B9AF5377EEC3166C4BF2611&SignatureValue=84C3943C9B9AF5377EEC3166C4BF2611&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=K_striga@bk.ru&Fee=2.690000&Shp_days=30&Shp_id=691241035"]
+
     # "out_summ=69.000000&OutSum=69.000000&inv_id=28203&InvId=28203&crc=7E2B0CF1738753B2921C292C84E0A9B1&SignatureValue=7E2B0CF1738753B2921C292C84E0A9B1&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=kvas_tonya@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1361118358",
-"out_summ=69.000000&OutSum=69.000000&inv_id=27878&InvId=27878&crc=54EDA12891279D97F9837AAC97CDA713&SignatureValue=54EDA12891279D97F9837AAC97CDA713&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ksouishh@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388473719",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28212&InvId=28212&crc=FB6DDBFABEE9AD2D2942B120852FFB3E&SignatureValue=FB6DDBFABEE9AD2D2942B120852FFB3E&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=katrin.kachalina@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=773884210",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28268&InvId=28268&crc=F2CD8CC94A32215A091C8F8306DB9864&SignatureValue=F2CD8CC94A32215A091C8F8306DB9864&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=valeriyan90@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=870022954",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28250&InvId=28250&crc=2DDDF92ED4685725C3DE275083D9B652&SignatureValue=2DDDF92ED4685725C3DE275083D9B652&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=79043875625@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388009784&Shp_prev=16948",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28247&InvId=28247&crc=57D5C23FB873AC3FC0858623C49100F6&SignatureValue=57D5C23FB873AC3FC0858623C49100F6&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=sysoevaolga@rambler.ru&Fee=2.690000&Shp_days=30&Shp_id=851864213&Shp_prev=16912",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28243&InvId=28243&crc=4AFF5E05601D1EDB2E881578BDC2F114&SignatureValue=4AFF5E05601D1EDB2E881578BDC2F114&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=shyrpaliza@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=410566780&Shp_prev=16791",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28223&InvId=28223&crc=DF14084A5A34961F4CE7F0E1505AF290&SignatureValue=DF14084A5A34961F4CE7F0E1505AF290&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=gr.gulnar@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1339033602&Shp_prev=16171",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28226&InvId=28226&crc=C29FC2C573ED9F6805BB68787CED62B3&SignatureValue=C29FC2C573ED9F6805BB68787CED62B3&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=simakovaanatasia74@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=1056079111&Shp_prev=16470",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28222&InvId=28222&crc=A078302493F99A70F2A3BB468083B549&SignatureValue=A078302493F99A70F2A3BB468083B549&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Lena-19773@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=1743267397&Shp_prev=16133",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28220&InvId=28220&crc=FAA5734B5274A05741B19DB08BB615FD&SignatureValue=FAA5734B5274A05741B19DB08BB615FD&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=vadimlar2015mail.ru@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=584665166&Shp_prev=16091",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28221&InvId=28221&crc=A1E322BF054A317272FCE4AB57A3DEBB&SignatureValue=A1E322BF054A317272FCE4AB57A3DEBB&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=yana6905@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=342454885&Shp_prev=16092",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28217&InvId=28217&crc=911F5B17217EB20910F845FF3672F1CF&SignatureValue=911F5B17217EB20910F845FF3672F1CF&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=terekhova.e@stlca.ru&Fee=2.690000&Shp_days=30&Shp_id=5582545767&Shp_prev=16061",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28211&InvId=28211&crc=D63A90B027FDF8A88A429A7803BB4401&SignatureValue=D63A90B027FDF8A88A429A7803BB4401&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=anna.touristic@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=1023756055",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28209&InvId=28209&crc=C850BA97D2FE6DDD1406506F4E0E4965&SignatureValue=C850BA97D2FE6DDD1406506F4E0E4965&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=heezer92@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=746304898",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28202&InvId=28202&crc=8D70906FCA2A77FFF61A82DC4F26ADE5&SignatureValue=8D70906FCA2A77FFF61A82DC4F26ADE5&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=vovan_diagnost@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=5335742049",
-"out_summ=69.000000&OutSum=69.000000&inv_id=27878&InvId=27878&crc=54EDA12891279D97F9837AAC97CDA713&SignatureValue=54EDA12891279D97F9837AAC97CDA713&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ksouishh@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388473719",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28197&InvId=28197&crc=DF0650297F49EF409887EC85B4091668&SignatureValue=DF0650297F49EF409887EC85B4091668&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=qwnllzz@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=807961823",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28192&InvId=28192&crc=F0B4DF0FD5194696FFABA795E68E39C2&SignatureValue=F0B4DF0FD5194696FFABA795E68E39C2&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=mmihalkava9@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=1105694061",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28191&InvId=28191&crc=9F7A83B11D4A9B78E3834B6F9EA185DE&SignatureValue=9F7A83B11D4A9B78E3834B6F9EA185DE&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=Annloseva@mai.ru&Fee=2.690000&Shp_days=30&Shp_id=597876205",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28190&InvId=28190&crc=E69AE6B467ABD78C21ACBC2C133F1413&SignatureValue=E69AE6B467ABD78C21ACBC2C133F1413&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=shmyreva.m@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=978575304",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28184&InvId=28184&crc=F48DC8CFCF198F49F7AD2DC2DFBB0171&SignatureValue=F48DC8CFCF198F49F7AD2DC2DFBB0171&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Anastasiyabass@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=1431901599",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28180&InvId=28180&crc=3CCB1F20A9400A9043B6CFE5AF71998F&SignatureValue=3CCB1F20A9400A9043B6CFE5AF71998F&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Ismagilovaalfia@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=5217820291",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28177&InvId=28177&crc=21F77F40AD31CEE77CCC69B1F6E4B86D&SignatureValue=21F77F40AD31CEE77CCC69B1F6E4B86D&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=alexandra.prutskova@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=1493857070",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28178&InvId=28178&crc=1E23977D3286B4CB5A52F2BE097790D3&SignatureValue=1E23977D3286B4CB5A52F2BE097790D3&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=k_annikova@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=232827753",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28173&InvId=28173&crc=F2EE1BAEB4D04F0D0038C3E73AFD2399&SignatureValue=F2EE1BAEB4D04F0D0038C3E73AFD2399&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=Yulika817@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=331695818",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28167&InvId=28167&crc=AFB204A841051C084B9FE7EB83EC7640&SignatureValue=AFB204A841051C084B9FE7EB83EC7640&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=pyshinkova04@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=1983171637",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28169&InvId=28169&crc=8FF8A599F58436B27741922F4F9E4832&SignatureValue=8FF8A599F58436B27741922F4F9E4832&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=lolittalolalo@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1801633917",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28166&InvId=28166&crc=A147C1C874B2A4ECB152F74F1DE2EB75&SignatureValue=A147C1C874B2A4ECB152F74F1DE2EB75&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Sm.milla@yandex.ru&Fee=22.620000&Shp_days=365&Shp_id=1127460441",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28164&InvId=28164&crc=05CB9F075CB255697CC11ABE89A12918&SignatureValue=05CB9F075CB255697CC11ABE89A12918&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=postnikova2008@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=203118993",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28163&InvId=28163&crc=1D1B57AE38A5945D620ACD24A932F20B&SignatureValue=1D1B57AE38A5945D620ACD24A932F20B&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ryabchenokn@bk.ru&Fee=2.690000&Shp_days=30&Shp_id=482103534",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28157&InvId=28157&crc=B7F3A1E42798068F17DFC28D25AA3ADE&SignatureValue=B7F3A1E42798068F17DFC28D25AA3ADE&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=velyaevapolina@mail.com&Fee=12.880000&Shp_days=180&Shp_id=865999326",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28159&InvId=28159&crc=4B1EEFE2599563CAAD88EDBBD9285934&SignatureValue=4B1EEFE2599563CAAD88EDBBD9285934&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Vasilnatallia@yandex.ru&Fee=22.620000&Shp_days=365&Shp_id=299489693",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28155&InvId=28155&crc=00FAE559A3AEE8F6AC26E8439F7AABB9&SignatureValue=00FAE559A3AEE8F6AC26E8439F7AABB9&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=YandexPayPSR&EMail=EOVasileva@yandex.ru&Fee=12.880000&Shp_days=180&Shp_id=1150428203",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28153&InvId=28153&crc=93BBE92DEA42EF7C34830542AC4651FC&SignatureValue=93BBE92DEA42EF7C34830542AC4651FC&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Vera.bondarewa@icloud.com&Fee=2.690000&Shp_days=30&Shp_id=946717430",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28148&InvId=28148&crc=D664DA51E28BD61A09C58827EA44A02A&SignatureValue=D664DA51E28BD61A09C58827EA44A02A&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Zolotayaolya@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=1294101253",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28147&InvId=28147&crc=98291C8B82E524D786DC394C91D20929&SignatureValue=98291C8B82E524D786DC394C91D20929&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=dashamilor@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=712187",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28145&InvId=28145&crc=E0083E7EE399E6CEA5E840295C6D61FF&SignatureValue=E0083E7EE399E6CEA5E840295C6D61FF&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=rreckoner@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=368560145",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28143&InvId=28143&crc=844A76D71E29B61ABF549A71F51384D4&SignatureValue=844A76D71E29B61ABF549A71F51384D4&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=e_horkova@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=463052775",
-"out_summ=580.000000&OutSum=580.000000&inv_id=28142&InvId=28142&crc=1E6C0434D69290D88F6FA5C8E7ED4774&SignatureValue=1E6C0434D69290D88F6FA5C8E7ED4774&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Annesal@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=406149032",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28141&InvId=28141&crc=EEFA78ED12E8B44851924E34EE638BCD&SignatureValue=EEFA78ED12E8B44851924E34EE638BCD&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=yu.dobrina@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=260616473",
-"out_summ=69.000000&OutSum=69.000000&inv_id=28138&InvId=28138&crc=E0240F997FE48CF83C563F29C2483A6B&SignatureValue=E0240F997FE48CF83C563F29C2483A6B&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=lenok_min@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1595831004",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28139&InvId=28139&crc=7F229A61B019EC2F4961AD8D44AB8342&SignatureValue=7F229A61B019EC2F4961AD8D44AB8342&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=Aliyushka-1391@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=741017171",
-"out_summ=330.000000&OutSum=330.000000&inv_id=28137&InvId=28137&crc=268757258A82572BA0155636295F5F58&SignatureValue=268757258A82572BA0155636295F5F58&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=Sofi.shcherbakova.1997@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=909690544",
-"out_summ=330.000000&OutSum=330.000000&inv_id=27536&InvId=27536&crc=C208DD84AABFB27C873B4654154FA3C6&SignatureValue=C208DD84AABFB27C873B4654154FA3C6&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=menovshikova67@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=893174505",
-# "out_summ=69.000000&OutSum=69.000000&inv_id=28130&InvId=28130&crc=28061D36412CE4E21DB90AFF15D777B3&SignatureValue=28061D36412CE4E21DB90AFF15D777B3&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=dariaturilina@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=336502051"
-# ]
+# "out_summ=69.000000&OutSum=69.000000&inv_id=27878&InvId=27878&crc=54EDA12891279D97F9837AAC97CDA713&SignatureValue=54EDA12891279D97F9837AAC97CDA713&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ksouishh@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388473719",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28212&InvId=28212&crc=FB6DDBFABEE9AD2D2942B120852FFB3E&SignatureValue=FB6DDBFABEE9AD2D2942B120852FFB3E&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=katrin.kachalina@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=773884210",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28268&InvId=28268&crc=F2CD8CC94A32215A091C8F8306DB9864&SignatureValue=F2CD8CC94A32215A091C8F8306DB9864&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=valeriyan90@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=870022954",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28250&InvId=28250&crc=2DDDF92ED4685725C3DE275083D9B652&SignatureValue=2DDDF92ED4685725C3DE275083D9B652&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=79043875625@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388009784&Shp_prev=16948",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28247&InvId=28247&crc=57D5C23FB873AC3FC0858623C49100F6&SignatureValue=57D5C23FB873AC3FC0858623C49100F6&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=sysoevaolga@rambler.ru&Fee=2.690000&Shp_days=30&Shp_id=851864213&Shp_prev=16912",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28243&InvId=28243&crc=4AFF5E05601D1EDB2E881578BDC2F114&SignatureValue=4AFF5E05601D1EDB2E881578BDC2F114&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=shyrpaliza@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=410566780&Shp_prev=16791",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28223&InvId=28223&crc=DF14084A5A34961F4CE7F0E1505AF290&SignatureValue=DF14084A5A34961F4CE7F0E1505AF290&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=gr.gulnar@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1339033602&Shp_prev=16171",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28226&InvId=28226&crc=C29FC2C573ED9F6805BB68787CED62B3&SignatureValue=C29FC2C573ED9F6805BB68787CED62B3&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=simakovaanatasia74@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=1056079111&Shp_prev=16470",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28222&InvId=28222&crc=A078302493F99A70F2A3BB468083B549&SignatureValue=A078302493F99A70F2A3BB468083B549&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Lena-19773@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=1743267397&Shp_prev=16133",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28220&InvId=28220&crc=FAA5734B5274A05741B19DB08BB615FD&SignatureValue=FAA5734B5274A05741B19DB08BB615FD&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=vadimlar2015mail.ru@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=584665166&Shp_prev=16091",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28221&InvId=28221&crc=A1E322BF054A317272FCE4AB57A3DEBB&SignatureValue=A1E322BF054A317272FCE4AB57A3DEBB&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=yana6905@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=342454885&Shp_prev=16092",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28217&InvId=28217&crc=911F5B17217EB20910F845FF3672F1CF&SignatureValue=911F5B17217EB20910F845FF3672F1CF&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=terekhova.e@stlca.ru&Fee=2.690000&Shp_days=30&Shp_id=5582545767&Shp_prev=16061",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28211&InvId=28211&crc=D63A90B027FDF8A88A429A7803BB4401&SignatureValue=D63A90B027FDF8A88A429A7803BB4401&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=anna.touristic@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=1023756055",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28209&InvId=28209&crc=C850BA97D2FE6DDD1406506F4E0E4965&SignatureValue=C850BA97D2FE6DDD1406506F4E0E4965&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=heezer92@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=746304898",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28202&InvId=28202&crc=8D70906FCA2A77FFF61A82DC4F26ADE5&SignatureValue=8D70906FCA2A77FFF61A82DC4F26ADE5&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=vovan_diagnost@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=5335742049",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=27878&InvId=27878&crc=54EDA12891279D97F9837AAC97CDA713&SignatureValue=54EDA12891279D97F9837AAC97CDA713&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ksouishh@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388473719",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28197&InvId=28197&crc=DF0650297F49EF409887EC85B4091668&SignatureValue=DF0650297F49EF409887EC85B4091668&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=qwnllzz@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=807961823",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28192&InvId=28192&crc=F0B4DF0FD5194696FFABA795E68E39C2&SignatureValue=F0B4DF0FD5194696FFABA795E68E39C2&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=mmihalkava9@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=1105694061",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28191&InvId=28191&crc=9F7A83B11D4A9B78E3834B6F9EA185DE&SignatureValue=9F7A83B11D4A9B78E3834B6F9EA185DE&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=Annloseva@mai.ru&Fee=2.690000&Shp_days=30&Shp_id=597876205",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28190&InvId=28190&crc=E69AE6B467ABD78C21ACBC2C133F1413&SignatureValue=E69AE6B467ABD78C21ACBC2C133F1413&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=shmyreva.m@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=978575304",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28184&InvId=28184&crc=F48DC8CFCF198F49F7AD2DC2DFBB0171&SignatureValue=F48DC8CFCF198F49F7AD2DC2DFBB0171&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Anastasiyabass@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=1431901599",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28180&InvId=28180&crc=3CCB1F20A9400A9043B6CFE5AF71998F&SignatureValue=3CCB1F20A9400A9043B6CFE5AF71998F&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Ismagilovaalfia@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=5217820291",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28177&InvId=28177&crc=21F77F40AD31CEE77CCC69B1F6E4B86D&SignatureValue=21F77F40AD31CEE77CCC69B1F6E4B86D&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=alexandra.prutskova@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=1493857070",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28178&InvId=28178&crc=1E23977D3286B4CB5A52F2BE097790D3&SignatureValue=1E23977D3286B4CB5A52F2BE097790D3&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=k_annikova@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=232827753",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28173&InvId=28173&crc=F2EE1BAEB4D04F0D0038C3E73AFD2399&SignatureValue=F2EE1BAEB4D04F0D0038C3E73AFD2399&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=Yulika817@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=331695818",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28167&InvId=28167&crc=AFB204A841051C084B9FE7EB83EC7640&SignatureValue=AFB204A841051C084B9FE7EB83EC7640&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=pyshinkova04@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=1983171637",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28169&InvId=28169&crc=8FF8A599F58436B27741922F4F9E4832&SignatureValue=8FF8A599F58436B27741922F4F9E4832&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=YandexPayPSR&EMail=lolittalolalo@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1801633917",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28166&InvId=28166&crc=A147C1C874B2A4ECB152F74F1DE2EB75&SignatureValue=A147C1C874B2A4ECB152F74F1DE2EB75&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Sm.milla@yandex.ru&Fee=22.620000&Shp_days=365&Shp_id=1127460441",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28164&InvId=28164&crc=05CB9F075CB255697CC11ABE89A12918&SignatureValue=05CB9F075CB255697CC11ABE89A12918&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=postnikova2008@yandex.ru&Fee=2.690000&Shp_days=30&Shp_id=203118993",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28163&InvId=28163&crc=1D1B57AE38A5945D620ACD24A932F20B&SignatureValue=1D1B57AE38A5945D620ACD24A932F20B&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ryabchenokn@bk.ru&Fee=2.690000&Shp_days=30&Shp_id=482103534",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28157&InvId=28157&crc=B7F3A1E42798068F17DFC28D25AA3ADE&SignatureValue=B7F3A1E42798068F17DFC28D25AA3ADE&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=velyaevapolina@mail.com&Fee=12.880000&Shp_days=180&Shp_id=865999326",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28159&InvId=28159&crc=4B1EEFE2599563CAAD88EDBBD9285934&SignatureValue=4B1EEFE2599563CAAD88EDBBD9285934&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Vasilnatallia@yandex.ru&Fee=22.620000&Shp_days=365&Shp_id=299489693",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28155&InvId=28155&crc=00FAE559A3AEE8F6AC26E8439F7AABB9&SignatureValue=00FAE559A3AEE8F6AC26E8439F7AABB9&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=YandexPayPSR&EMail=EOVasileva@yandex.ru&Fee=12.880000&Shp_days=180&Shp_id=1150428203",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28153&InvId=28153&crc=93BBE92DEA42EF7C34830542AC4651FC&SignatureValue=93BBE92DEA42EF7C34830542AC4651FC&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=Vera.bondarewa@icloud.com&Fee=2.690000&Shp_days=30&Shp_id=946717430",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28148&InvId=28148&crc=D664DA51E28BD61A09C58827EA44A02A&SignatureValue=D664DA51E28BD61A09C58827EA44A02A&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Zolotayaolya@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=1294101253",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28147&InvId=28147&crc=98291C8B82E524D786DC394C91D20929&SignatureValue=98291C8B82E524D786DC394C91D20929&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=dashamilor@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=712187",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28145&InvId=28145&crc=E0083E7EE399E6CEA5E840295C6D61FF&SignatureValue=E0083E7EE399E6CEA5E840295C6D61FF&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=rreckoner@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=368560145",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28143&InvId=28143&crc=844A76D71E29B61ABF549A71F51384D4&SignatureValue=844A76D71E29B61ABF549A71F51384D4&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=e_horkova@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=463052775",
+# "out_summ=580.000000&OutSum=580.000000&inv_id=28142&InvId=28142&crc=1E6C0434D69290D88F6FA5C8E7ED4774&SignatureValue=1E6C0434D69290D88F6FA5C8E7ED4774&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Annesal@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=406149032",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28141&InvId=28141&crc=EEFA78ED12E8B44851924E34EE638BCD&SignatureValue=EEFA78ED12E8B44851924E34EE638BCD&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=yu.dobrina@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=260616473",
+# "out_summ=69.000000&OutSum=69.000000&inv_id=28138&InvId=28138&crc=E0240F997FE48CF83C563F29C2483A6B&SignatureValue=E0240F997FE48CF83C563F29C2483A6B&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=lenok_min@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1595831004",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28139&InvId=28139&crc=7F229A61B019EC2F4961AD8D44AB8342&SignatureValue=7F229A61B019EC2F4961AD8D44AB8342&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=Aliyushka-1391@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=741017171",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=28137&InvId=28137&crc=268757258A82572BA0155636295F5F58&SignatureValue=268757258A82572BA0155636295F5F58&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=Sofi.shcherbakova.1997@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=909690544",
+# "out_summ=330.000000&OutSum=330.000000&inv_id=27536&InvId=27536&crc=C208DD84AABFB27C873B4654154FA3C6&SignatureValue=C208DD84AABFB27C873B4654154FA3C6&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=menovshikova67@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=893174505",
+# # "out_summ=69.000000&OutSum=69.000000&inv_id=28130&InvId=28130&crc=28061D36412CE4E21DB90AFF15D777B3&SignatureValue=28061D36412CE4E21DB90AFF15D777B3&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=dariaturilina@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=336502051"
+# # ]
 # data=[]
 # import requests
 # data_curr={}
@@ -846,17 +856,20 @@
 # print(data)
 
 
-# for data1 in data:
-#     request1=requests.post("http://195.2.79.3:443/get_payment",data=data1)
-#     print(request1.text)
-from databaseInteraction import *
+# import datetime
+# date=datetime.datetime.now().date()
+# # for data1 in data:
+# #     request1=requests.post("http://195.2.79.3:443/get_payment",data=data1)
+# #     print(request1.text)
+# from databaseInteraction import *
+# add_web_source(title="test",code=1111111,price=0,date=date,
+#         type="канал")
 
-
-session=sessionmaker(engine)()
-today=datetime.now().date()
-payments1=session.query(SuccessPayment).filter_by(payment_date=today).all()
-lists1=[]
-for payment in payments1:
-    if not payment.type_of_payment=="TRY REC":
-        user=session.query(User).filter_by(TelegramID=payment.telegram_id).update({"IsActiveSub":1,"SubscrType_ID":3})
-session.commit()
+# session=sessionmaker(engine)()
+# today=datetime.now().date()
+# payments1=session.query(SuccessPayment).filter_by(payment_date=today).all()
+# lists1=[]
+# for payment in payments1:
+#     if not payment.type_of_payment=="TRY REC":
+#         user=session.query(User).filter_by(TelegramID=payment.telegram_id).update({"IsActiveSub":1,"SubscrType_ID":3})
+# session.commit()
