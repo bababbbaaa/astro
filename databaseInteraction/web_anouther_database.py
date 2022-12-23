@@ -136,10 +136,10 @@ def get_web_source(code: str = None, title: str = None) -> WebSource:
     Получение объекта источника по его уникальному коду
 
     """
-
+    session_web=sessionmaker(engine_web)()
     WebSource = _get_source(code, title)
     if WebSource is not None:
-        return SessionWeb.execute(WebSource).scalar()
+        return session_web.execute(WebSource).scalar()
 
 
 def _get_source(code: str, title: str):
