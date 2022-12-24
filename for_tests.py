@@ -694,8 +694,8 @@
 
 import requests
 
-requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
-print(requets.text)
+# requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
+# print(requets.text)
 # from databaseInteraction import *
 # import time
 
@@ -794,7 +794,13 @@ print(requets.text)
 #             {"amount":69,"type_of_payment":"REC"}
 #         )
 #     session.commit()
-# lists=["out_summ=69.000000&OutSum=69.000000&inv_id=28288&InvId=28288&crc=84C3943C9B9AF5377EEC3166C4BF2611&SignatureValue=84C3943C9B9AF5377EEC3166C4BF2611&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=K_striga@bk.ru&Fee=2.690000&Shp_days=30&Shp_id=691241035"]
+lists=["out_summ=330.000000&OutSum=330.000000&inv_id=28118&InvId=28118&crc=8C5041E039D534FDB798AA23119E7FBA&SignatureValue=8C5041E039D534FDB798AA23119E7FBA&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=9110311019@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=5247227953",
+# "",
+# "",
+# "",
+# "",
+# "",
+]
 
     # "out_summ=69.000000&OutSum=69.000000&inv_id=28203&InvId=28203&crc=7E2B0CF1738753B2921C292C84E0A9B1&SignatureValue=7E2B0CF1738753B2921C292C84E0A9B1&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=kvas_tonya@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1361118358",
 # "out_summ=69.000000&OutSum=69.000000&inv_id=27878&InvId=27878&crc=54EDA12891279D97F9837AAC97CDA713&SignatureValue=54EDA12891279D97F9837AAC97CDA713&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ksouishh@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388473719",
@@ -842,7 +848,7 @@ print(requets.text)
 # "out_summ=330.000000&OutSum=330.000000&inv_id=28137&InvId=28137&crc=268757258A82572BA0155636295F5F58&SignatureValue=268757258A82572BA0155636295F5F58&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=Sofi.shcherbakova.1997@gmail.com&Fee=12.880000&Shp_days=180&Shp_id=909690544",
 # "out_summ=330.000000&OutSum=330.000000&inv_id=27536&InvId=27536&crc=C208DD84AABFB27C873B4654154FA3C6&SignatureValue=C208DD84AABFB27C873B4654154FA3C6&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=menovshikova67@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=893174505",
 # # "out_summ=69.000000&OutSum=69.000000&inv_id=28130&InvId=28130&crc=28061D36412CE4E21DB90AFF15D777B3&SignatureValue=28061D36412CE4E21DB90AFF15D777B3&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=dariaturilina@gmail.com&Fee=2.690000&Shp_days=30&Shp_id=336502051"
-# # ]
+# # # ]
 # data=[]
 # import requests
 # data_curr={}
@@ -856,11 +862,11 @@ print(requets.text)
 # print(data)
 
 
-# import datetime
-# date=datetime.datetime.now().date()
-# # for data1 in data:
-# #     request1=requests.post("http://195.2.79.3:443/get_payment",data=data1)
-# #     print(request1.text)
+# # import datetime
+# # date=datetime.datetime.now().date()
+# for data1 in data:
+#     request1=requests.post("http://195.2.79.3:443/get_payment",data=data1)
+#     print(request1.text)
 # from databaseInteraction import *
 # add_web_source(title="test",code=1111111,price=0,date=date,
 #         type="канал")
