@@ -364,7 +364,7 @@ async def cancel_manager(message):
         message.from_user.id, "*Вызвать* календарь: /calendar", parse_mode="Markdown")
 
 
-async def render_posts(call: Message | CallbackQuery, date, delete_message: bool = True):
+async def render_posts(call: Message, date, delete_message: bool = True):
     author = call.from_user.id
 
     if delete_message:
