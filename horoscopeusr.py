@@ -3,7 +3,7 @@ import horoscopeproc
 from horoscoperr import HandleMess
 import random
 from datetime import date, datetime, timedelta
-
+import re
 
 
 # добавить пользователя в базу данных,  подписка начальная
@@ -66,8 +66,12 @@ def RegUser(inpTelegramID):
     if conn:  
        conn.close() 
 
-
-
+# удаляет из строки все символы кроме указанных
+def clstr(inpstr):
+    res = re.sub(r'[^-!;:.,A-Za-z0-9_а-яА-ЯёЁ ]*', "", inpstr)
+    
+    return res
+    
 
 ## inpValues- словарь содержащий Name,Gender_ID,Birthday,DesTime_ID,BirthTime,Birthplace
 def RegUserFull(inpTelegramID,inpValues):
@@ -87,7 +91,7 @@ def RegUserFull(inpTelegramID,inpValues):
    
    records = cur.fetchall()
 
-   if len(records)==0:        # пользователь уже зарегистрирован
+   if len(records)==0:        # пользователь не зарегистрирован
       
       HandleMess("Пользователь не зарегистрирован, ТЛГ ID :"+str(inpTelegramID),True)
       return((False,"Пользователь не  зарегистрирован, ТЛГ ID :"+str(inpTelegramID)))
@@ -123,8 +127,10 @@ def RegUserFull(inpTelegramID,inpValues):
 
 
    
-   cur.execute(strQuery,(inpValues['Name'],inpValues['Gender_ID'],inpValues['Birthday'],inpValues['DesTime_ID'],inpValues['BirthTime'],inpValues['Birthplace'],
+    
+   cur.execute(strQuery,(clstr(inpValues['Name']),inpValues['Gender_ID'],clstr(inpValues['Birthday']),inpValues['DesTime_ID'],clstr(inpValues['BirthTime']),clstr(inpValues['Birthplace']),
                          inpTelegramID,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю
+
    
    ##cur.execute(strQuery,(inpTelegramID,0,lenMess-1,)) # IntrvMessBeg,IntrvMessEnd - интервал ID таблицы MessBodies из кот были сформ сообщения пользователю          
    conn.commit()
@@ -319,6 +325,10 @@ def ChUserInfo(inpTelegramID,inpFieldName, inpValue):
      HandleMess("Ошибка имени поля для изменения Users : "+inpFieldName,3,True)
      return(False,)
 
+
+  if inpFieldName in ['Name', 'Birthtime','Birthday','Birthplace']:
+     inpValue = clstr(inpValue) 
+ 
   cur.execute("SELECT 1 FROM Users WHERE TelegramID = %s " ,(inpTelegramID,))
   records = cur.fetchall()
   
@@ -457,7 +467,10 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 
   inpFieldName = inpFieldName.capitalize()
 
-  
+  if inpFieldName in ['Name', 'Birthday','Birthplace']:
+     inpValue = clstr(inpValue) 
+
+ 
   if not inpFieldName in UsrFields:
      HandleMess("Ошибка имени поля для изменения UsersTmp : "+inpFieldName,3,True)
      return((False,))
@@ -489,12 +502,14 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 
 
 
-#print(ChTmpUserInfo(952863788,"Name", "ewrewrqwerq"))
+##print(ChTmpUserInfo(232069579,"Name", "ewrewrqw2erq"))
 
 ##print(RegUser(121212121237))
 ##inpValues = {"Name":"Sasa","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
 ##print(RegUserFull(121212121237,inpValues))
-##print(GenNewUserMess(121212121237))
+       
+##print(GenNewUserMess(850703853))
+       
 ##conn = horoscopedb.ConnectDb()
 ##print(RegUser(123456789))
 ##CreateUsrMess(conn,1,0,10)
@@ -502,7 +517,8 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 ##print(ChUserInfo(conn,"1234","sasa","DesTime_id", "10") )
 
 ##old = datetime.now()
-##print(GenNewUserMess(123456789))
+##GenNewUserMess(881371266)
+####print(GenNewUserMess(881371266))
 ##print("tot="+str(datetime.now()-old))
        
 
@@ -515,5 +531,14 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 ##print(datetime.datetime.now())
 
 ##print(RegUser(121212121237))
-##print(RegTmpUser(121212121212))
-##print(ChUserInfo(121212121212,"Source_ID", 5) )
+##print(RegTmpUser(1862603411))
+##print(ChTmpUserInfo(1862603411,"Name", "Михельсон"))
+##print(ChTmpUserInfo(1862603411,"Gender_ID", 1))
+##print(ChTmpUserInfo(1862603411,"Birthday", "01.01.1979"))
+
+
+
+##print(RegUser(33333))
+##inpValues = {"Name":"werÀ#À ¬À®dddÀ+À","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
+##print(RegUserFull(33333,inpValues))
+##print(ChUserInfo(33333,'Name','À\x9c\x00<\x00/\x00'))
