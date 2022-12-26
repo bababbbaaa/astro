@@ -168,7 +168,7 @@ def sub_type4_text(id=None):
     return 'Ваша подписка в данный момент неактивна. Вы можете в любой момент активировать ее заново.'
 offert='''<a href="https://docs.google.com/document/d/1jwpcUW2Dj2nPr7M_gsBoXmwuXYiGoyk5o6o5WVOebDI/edit?usp=sharing">Соглашение на обработку персональных данных</a>
 
-<a href="https://docs.google.com/document/d/1e2BED-8saLTsVIc0_fyMMKn8i5xnqwcF_k9oY_BHkJw/edit)">Соглашение на обработку рекуррентных платежей.</a>
+<a href="https://docs.google.com/document/d/1e2BED-8saLTsVIc0_fyMMKn8i5xnqwcF_k9oY_BHkJw/edit">Соглашение на обработку рекуррентных платежей.</a>
 
 <a href="https://docs.google.com/document/d/1zGaul1srvBDIy1OnaoggKnXfmtDrP5UOSyKSjHYRLVU"> Оферта оказания услуг</a> '''
 
