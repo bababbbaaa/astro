@@ -236,26 +236,26 @@
 # # # # # pay=for_payments.get_money_for_sub(id=int(10378),amount=69,days=30,test=0)
 # # # # # print(pay.text)
 # # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.1000",days=30,payed=True,amount=69,link="REC")
-# # # # LOGIN="Astrobot"
-# # # # PASSWORD_FOR_ROBOKASSA="oLy0Vda8EbnP8wlR5Xi1"
-# # # # # idempotence_key = str(uuid.uuid4())
-# # # # account_id_shop="jkdskd"
-# # # # gateway_id_shop=""
-# # # # MAIN_PASSWORD="oLy0Vda8EbnP8wlR5Xi1"
-# # # # TEST_PASSWORD="ygAdIPC6I1c1qxER1Iu8"
-# # # # # pay=for_payments.get_money_for_sub(id=int(10853),amount=69,days=30,test=0,tg_id=)
-# # # # # # print(pay.text)
-# # # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
+# LOGIN="Astrobot"
+# PASSWORD_FOR_ROBOKASSA="oLy0Vda8EbnP8wlR5Xi1"
+# # idempotence_key = str(uuid.uuid4())
+# account_id_shop="jkdskd"
+# gateway_id_shop=""
+# MAIN_PASSWORD="oLy0Vda8EbnP8wlR5Xi1"
+# TEST_PASSWORD="ygAdIPC6I1c1qxER1Iu8"
+# pay=for_payments.get_money_for_sub(id=int(10853),amount=69,days=30,test=0,tg_id=)
+# # print(pay.text)
+# # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
 
-# # # # # pay=for_payments.get_money_for_sub(id=int(10210),amount=69,days=30,test=0)
-# # # # # print(pay.text)
-# # # # # add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
+# pay=for_payments.get_money_for_sub(id=int(10210),amount=69,days=30,test=0)
+# print(pay.text)
+# add_payment(sub_type=3,telegram_id=1,payment_id=str(count_payments()),active_until="10.10.10",days=30,payed=True,amount=69,link="REC")
 
-# # # # import robokassa
-# # # # # add_payment(sub_type=3,telegram_id=2,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
-# # # # x=robokassa.earn_recurrent_pay("Astrobot",PASSWORD_FOR_ROBOKASSA,cost=69,number=10853,description="Оплата подписки на астробота",is_test=0,days=30,tg_id=5088332038)
-# # # # print(x)
-# # # # pass 
+# import robokassa
+# # add_payment(sub_type=3,telegram_id=2,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
+# x=robokassa.earn_recurrent_pay("Astrobot",PASSWORD_FOR_ROBOKASSA,cost=69,number=10853,description="Оплата подписки на астробота",is_test=0,days=30,tg_id=5088332038)
+# print(x)
+# # # # # pass 
 # # # DATE_FORMAT = '%d.%m.%Y'
 # # # from datetime import date,timedelta
 
@@ -689,24 +689,24 @@
 # # js = horoscopeproc.GenHourMessAll(11, inpTelegramID=str(id))
 # # print(js)\
 # x=bot.get_chat("573614210")
-# print(x)
+# # print(x)
 
 
-import requests
+# import requests
 
-# requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
-# print(requets.text)
-# from databaseInteraction import *
-# import time
+# # requets=requests.post("http://127.0.0.1:5000/get_amount_of_sources",json={})
+# # print(requets.text)
+# # from databaseInteraction import *
+# # import time5
 
-# x=SessionWeb.query(WebSource).all()
-# print(len(x))
-# Session.commit()
-# time.sleep(60)
+# # x=SessionWeb.query(WebSource).all()
+# # print(len(x))
+# # Session.commit()
+# # time.sleep(60)
 
-# x=SessionWeb.query(WebSource).all()
-# print(len(x))
-# print(get_success_web_payments())
+# # x=SessionWeb.query(WebSource).all()
+# # print(len(x))
+# # print(get_success_web_payments())
 # from for_payments import *
 
 
@@ -793,14 +793,15 @@ import requests
 #         session.query(telegram_id=x[i].telegram_id,type_of_payment="TRY REC").update(
 #             {"amount":69,"type_of_payment":"REC"}
 #         )
-#     session.commit()
-lists=["out_summ=330.000000&OutSum=330.000000&inv_id=28118&InvId=28118&crc=8C5041E039D534FDB798AA23119E7FBA&SignatureValue=8C5041E039D534FDB798AA23119E7FBA&PaymentMethod=BankCard&IncSum=330.000000&IncCurrLabel=BankCardPSR&EMail=9110311019@mail.ru&Fee=12.880000&Shp_days=180&Shp_id=5247227953",
-# "",
-# "",
-# "",
-# "",
-# "",
-]
+# #     session.commit()
+# lists=["out_summ=580.000000&OutSum=580.000000&inv_id=28285&InvId=28285&crc=CD9E3375F4B539BBE7C8A023BB6BD55E&SignatureValue=CD9E3375F4B539BBE7C8A023BB6BD55E&PaymentMethod=BankCard&IncSum=580.000000&IncCurrLabel=BankCardPSR&EMail=Yanina-sokol@mail.ru&Fee=22.620000&Shp_days=365&Shp_id=898275446"
+# ,
+# # # "",
+# # # "",
+# # # "",
+# # # "",
+# # # "",
+# ]
 
     # "out_summ=69.000000&OutSum=69.000000&inv_id=28203&InvId=28203&crc=7E2B0CF1738753B2921C292C84E0A9B1&SignatureValue=7E2B0CF1738753B2921C292C84E0A9B1&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=kvas_tonya@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1361118358",
 # "out_summ=69.000000&OutSum=69.000000&inv_id=27878&InvId=27878&crc=54EDA12891279D97F9837AAC97CDA713&SignatureValue=54EDA12891279D97F9837AAC97CDA713&PaymentMethod=BankCard&IncSum=69.000000&IncCurrLabel=BankCardPSR&EMail=ksouishh@mail.ru&Fee=2.690000&Shp_days=30&Shp_id=1388473719",
@@ -867,7 +868,12 @@ lists=["out_summ=330.000000&OutSum=330.000000&inv_id=28118&InvId=28118&crc=8C504
 # for data1 in data:
 #     request1=requests.post("http://195.2.79.3:443/get_payment",data=data1)
 #     print(request1.text)
-# from databaseInteraction import *
+# # # from databaseInteraction import *
+
+# import functions
+
+# x=functions.select_all_active_until_table("577552874")
+# print(x)
 # add_web_source(title="test",code=1111111,price=0,date=date,
 #         type="канал")
 
@@ -879,3 +885,37 @@ lists=["out_summ=330.000000&OutSum=330.000000&inv_id=28118&InvId=28118&crc=8C504
 #     if not payment.type_of_payment=="TRY REC":
 #         user=session.query(User).filter_by(TelegramID=payment.telegram_id).update({"IsActiveSub":1,"SubscrType_ID":3})
 # session.commit()
+# print("\x04")
+import for_payments
+from databaseInteraction import *
+# import robokassa
+from utils import *
+import config
+recurent_subs=get_sub(id=952863788)
+days1=30
+if int(float(recurent_subs.Type))==330 or int(float(recurent_subs.Type==config.cost[180])):
+    days1=180
+if int(float(recurent_subs.Type))==580 or int(float(recurent_subs.Type==config.cost[365])):
+    days1=365
+pay=for_payments.get_money_for_sub(id=int(recurent_subs.PayID),amount=int(float(recurent_subs.Type)),days=days1,test=0,tg_id=recurent_subs.TelegramID)
+# print(pay.text)
+try:
+    if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
+        # set_field(id=int(recurent_subs[i].TelegramID),end=end)
+        try:
+            add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+        except:
+            pass
+        add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
+    else:
+        try:
+            add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+        except:
+            pass
+# add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
+except:
+    pass
+try:
+    for_payments.wait_until_send(952863788,"списание закончилось")
+except:
+    pass

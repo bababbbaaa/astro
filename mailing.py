@@ -483,7 +483,12 @@ def service_message() -> None:
                 amount=69
             else:
                 amount=config.cost
-            pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=69,days=30,test=0,tg_id=recurent_subs[i].TelegramID)
+            days1=30
+            if int(float(recurent_subs[i].Type))==330 or int(float(recurent_subs[i].Type==config.cost[180])):
+                days1=180
+            if int(float(recurent_subs[i].Type))==580 or int(float(recurent_subs[i].Type==config.cost[365])):
+                days1=365
+            pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
             # print(pay.text)
             try:
                 if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
@@ -492,18 +497,19 @@ def service_message() -> None:
                         add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
                     except:
                         pass
-                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="try REC")
+                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=days1,payed=True,amount=0,link="try REC")
 
                 else:
                     try:
-                        days=0
-                        id=recurent_subs[i].TelegramID
-                        end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
-                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],end_time)).start()
+                        add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
                     except:
                         pass
                     # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
-            except:
+            except Exception as err:
+                try:
+                    wait_until_send(952863788,str(err))
+                except:
+                    pass
                 continue
         try:
             wait_until_send(952863788,"списание закончилось")
@@ -511,7 +517,10 @@ def service_message() -> None:
             pass
 
     except Exception as err:
-        
+        try:
+            wait_until_send(952863788,str(err))
+        except:
+            pass
         print("errr")
         
         logger.error(err)
@@ -556,9 +565,9 @@ from utils import logger
 
 DATE_FORMAT = '%d.%m.%Y'
 
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 
-scheduler = BackgroundScheduler()
+# scheduler = BackgroundScheduler()
 
 def remind_managers():
     tomorrow = date.today() + timedelta(days=1)
