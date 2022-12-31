@@ -304,6 +304,8 @@ def get_tables(data=None):
             row[10]=datetime.strptime("01.01.1970","%d.%m.%Y")
         if row[11]==None:
             row[11]=datetime.strptime("01.01.1970","%d.%m.%Y")
+        if row[17]==None:
+            row[17]=datetime.strptime("01.01.1970","%d.%m.%Y")
         res.append({"ID": row[0], "Name": row[1], "is_main": row[2], "BirthTime": str(row[4]),
                     "Birthday": row[5], "Gender_ID": row[3], 'Birthplace': row[6], "DesTime_ID": row[7],
                     "TimeZone": row[8], "TelegramID": row[9], "RegDate": datetime.strftime(row[10],"%Y-%m-%d %H:%M:%S"), "RegDateFin": datetime.strftime(row[11],"%Y-%m-%d %H:%M:%S"), "IsActiveBot": row[12],
@@ -698,5 +700,5 @@ def update_source_route():
     except Exception as e:
         return str(e), 400
 
-app.run(host=HOST, port=PORT,debug=True)
-# app.run(debug=True)
+# app.run(host=HOST, port=PORT,debug=True)
+app.run(debug=True)
