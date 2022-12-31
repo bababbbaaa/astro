@@ -2,8 +2,8 @@ SUPPORT="ИМЯ ПОДДЕРЖКИ"
 import horoscopedb as horoscopedb
 from datetime import datetime
 MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
-TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"#astrologyEveryDay
-# TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
+# TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"#astrologyEveryDay
+TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
 # TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM" # Sharapa bot
 
 photos={"inter_name":"days/name.png",
