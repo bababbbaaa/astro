@@ -886,9 +886,9 @@
 #         user=session.query(User).filter_by(TelegramID=payment.telegram_id).update({"IsActiveSub":1,"SubscrType_ID":3})
 # session.commit()
 # print("\x04")
-import for_payments
-x=for_payments.make_recurse_pay(id=952863788,days=30,amount=69,test=0)
-print(x)
+# import for_payments
+# x=for_payments.make_recurse_pay(id=952863788,days=30,amount=69,test=0)
+# print(x)
 # from databaseInteraction import *
 # # import robokassa
 # from utils import *
@@ -921,3 +921,7 @@ print(x)
 #     for_payments.wait_until_send(952863788,"списание закончилось")
 # except:
 #     pass
+
+import requests
+request=requests.post(url="http://127.0.0.1:5000/get_success_payments",headers={"Content-Type":"application/json"},json={})
+print(request)

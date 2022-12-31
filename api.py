@@ -296,7 +296,7 @@ def get_tables(data=None):
     if end_range > len(records):
 
         end_range = len(records)
-    for row in records[offset:end_range]:#datetime.strftime(row[16],"%Y-%m-%d")
+    for row in records[length-offset-limit:length-offset]:#datetime.strftime(row[16],"%Y-%m-%d")
         res.append({"ID": row[0], "Name": row[1], "is_main": row[2], "BirthTime": str(row[4]),
                     "Birthday": row[5], "Gender_ID": row[3], 'Birthplace': row[6], "DesTime_ID": row[7],
                     "TimeZone": row[8], "TelegramID": row[9], "RegDate": datetime.strftime(row[10],"%Y-%m-%d %H:%M:%S"), "RegDateFin": datetime.strftime(row[11],"%Y-%m-%d %H:%M:%S"), "IsActiveBot": row[12],
