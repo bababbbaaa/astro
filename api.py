@@ -303,7 +303,7 @@ def get_tables(data=None):
                     "Balance": str(row[13]), "IsActiveSub": row[14], "SubscrType_ID": row[15],
                     "ActiveUntil": datetime.strftime(row[16],"%Y-%m-%d"), "DateSend": datetime.strftime(row[17],"%Y-%m-%d") , "Source_ID": row[22]
                     })
-
+    res=res[::-1]
     conn.commit()
     cur.close()
     conn.close()
@@ -516,7 +516,7 @@ def get_payments():
 @app.route('/get_success_payments', methods=['POST', 'GET'])
 def get_sucess_payments_route():
     try:
-        print("dfdfdfdfdf")
+        # print("dfdfdfdfdf")
         data = request.get_json()
 
         telegram_id = data.get('telegram_id')
@@ -537,7 +537,7 @@ def get_sucess_payments_route():
 
         payments = get_success_web_payments(telegram_id, source_id, payment_type,rec_available,from_date,to_date,amount)
         converted = alchemy_list_convert(payments)
-
+        converted=converted[::-1]
 
         if return_excel==True:
             path='static/payments.xlsx'
