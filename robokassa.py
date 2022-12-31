@@ -7,16 +7,23 @@ from requests import request
 import requests
 from databaseInteraction.payments import add_payment
 from utils import *
-
+from config import *
 import functions
 #позиции наменклатуры для налогов
+def nomenklarue_for_sign(days,price):
+    text='{"sno":"usn_income","items":[{"name":"Подписка на астробот '+ str(days)+' дней","quantity":1,"sum":'+str(price)+',"payment_method":"full_payment","payment_object":"commodity","tax":"none"}]}'
+    return text
+# nomenklarue_30_for_sign='''{"sno":"usn_income","items":[{"name":"Подписка на астробот 30 дней","quantity":1,"sum":69,"payment_method":"full_payment","payment_object":"commodity","tax":"none"}]}'''
+# nomenklarue_180_for_sign='''"sno":"usn_income","items":[{"name":"Подписка на астробот 180 дней","quantity":1,"sum":330,"payment_method":"full_payment","payment_object":"commodity","tax":"none}]}"'''
+# nomenklarue_365_for_sign={"sno":"usn_income","items":[{"name":"Подписка на астробот 365 дней","quantity":1,"sum":580,"payment_method":"full_payment","payment_object":"commodity","tax":"none"}]}
+
 nomenklarue_30={
           "sno":"usn_income",
           "items": [
             {
               "name": "Подписка на астробот 30 дней",
               "quantity": 1,
-              "sum": 69,
+              "sum": cost[30],
               "payment_method": "full_payment",
               "payment_object": "commodity",
               "tax": "none"
@@ -27,7 +34,7 @@ nomenklarue_180={
             {
               "name": "Подписка на астробот 180 дней",
               "quantity": 1,
-              "sum": 330,
+              "sum": cost[180],
               "payment_method": "full_payment",
               "payment_object": "commodity",
               "tax": "none"
@@ -37,15 +44,15 @@ nomenklarue_365={
           "sno":"usn_income",
           "items": [
             {
-              "name": "Подписка на астробот (год)",
+              "name": "Подписка на астробот 365 дней",
               "quantity": 1,
-              "sum": 580,
+              "sum": cost[365],
               "payment_method": "full_payment",
               "payment_object": "commodity",
               "tax": "none"
             }]}
 nomenklatura={30:nomenklarue_30,180:nomenklarue_180,365:nomenklarue_365}
-
+# nomenklatura_for_sign={30:nomenklarue_30_for_sign,180:nomenklarue_180_for_sign,365:nomenklarue_365_for_sign}
 
 
 
@@ -190,15 +197,15 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
     signature = calculate_signature(
         merchant_login,
         cost,
+        
+
         number1,
-        # nomenklatura[days],
+        nomenklarue_for_sign(days,cost),
         merchant_password_1,
 
         "Shp_days="+str(days),
         "Shp_id="+str(tg_id),
-        # "Shp_id":number,
-        # "Shp_days":days,
-        # "Shp_Rec="+str(1),
+
         "Shp_prev="+str(number)
         
     )
@@ -211,13 +218,14 @@ def earn_recurrent_pay(merchant_login:str,  # Merchant login
         'Description': description,
         'SignatureValue': signature,
         'IsTest': is_test,
-        # "receipt":nomenklatura[days],
+        "Receipt":nomenklarue_for_sign(days,cost),
         "Shp_id":tg_id,
         "Shp_days":days,
         # "Shp_Rec":1,
         "Shp_prev":number
         }
-    print(data,"data")
+    # print(data,"data")
+    # x=check_signature_result(number1,cost,signature,merchant_password_1)
     request=requests.post(url,data=data)
     return(request)
 def check_success_payment(merchant_password_1: str, request: str) -> str:
