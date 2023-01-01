@@ -700,5 +700,5 @@ def update_source_route():
     except Exception as e:
         return str(e), 400
 
-# app.run(host=HOST, port=PORT,debug=True)
-app.run(debug=True)
+app.run(host=HOST, port=PORT,debug=True)
+#app.run(debug=True)
