@@ -923,5 +923,5 @@
 #     pass
 
 import requests
-request=requests.post(url="http://195.2.79.3:443/get_tables",headers={"Content-Type":"application/json"},json={"limit":250})
+request=requests.post(url="http://195.2.79.3:443/get_tables",headers={"Content-Type":"application/json"},json={"limit": 25, "offset": 50})
 print(request.text)
