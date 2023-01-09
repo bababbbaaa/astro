@@ -47,7 +47,7 @@ class InlineButton(InlineKeyboardButton):
 async def startup(message):
     suggesting_commands = [
     BotCommand(command="send",description="Получить гороскоп сейчас"),
-    BotCommand(command="gen_user_mes",description="Гороскоп другу"),
+    # BotCommand(command="gen_user_mes",description="Гороскоп другу"),
     BotCommand(command="subscribe",description="Подписка"),
     BotCommand(command="support",description="Поддержка"),
     BotCommand(command="change",description="Изменить данные"),
