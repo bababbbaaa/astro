@@ -113,9 +113,9 @@ def GenHourMessAll(inpDesTimeID,inpTelegramID=None):
     currNow = date.today()
     
     txtQuery = """SELECT Users.ID as UsrID,
-                         Name,
+                         coalesce(Name,'-'),
                          TelegramID,
-                         Gender_ID,
+                         coalesce(Gender_ID,2),
                          UM.MessID as MessID,    /*идентификатор в таблице UserMess потом удалить эти сообщения*/
                          UserMess.Col_1,
                          coalesce(Mb1.Col_1,'') as txtCol_1,
@@ -274,9 +274,9 @@ def GenHourMessAll(inpDesTimeID,inpTelegramID=None):
                                        /*   ActiveUntil > ? AND*/
                                        RegDateFin IS NOT NULL AND 
                                           DesTime_ID = %s  AND
-                                     /* TelegramID = 5560719600  AND*/
+                                      /*TelegramID = 850703853  AND*/
                                          
-                                        (Users.DateSend<>CURRENT_DATE()))
+                                        (Users.DateSend<>CURRENT_DATE())   )
                                ORDER BY SubscrTypeForORDER """,(inpDesTimeID,))#(datetime.strftime(datetime.now(), "%Y-%m-%d"),inpDesTimeID,))
 
        records = cur.fetchall() 
@@ -365,8 +365,6 @@ def GenHourMessAll(inpDesTimeID,inpTelegramID=None):
          newTodayList.append((UserID,currNow,col_1,col_2,col_3,col_4)) #  добавляем в сегодняшние сообщения
         
       
-      
-
       ServMess =""
       Stat     = 0
       leftDays  = durDays(currNow,str(ActiveUntil)) # проверить оставшуюся подписку
@@ -638,16 +636,16 @@ def GenTmpUsrMess(inpTelegramID):
                (SecTb.ID <> MainTb.ID)
 
                  LEFT JOIN MessBodies as Mb1 
-                 ON Mb1.ID = coalesce(MainTb.Col_1,SecTb.Col_1,'')
+                 ON Mb1.ID = coalesce(MainTb.Col_1,SecTb.Col_1,Null)
 
                  LEFT JOIN MessBodies as Mb2
-                 ON Mb2.ID = coalesce(MainTb.Col_2,SecTb.Col_2,'')
+                 ON Mb2.ID = coalesce(MainTb.Col_2,SecTb.Col_2,Null)
 
                  LEFT JOIN MessBodies as Mb3 
-                 ON Mb3.ID = coalesce(MainTb.Col_3,SecTb.Col_3,'')
+                 ON Mb3.ID = coalesce(MainTb.Col_3,SecTb.Col_3,Null)
 
                  LEFT JOIN MessBodies as Mb4 
-                 ON Mb4.ID = coalesce(MainTb.Col_4,SecTb.Col_4,'')
+                 ON Mb4.ID = coalesce(MainTb.Col_4,SecTb.Col_4,Null)
                
                WHERE (MainTb.ID = (SELECT MAX(ID) FROM UsersTmp WHERE TelegramID = %s)) LIMIT 1 """
 
@@ -1003,9 +1001,12 @@ def InsertIntoTable(inpTbName,inpValues):
     if conn:  
        conn.close()
 
-# сохранить id пользователей в файл по заданным параметрам
-def SaveSegmentDb(inPar):
+
+
+
+def SaveSegment(inPar):
  try:
+  
    if inPar == '1': # платная
       Qfilter = " WHERE IsActiveBot = 1 AND  SubscrType_ID = 3"      
    elif inPar == '2': # триал
@@ -1022,6 +1023,8 @@ def SaveSegmentDb(inPar):
 
    path="static/Segment_"+inPar+".txt"
    cur = False
+   f_out = False
+   conn = False
    conn = horoscopedb.ConnectDb()
    if conn is None:      
        return(False)
@@ -1036,7 +1039,7 @@ def SaveSegmentDb(inPar):
         
    return(path)
  except Exception as error:
-    return(error)
+    return(str(error))
     
  finally:    
     if cur:
@@ -1045,6 +1048,74 @@ def SaveSegmentDb(inPar):
        conn.close()
     if f_out:
        f_out.close()
+
+
+################### функции вызваемые из js
+def get_listsour():
+ try:
+   conn = False
+   cur = False
+   conn = horoscopedb.ConnectDb()
+   if conn is None:      
+       return(False)      
+   cur = conn.cursor()
+   cur.execute("SELECT Name FROM Sources ")
+   records = cur.fetchall()
+   return records
+ except:
+    return None
+    
+ finally:    
+    if cur:
+       cur.close()
+    if conn:  
+       conn.close()
+    
+
+   
+
+# сохранить id пользователей в файл по заданным параметрам
+#
+# функция вызывается из js, в качестве параметра педается строка - словарь имя = значение;
+# func -  это имя вызываемой функции
+def SaveSegmentDb(inPar):
+ try: 
+   sep = ";"
+   sepdict = "="   
+   inpsubString = inPar.strip(sep).lower()
+   kolelem = inpsubString.count(sepdict)
+   
+   if kolelem==0: # передан не словать а единственный параметр
+      
+      res = SaveSegment(inPar)      
+      return res
+   
+   tmpD = dict(subStr.split(sepdict) for subStr in inpsubString.split(sep))# разбрать вх строку на парам и значение
+   if len(tmpD)==0:
+      return None
+   
+   currD = {}
+   for key, value in tmpD.items():
+        currD[key.strip()] = value.strip() # обрезать пробелы 
+   
+   
+   
+   if not currD.get("func", False):
+      return None
+   fname = currD["func"].strip()   
+   if fname == 'get_sourstatistic':
+
+      
+      pass
+   elif  fname == 'get_listsour':   
+      return get_listsour()
+   else:   
+       return "не найдена функция "+fname
+      
+   return currD 
+ except:   
+   return None
+
 
 
 def CopyUsrMess():
@@ -1145,17 +1216,29 @@ def CopyUsrMess():
 
 
 ##old = datetime.now()
-####
-##print(GenHourMessAll(1,121212121237))
-####GenHourMessAll(1,)#5560719600
-#####5392589497
+######
+##print(GenHourMessAll(1,))
+##print(GenHourMessAll(1,1484624784  ))#5560719600
+#######5392589497
 ##print("tot="+str(datetime.now()-old))
 ##for row in res:
 ##   print(row[2])
-##print(GenHourMessAll(1))
-##print(SaveSegmentDb('3'))
+##print(GenHourMessAll(0))
+#print(SaveSegmentDb(';3=5'))
 
 ##CopyUsrMess()
 
 
 ##print(InsertIntoTable(inpTbName="Sources",inpValues={"Name":"publdasdasic_name","Token":"tokdffdsfsden"}))
+
+##print(GenTmpUsrMess(1862603411))
+
+
+##print("2х2=1;3х3=4".split(";"))
+##subString="2х2=1;3х3=4"
+##for subStr in str.split(";"):
+##   print(subStr)
+##print(SaveSegmentDb('func = get_listsour '))
+
+#print(SaveSegment('2'))
+
