@@ -5,4 +5,3 @@ from . import sending_horoscope
 from . import managers
 from . import generate_token
 from . import general
-

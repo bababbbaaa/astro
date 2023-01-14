@@ -269,9 +269,31 @@ def tranfer_payments(date=None):
 
 
 
+def delete_yandex_pay(file):
+    workbook = load_workbook(file)
+    sheet=workbook.get_sheet_by_name('base')
+    i=2
+    session=sessionmaker(engine,autoflush=False)()
+    while True:
+        payment_type=str(sheet["B"+str(i)].value)
+        inv_id=str(sheet["A"+str(i)].value)
+        if payment_type!="RUR Bank Card" and inv_id!='None':
+            
+            pay=session.query(SuccessPayment).filter_by(payment_id=int(inv_id)).all()
 
+            if len(pay)!=0:
+                pay=pay[0]
+                sub=session.query(Subscription).filter_by(TelegramID=pay.telegram_id).all()
+                if len(sub)!=0:
+                    try:
+                        delete_sub(id=pay.telegram_id)
+                    except:
+                        pass
+        i+=1
+       
+#RUR Bank Card
 
-
-x=transfer_to_success_payment("base.xlsx")
-# add_triggers()
-upload_information_to_source()
+# x=transfer_to_success_payment("base.xlsx")
+# delete_yandex_pay("base.xlsx")
+# # add_triggers()
+# upload_information_to_source()

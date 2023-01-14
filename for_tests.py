@@ -934,6 +934,12 @@
 # print(x)
 # session.commit()
 
+
+
+# from databaseInteraction import *
+
+# session=sessionmaker(engine)()
+# session.query
 text1='''Дорогие пользователи Астробота! 
 
 С 15 января 2023 года стоимость подписки на Астробот будет увеличена и составит:

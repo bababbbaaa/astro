@@ -1,7 +1,7 @@
 SUPPORT="ИМЯ ПОДДЕРЖКИ"
 import horoscopedb as horoscopedb
 from datetime import datetime
-MANAGER_TOKEN="5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ"
+MANAGER_TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"
 TOKEN="5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"#astrologyEveryDay
 # TOKEN = "5321240856:AAGg8_PBKSMin50vxhKzWud0-xR95sp_QMQ" # Sergey bot
 # TOKEN = "1507510871:AAHZ9TbVo3ymM510xLuzq34EZubGPmXYYkM" # Sharapa bot
@@ -53,20 +53,20 @@ user_bots = [778327202, 5463088269]
 
 bots=["5393264409:AAFd137o2MSINcbYLK_9s2UZso_0OAXUBmU"]
 bot_name="@EveryDayAstrologyBot"
-cost={30:69,
-180:330,365:580}
+cost={30:99,
+180:499,365:829}
 url_for_all="<a href='https://google.com'>url из конфига</a>"
 url_for_costs={30:'''"<a href='https://google.com'>в конфиге указать url на 30</a>"''',
 180:'''"<a href='https://google.com'>в конфиге указать url на 180</a>"''',365:'''"<a href='https://google.com'>в конфиге указать url на 365</a>"'''}
 cost_text='''Доступно 3 варианта продления подписки: на 30, 180 и 365 дней.
 
-✅ Стоимость подписки на месяц - 69 рублей
+✅ Стоимость подписки на месяц - 99 рублей
 
 На полугодовой и годовой тариф действует скидка 20 и 30 % соответственно:
 
-✅ Стоимость подписки на пол года - <strike>414</strike> 330 ₽
+✅ Стоимость подписки на пол года - <strike>594</strike> 499 ₽
 
-✅ Стоимость подписки на год: <strike>828</strike> 580 ₽
+✅ Стоимость подписки на год: <strike>1188</strike> 829 ₽
 
 При продлении сроки подписок
 суммируются.
@@ -170,7 +170,7 @@ offert='''<a href="https://docs.google.com/document/d/1jwpcUW2Dj2nPr7M_gsBoXmwuX
 
 <a href="https://docs.google.com/document/d/1e2BED-8saLTsVIc0_fyMMKn8i5xnqwcF_k9oY_BHkJw/edit">Соглашение на обработку рекуррентных платежей.</a>
 
-<a href="https://docs.google.com/document/d/1zGaul1srvBDIy1OnaoggKnXfmtDrP5UOSyKSjHYRLVU"> Оферта оказания услуг</a> '''
+<a href="https://docs.google.com/document/d/10ybEadooll6XH5hlNMk_e3EVWEoltfPM2EkAhI0NwOg/edit?usp=sharing"> Оферта оказания услуг</a> '''
 
 #CREATE USER 'test_user'@'localhost' IDENTIFIED BY 'password';
 

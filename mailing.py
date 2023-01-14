@@ -1,5 +1,5 @@
 from ast import arg
-import schedule
+# import schedule
 from threading import Thread
 import time
 from for_payments import Get_Data
@@ -287,9 +287,9 @@ def text_for_notifications(day):
 
 Период пробной подписки действует 7 дней. Составление персональных гороскопов для наших пользователей требует много ресурсов, поэтому по истечению пробного периода подписка становится платной. Но мы сделали оплату минимально возможной:
 
-1)  на месяц - 69 рублей 
-2)  на полгода со скидкой 20% - <strike>414</strike>, 330 рублей
-3)  на год со скидкой 30% - <strike>828</strike>, 580 рублей. 
+1)  на месяц - 99 рублей 
+2)  на полгода со скидкой 20% - <strike>594</strike>, 499 рублей
+3)  на год со скидкой 30% - <strike>1188</strike>, 829 рублей. 
 
 Твой пробный период закончился.
 
@@ -310,9 +310,9 @@ def text_for_notifications(day):
 
 Период пробной подписки действует 7 дней. Составление персональных гороскопов для наших пользователей требует много ресурсов, поэтому по истечению пробного периода подписка становится платной. Но мы сделали оплату минимально возможной:
 
-1)  на месяц - 69 рублей 
-2)  на полгода со скидкой 20% - <strike>414</strike>, 330 рублей
-3)  на год со скидкой 30% - <strike>828</strike>, 580 рублей. 
+1)  на месяц - 99 рублей 
+2)  на полгода со скидкой 20% - <strike>594</strike>, 499 рублей
+3)  на год со скидкой 30% - <strike>1188</strike>, 829 рублей. 
 
 У тебя остаётся ещё '''+str(day)+" "+days_text+'''.
 
@@ -489,6 +489,7 @@ def service_message() -> None:
             if int(float(recurent_subs[i].Type))==580 or int(float(recurent_subs[i].Type==config.cost[365])):
                 days1=365
             pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
+            # minues_one_try(telegram_id=recurent_subs[i].TelegramID)
             # print(pay.text)
             try:
                 if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет

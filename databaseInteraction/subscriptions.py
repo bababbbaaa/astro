@@ -210,7 +210,7 @@
 #     return
     
 # Base.metadata.create_all(engine)
-from datetime import datetime
+from datetime import datetime,timedelta
 from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -243,6 +243,17 @@ class Subscription(Base):
     End = Column(Integer, nullable=False)
     PayID = Column(String, nullable=False)
 
+class New_Subscription(Base):
+    __tablename__ = 'New_Subscriptions'
+
+    ID = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
+    TelegramID = Column(Integer, nullable=False)
+    Type = Column(String(16), nullable=False)
+    Start = Column(String(16), nullable=False)
+    End = Column(Integer, nullable=False)
+    PayID = Column(String(16), nullable=False)
+    AmountOfTry=Column(Integer, nullable=False)
+
 # --------------------- PRIVATE METHODS ---------------------
 
 def _calculate_days(end) -> int:
@@ -250,6 +261,7 @@ def _calculate_days(end) -> int:
     
     Вычисляет, сколько полных дней между сегодня и введенной датой
     Если введенная дата перед сегодня, то возвращается 0
+
     """
 
     now = datetime.strptime(datetime.strftime(datetime.now(), DATE_FORMAT), DATE_FORMAT)
@@ -308,13 +320,27 @@ def _get_subs(
     return subs
 
 # --------------------- PUBLIC METHODS ----------------------
+def minues_one_try(telegram_id:int):
+    session=sessionmaker(engine)()
+    sub=session.query(Subscription).filter_by(TelegramID=int(telegram_id)).first()
+    if sub.AmountOfTry<=0:
+        session.delete(sub)
+        return True
+    else:   
+        new_date=datetime.strptime(sub.start,DATE_FORMAT)
+        new_date=new_date+timedelta(days=1)
+        new_date=datetime.strftime(new_date,DATE_FORMAT)
+        session.query(Subscription).filter_by(TelegramID=telegram_id).update({"AmountOfTry":sub.AmountOfTry-1,"end":new_date})
 
+        
 def add_sub(
     id : int = '',
     type : int = 3,
     start : str = '',
     end : str = '',
-    pay_id : str = '') -> Subscription:
+    pay_id : str = '',
+    amount_of_tries:int=3
+    ) -> Subscription:
 
     """
     
@@ -337,7 +363,8 @@ def add_sub(
                                 Type=type,
                                 Start=start,
                                 End=end,
-                                PayID=pay_id)
+                                PayID=pay_id,)
+                                #AmountOfTry=amount_of_tries)
                                 
     _session.add(subscription)
     _session.commit()

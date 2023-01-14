@@ -135,7 +135,7 @@ async def end_sub(call):
         but2 = types.InlineKeyboardButton(
             text="нет", callback_data="del")
         keyboard.row(but1, but2)
-        await wait_until_send(id, '''Обращаем внимание, что при отказе от подписки функции бота отключаются и денежные средства, оставшиеся до окончания подписки, не возвращаются.
+        await wait_until_send(id, '''Обращаем внимание, что при отказе от подписки денежные средства, оставшиеся до окончания подписки, не возвращаются.
 
 Вы точно хотите отказаться от подписки?''', reply_markup=keyboard)
     except Exception as err:
