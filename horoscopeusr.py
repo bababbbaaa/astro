@@ -38,10 +38,10 @@ def RegUser(inpTelegramID):
    lenMess = horoscopeproc.GetTbLen(conn,"MessBodies")
    NullDate = datetime.strptime('1970-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
    
-   strQuery = """INSERT INTO Users (Name,TimeZone, TelegramID,IS_Main,
+   strQuery = """INSERT INTO Users (Name,TimeZone, TelegramID,IS_Main,RegDate,
                                      IsActiveBot,Balance,IsActiveSub,SubscrType_ID,
                                      ActiveUntil,DateSend,IntrvMessBeg,IntrvMessEnd)                                     
-                 VALUES ('',0,%s,1,
+                 VALUES ('',0,%s,1,NOW(),
                          1,0,1,1,                         
                          %s,%s,%s,%s)
                 """
@@ -118,8 +118,7 @@ def RegUserFull(inpTelegramID,inpValues):
                                      Birthday = %s,
                                      DesTime_ID = %s,
                                      BirthTime = %s,
-                                     Birthplace = %s,                                                                    
-                                     RegDate = NOW(),
+                                     Birthplace = %s,                                                                                                         
                                      RegDateFin = NOW(),
                                      ActiveUntil = DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY)                 
                  WHERE TelegramID = %s        
@@ -244,7 +243,7 @@ def GenAllUsrMess():
    lastID  = lenMess-1
    
    cur = conn.cursor()
-   cur.execute("SELECT ID,IntrvMessEnd FROM Users WHERE IntrvMessEnd < %s ",(lastID,) )
+   cur.execute("SELECT ID,IntrvMessEnd FROM Users WHERE IntrvMessEnd < %s AND (RegDateFin is Not Null) AND (RegDateFin<>'1970-01-01') " ,(lastID,) )
 
    usrList = list()   
    records = cur.fetchall()
@@ -269,10 +268,6 @@ def GenAllUsrMess():
    cur.executemany("UPDATE Users SET IntrvMessEnd = %s WHERE ID = %s ",usrList)  
 ##    cur.execute("UPDATE Users SET IntrvMessEnd = ? WHERE ID = ?  " ,(lastID,currID,))
    conn.commit()
-
-
-
-
 
    return True
  except Exception as error:
@@ -526,9 +521,7 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 ##print(GetTmpUserInfo("12345")[3]["Birthday"])
 ##print(RegTmpUser("12345"))
 ##print(ChTmpUserInfo("12345","Name","ыыыыы"))
-##print(datetime.datetime.now())
-##print(GenAllUsrMess())
-##print(datetime.datetime.now())
+       
 
 ##print(RegUser(121212121237))
 ##print(RegTmpUser(1862603411))
@@ -542,3 +535,10 @@ def ChTmpUserInfo(inpTelegramID,inpFieldName, inpValue):
 ##inpValues = {"Name":"werÀ#À ¬À®dddÀ+À","Gender_ID":1,"Birthday":'23.12.2022',"DesTime_ID":1,"BirthTime":'23:59',"Birthplace":'fff'}
 ##print(RegUserFull(33333,inpValues))
 ##print(ChUserInfo(33333,'Name','À\x9c\x00<\x00/\x00'))
+
+
+
+##print(datetime.now())
+##print(GenAllUsrMess())
+##print(datetime.now())
+
