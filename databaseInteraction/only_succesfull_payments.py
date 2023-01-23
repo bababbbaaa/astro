@@ -98,6 +98,7 @@ def add_success_payment(**kwargs) -> None:
     birth_day=user.Birthday
 
     if birth_day=="" or birth_day==None:
+        birth_day=birth_day.replace(" ","")
         birth_day=datetime.strptime("00:00","%H:%M")
 
     else:

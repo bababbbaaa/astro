@@ -154,7 +154,7 @@ async def fin_sub(call):
         id = call.from_user.id
         delete_sub(id=id)
         add_payment(sub_type=3,telegram_id=id,payment_id=str(count_payments()),active_until="01.10.1000",days=30,payed=True,amount=0,link="UNSUB")
-
+        delete_period_sub(id)
         await wait_until_send(id,'Подписка отменена. Вы можете в любой момент активировать ее заново через раздел меню "подписка".')
     except:
         await wait_until_send(id,"Мы не обнаружили у вас подписку")

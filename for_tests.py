@@ -936,43 +936,50 @@
 
 
 
-# from databaseInteraction import *
-
-# session=sessionmaker(engine)()
-# session.query
-text1='''Дорогие пользователи Астробота! 
-
-С 15 января 2023 года стоимость подписки на Астробот будет увеличена и составит:
-
-1)  на месяц – 99 рублей 
-2)  на полгода – <strike>594</strike>, 499 рублей 
-3)  на год – <strike>1188</strike>, 829 рублей.
-
-Для всех подписчиков, оплативших подписку до 15 января 2023 года, цена останется неизменной при условии автопродления подписки.
-
-Успейте оформить подписку до 15 января по старым расценкам.
-
-Прекрасного дня! 🌸
-
-'''
-from threading import Thread
-import time
-from config import *
-import telebot
 from databaseInteraction import *
-bot=telebot.TeleBot(token=TOKEN)
 
-users=Session.query(User).filter_by(IsActiveBot=1).all()
+today=datetime.now().date()
+# from_old_sub_to_new(952863788)
+# delete_period_sub(952863788)
+session=sessionmaker(engine)()
+subs=session.query(SuccessPayment).filter_by(payment_date=today).all()
+for i in range(subs):
+    
+# # session=sessionmaker(engine)()
+# # session.query
+# text1='''Дорогие пользователи Астробота! 
 
-bot.send_message(chat_id=952863788,text="начало")
-bot.send_message(chat_id=5127634821,text="начало")
+# С 15 января 2023 года стоимость подписки на Астробот будет увеличена и составит:
 
-for user in users:
-    try:
-        Thread(target=bot.send_message,args=(user.TelegramID,text1,"html")).start()
-        # bot.send_message(user.TelegramID,text=text,parse_mode="html")
-        time.sleep(1/15)
-    except:
-        print(user.TelegramID)
-bot.send_message(chat_id=952863788,text="конец")
-bot.send_message(chat_id=5127634821,text="конец")
+# 1)  на месяц – 99 рублей 
+# 2)  на полгода – <strike>594</strike>, 499 рублей 
+# 3)  на год – <strike>1188</strike>, 829 рублей.
+
+# Для всех подписчиков, оплативших подписку до 15 января 2023 года, цена останется неизменной при условии автопродления подписки.
+
+# Успейте оформить подписку до 15 января по старым расценкам.
+
+# Прекрасного дня! 🌸
+
+# '''
+# from threading import Thread
+# import time
+# from config import *
+# import telebot
+# from databaseInteraction import *
+# bot=telebot.TeleBot(token=TOKEN)
+
+# users=Session.query(User).filter_by(IsActiveBot=1).all()
+
+# bot.send_message(chat_id=952863788,text="начало")
+# bot.send_message(chat_id=5127634821,text="начало")
+
+# for user in users:
+#     try:
+#         Thread(target=bot.send_message,args=(user.TelegramID,text1,"html")).start()
+#         # bot.send_message(user.TelegramID,text=text,parse_mode="html")
+#         time.sleep(1/15)
+#     except:
+#         print(user.TelegramID)
+# bot.send_message(chat_id=952863788,text="конец")
+# bot.send_message(chat_id=5127634821,text="конец")

@@ -249,12 +249,70 @@ class New_Subscription(Base):
     ID = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
     TelegramID = Column(Integer, nullable=False)
     Type = Column(String(16), nullable=False)
-    Start = Column(String(16), nullable=False)
-    End = Column(Integer, nullable=False)
+    Start = Column(Date, nullable=False)
+    End = Column(Date, nullable=False)
     PayID = Column(String(16), nullable=False)
     AmountOfTry=Column(Integer, nullable=False)
 
 # --------------------- PRIVATE METHODS ---------------------
+
+def delete_period_sub(telegram_id):
+    session=sessionmaker(engine)()
+    sub=session.query(New_Subscription).filter_by(TelegramID=telegram_id).first()
+    if sub==None:
+        return False
+    session.delete(sub)
+    session.commit()
+
+def from_old_sub_to_new(telegram_id):
+    session=sessionmaker(engine)()
+    old_sub=session.query(Subscription).filter_by(TelegramID=telegram_id).first()
+    start=datetime.strptime(old_sub.Start,"%d.%m.%Y").date()
+    end=datetime.strptime(old_sub.End,"%d.%m.%Y").date()
+    end=end+timedelta(days=1)
+    new_sub=New_Subscription(
+        TelegramID=old_sub.TelegramID,
+        Type=old_sub.Type,
+        Start=start,
+        End=end,
+        PayID=old_sub.PayID,
+        AmountOfTry=3
+    )
+    session.add(new_sub)
+    session.commit()
+
+
+def try_rec_in_base(telegram_id):
+    session=sessionmaker(engine)()
+    sub=session.query(New_Subscription).filter_by(TelegramID=telegram_id).all()
+    if len(sub)==1: 
+        sub=sub[0]
+        amount_of_try=sub.AmountOfTry
+        # if amount_of_try==4:
+        #     end=datetime.now()+timedelta(days=1)
+        #     end=end.date()
+        if amount_of_try==3:
+            end=datetime.now()+timedelta(days=2)
+            end=end.date()
+        if amount_of_try==2:
+            end=datetime.now()+timedelta(days=4)
+            end=end.date()
+        if amount_of_try==1:
+            end=datetime.now()+timedelta(days=7)
+            end=end.date() 
+            
+        session.query(New_Subscription).filter_by(TelegramID=telegram_id).update(
+            {"AmountOfTry":amount_of_try-1,
+            "End":end}
+        )
+        session.commit()
+    else:
+        from_old_sub_to_new(telegram_id)
+    
+
+
+
+
 
 def _calculate_days(end) -> int:
     """
@@ -320,7 +378,7 @@ def _get_subs(
     return subs
 
 # --------------------- PUBLIC METHODS ----------------------
-def minues_one_try(telegram_id:int):
+# def minues_one_try(telegram_id:int):
     session=sessionmaker(engine)()
     sub=session.query(Subscription).filter_by(TelegramID=int(telegram_id)).first()
     if sub.AmountOfTry<=0:
@@ -427,5 +485,5 @@ def set_field(
     _session.commit()
 
     return
-    
+# New_Subscription.__table__.drop(engine)
 Base.metadata.create_all(engine)

@@ -410,7 +410,7 @@ def service_message() -> None:
             all_service_messages=[]
         while i<len(all_service_messages):#Удаляем из списка рассылки тех, у кого рекурентная подписка
             
-            if int(all_service_messages[i]["id"]) in already_registr_subs:
+            if int(all_service_messages[i]["id"]) in already_registr_subs :
                 all_service_messages.pop(i)
             elif all_service_messages[i]['days_till_end']+1==0:
                 id=all_service_messages[i]["id"]
@@ -490,6 +490,7 @@ def service_message() -> None:
                 days1=365
             pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
             # minues_one_try(telegram_id=recurent_subs[i].TelegramID)
+            from_old_sub_to_new(recurent_subs[i].TelegramID)
             # print(pay.text)
             try:
                 if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет

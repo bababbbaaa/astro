@@ -376,7 +376,10 @@ def get_payment():
                 if prev_id!=0 and prev_id!=None:
                     # try:
                     change_unsuccesful_to_succesful(id)
-                        
+                    try:
+                        delete_period_sub(id)
+                    except:
+                        pass
                     # except:
                     #     pass
                     # update_price_list_with_id(id,"new_payment",price)
