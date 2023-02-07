@@ -939,12 +939,12 @@
 from databaseInteraction import *
 
 today=datetime.now().date()
-# from_old_sub_to_new(952863788)
+from_old_sub_to_new(952863788)
 # delete_period_sub(952863788)
-session=sessionmaker(engine)()
-subs=session.query(SuccessPayment).filter_by(payment_date=today).all()
-for i in range(subs):
-    
+# session=sessionmaker(engine)()
+# subs=session.query(SuccessPayment).filter_by(payment_date=today).all()
+# for i in range(subs):
+
 # # session=sessionmaker(engine)()
 # # session.query
 # text1='''Дорогие пользователи Астробота! 

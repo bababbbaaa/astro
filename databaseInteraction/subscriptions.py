@@ -247,7 +247,7 @@ class New_Subscription(Base):
     __tablename__ = 'New_Subscriptions'
 
     ID = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
-    TelegramID = Column(Integer, nullable=False)
+    TelegramID = Column(BIGINT, nullable=False)
     Type = Column(String(16), nullable=False)
     Start = Column(Date, nullable=False)
     End = Column(Date, nullable=False)
@@ -294,13 +294,14 @@ def try_rec_in_base(telegram_id):
         if amount_of_try==3:
             end=datetime.now()+timedelta(days=2)
             end=end.date()
-        if amount_of_try==2:
+        elif amount_of_try==2:
             end=datetime.now()+timedelta(days=4)
             end=end.date()
-        if amount_of_try==1:
+        elif amount_of_try==1:
             end=datetime.now()+timedelta(days=7)
             end=end.date() 
-            
+        else:
+            end=sub.End
         session.query(New_Subscription).filter_by(TelegramID=telegram_id).update(
             {"AmountOfTry":amount_of_try-1,
             "End":end}

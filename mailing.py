@@ -385,15 +385,15 @@ def service_message() -> None:
         cool_subs=get_subs()
         already_registr_subs=[]
         recurent_subs=[]
-        try:
-            wait_until_send(952863788,"функция началась")
-            # breakpoint()
+#         try:
+#             wait_until_send(952863788,"функция началась")
+#             # breakpoint()
 
-            wait_until_send(5127634821,"рассылка началась")
-        except:
-            pass
-        # breakpoint()
-        # return("end")
+#             wait_until_send(5127634821,"рассылка началась")
+#         except:
+#             pass
+#         # breakpoint()
+#         # return("end")
         for i in range(len(cool_subs)):
             try:
                 already_registr_subs.append(cool_subs[i].TelegramID)#формируем список тех, кто уже подписался
@@ -403,71 +403,71 @@ def service_message() -> None:
                     recurent_subs.append(cool_subs[i])#формируем список из тех, с кого списать деньги
             except:
                 continue
-        all_service_messages=functions.select_all_active_until_table()
+        # all_service_messages=functions.select_all_active_until_table()
         
-        i=0
-        if all_service_messages==None:
-            all_service_messages=[]
-        while i<len(all_service_messages):#Удаляем из списка рассылки тех, у кого рекурентная подписка
+        # i=0
+        # if all_service_messages==None:
+        #     all_service_messages=[]
+        # while i<len(all_service_messages):#Удаляем из списка рассылки тех, у кого рекурентная подписка
             
-            if int(all_service_messages[i]["id"]) in already_registr_subs :
-                all_service_messages.pop(i)
-            elif all_service_messages[i]['days_till_end']+1==0:
-                id=all_service_messages[i]["id"]
-                ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
-                ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
-                i+=1
-            else:
-                i+=1
+        #     if int(all_service_messages[i]["id"]) in already_registr_subs :
+        #         all_service_messages.pop(i)
+        #     elif all_service_messages[i]['days_till_end']+1==0:
+        #         id=all_service_messages[i]["id"]
+        #         ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
+        #         ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
+        #         i+=1
+        #     else:
+        #         i+=1
         
-        photos={}
-        photos["0"]=open("days/"+"0.jpg","rb").read()
+        # photos={}
+        # photos["0"]=open("days/"+"0.jpg","rb").read()
 
-        photos["3"]=open("days/"+"3.jpg","rb").read()
+        # photos["3"]=open("days/"+"3.jpg","rb").read()
         
-        photos["7"]=open("days/"+"7.jpg","rb").read()
+        # photos["7"]=open("days/"+"7.jpg","rb").read()
 
-        photos["1"]=open("days/"+"1.jpg","rb").read()
-        photos["10"]=open("days/"+"10.png","rb").read()
+        # photos["1"]=open("days/"+"1.jpg","rb").read()
+        # photos["10"]=open("days/"+"10.png","rb").read()
 #         # breakpoint()
 
-        for i in range(len(all_service_messages)):
-            try:
-                days=all_service_messages[i]["days_till_end"]+1
-                # if days==7:
-                #     print(days)
-                if days in config.days_for_mailing:
+#         for i in range(len(all_service_messages)):
+#             try:
+#                 days=all_service_messages[i]["days_till_end"]+1
+#                 # if days==7:
+#                 #     print(days)
+#                 if days in config.days_for_mailing:
                     
-                    # end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
-                    try:
-                        id=all_service_messages[i]["id"]
-                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],days)).start()#Отправляем в процесс id
-                    except:
-                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(0)],days)).start()#Отправляем в процесс id
-                        # make_notificartion_with_keyboard(all_service_messages[i]["id"],photos[str(days)])
-                    finally:
-                        time.sleep(1/15)
-                if days==-3:
-                    id=all_service_messages[i]["id"]
-                    # print(all_service_messages[i]["id"],all_service_messages[i])
-                    caption="""Заметили, что последние 3 дня даются вам тяжелее обычного? 
-Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
+#                     # end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
+#                     try:
+#                         id=all_service_messages[i]["id"]
+#                         Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],days)).start()#Отправляем в процесс id
+#                     except:
+#                         Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(0)],days)).start()#Отправляем в процесс id
+#                         # make_notificartion_with_keyboard(all_service_messages[i]["id"],photos[str(days)])
+#                     finally:
+#                         time.sleep(1/15)
+#                 if days==-3:
+#                     id=all_service_messages[i]["id"]
+#                     # print(all_service_messages[i]["id"],all_service_messages[i])
+#                     caption="""Заметили, что последние 3 дня даются вам тяжелее обычного? 
+# Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
 
-Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
-                    Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(3)],days,caption)).start()
-                    time.sleep(1/15)  
-                if days==-10:
-                    id=all_service_messages[i]["id"]
-                    caption="""Заметили, что последние 10 дней даются вам тяжелее обычного? 
-Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
+# Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
+#                     Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(3)],days,caption)).start()
+#                     time.sleep(1/15)  
+#                 if days==-10:
+#                     id=all_service_messages[i]["id"]
+#                     caption="""Заметили, что последние 10 дней даются вам тяжелее обычного? 
+# Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
 
-Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
-                    Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start() 
-                    time.sleep(1/15)
-            except:
-                continue
-#         print(recurent_subs)
-        # breakpoint()  
+# Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
+#                     Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start() 
+#                     time.sleep(1/15)
+#             except:
+#                 continue
+# #         print(recurent_subs)
+#         # breakpoint()  
 
         print(10)
         try:
@@ -594,3 +594,5 @@ def mail_horoscope_after_photo(id,pict,first_part,second_part):
     wait_until_send_photo(id,pict,first_part,parse_mode="html")
     time.sleep(1/10)
     wait_until_send(id,second_part,parse_mode="html")
+
+# service_message()
