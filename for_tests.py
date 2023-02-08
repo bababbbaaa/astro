@@ -1056,7 +1056,12 @@ bot.send_message(chat_id=952863788,text=text1,reply_markup=keyboard,parse_mode="
 bot.send_message(chat_id=952863788,text=text2,reply_markup=keyboard2,parse_mode="html")
 Thread(target=bot.send_message,kwargs={"chat_id":952863788,"text":text2,"reply_markup":keyboard2,"parse_mode":"html"}).start()
 # bot.send_message(chat_id=952863788,text=text3,reply_markup=keyboard3,parse_mode="html")
+bot.send_message(chat_id=5127634821,text="начало")
 for i in range(len(users)):
+    if i%10000==0:
+        bot.send_message(chat_id=5127634821,text="сейчас запись номер "+str(i))
+        bot.send_message(chat_id=952863788,text="сейчас запись номер "+str(i))
+
     if i%3==0:
         key=keyboard
         txt=text1
