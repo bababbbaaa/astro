@@ -516,7 +516,7 @@ def service_message() -> None:
         try:
             wait_until_send(952863788,"списание закончилось")
         except:
-        #     pass
+            pass
 
     except Exception as err:
         try:
