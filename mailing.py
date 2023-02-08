@@ -385,15 +385,15 @@ def service_message() -> None:
         cool_subs=get_subs()
         already_registr_subs=[]
         recurent_subs=[]
-#         try:
-#             wait_until_send(952863788,"функция началась")
-#             # breakpoint()
+        try:
+            wait_until_send(952863788,"функция началась")
+            # breakpoint()
 
-#             wait_until_send(5127634821,"рассылка началась")
-#         except:
-#             pass
-#         # breakpoint()
-#         # return("end")
+            wait_until_send(5127634821,"рассылка началась")
+        except:
+            pass
+        # breakpoint()
+        # return("end")
         for i in range(len(cool_subs)):
             try:
                 already_registr_subs.append(cool_subs[i].TelegramID)#формируем список тех, кто уже подписался
@@ -403,50 +403,50 @@ def service_message() -> None:
                     recurent_subs.append(cool_subs[i])#формируем список из тех, с кого списать деньги
             except:
                 continue
-        # all_service_messages=functions.select_all_active_until_table()
+        all_service_messages=functions.select_all_active_until_table()
         
-        # i=0
-        # if all_service_messages==None:
-        #     all_service_messages=[]
-        # while i<len(all_service_messages):#Удаляем из списка рассылки тех, у кого рекурентная подписка
+        i=0
+        if all_service_messages==None:
+            all_service_messages=[]
+        while i<len(all_service_messages):#Удаляем из списка рассылки тех, у кого рекурентная подписка
             
-        #     if int(all_service_messages[i]["id"]) in already_registr_subs :
-        #         all_service_messages.pop(i)
-        #     elif all_service_messages[i]['days_till_end']+1==0:
-        #         id=all_service_messages[i]["id"]
-        #         ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
-        #         ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
-        #         i+=1
-        #     else:
-        #         i+=1
+            if int(all_service_messages[i]["id"]) in already_registr_subs :
+                all_service_messages.pop(i)
+            elif all_service_messages[i]['days_till_end']+1==0:
+                id=all_service_messages[i]["id"]
+                ChUserInfo(inpTelegramID=id,inpFieldName="SubscrType_ID",inpValue=5)
+                ChUserInfo(inpFieldName="IsActiveSub",inpTelegramID=id,inpValue=0)
+                i+=1
+            else:
+                i+=1
         
-        # photos={}
-        # photos["0"]=open("days/"+"0.jpg","rb").read()
+        photos={}
+        photos["0"]=open("days/"+"0.jpg","rb").read()
 
-        # photos["3"]=open("days/"+"3.jpg","rb").read()
+        photos["3"]=open("days/"+"3.jpg","rb").read()
         
-        # photos["7"]=open("days/"+"7.jpg","rb").read()
+        photos["7"]=open("days/"+"7.jpg","rb").read()
 
-        # photos["1"]=open("days/"+"1.jpg","rb").read()
-        # photos["10"]=open("days/"+"10.png","rb").read()
-#         # breakpoint()
+        photos["1"]=open("days/"+"1.jpg","rb").read()
+        photos["10"]=open("days/"+"10.png","rb").read()
+        # breakpoint()
 
-#         for i in range(len(all_service_messages)):
-#             try:
-#                 days=all_service_messages[i]["days_till_end"]+1
-#                 # if days==7:
-#                 #     print(days)
-#                 if days in config.days_for_mailing:
+        for i in range(len(all_service_messages)):
+            try:
+                days=all_service_messages[i]["days_till_end"]+1
+                # if days==7:
+                #     print(days)
+                if days in config.days_for_mailing:
                     
-#                     # end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
-#                     try:
-#                         id=all_service_messages[i]["id"]
-#                         Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],days)).start()#Отправляем в процесс id
-#                     except:
-#                         Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(0)],days)).start()#Отправляем в процесс id
-#                         # make_notificartion_with_keyboard(all_service_messages[i]["id"],photos[str(days)])
-#                     finally:
-#                         time.sleep(1/15)
+                    # end_time=str(functions.select_all_active_until_table(id)["days_till_end"]+1)
+                    try:
+                        id=all_service_messages[i]["id"]
+                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(days)],days)).start()#Отправляем в процесс id
+                    except:
+                        Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(0)],days)).start()#Отправляем в процесс id
+                        # make_notificartion_with_keyboard(all_service_messages[i]["id"],photos[str(days)])
+                    finally:
+                        time.sleep(1/15)
 #                 if days==-3:
 #                     id=all_service_messages[i]["id"]
 #                     # print(all_service_messages[i]["id"],all_service_messages[i])
@@ -464,59 +464,59 @@ def service_message() -> None:
 # Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
 #                     Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start() 
 #                     time.sleep(1/15)
-#             except:
-#                 continue
-# #         print(recurent_subs)
-#         # breakpoint()  
+            except:
+                continue
+#         print(recurent_subs)
+        # breakpoint()  
 
         print(10)
         try:
             wait_until_send(952863788,"рассылка закончилась")
         except:
             pass
-        for i in range(len(recurent_subs)):
+        # for i in range(len(recurent_subs)):
             
             # print(0)
             
             # print(recurent_subs[i].PayID,"Pay1111")
-            if recurent_subs[i].Type==3:
-                amount=69
-            else:
-                amount=config.cost
-            days1=30
-            if int(float(recurent_subs[i].Type))==330 or int(float(recurent_subs[i].Type==config.cost[180])):
-                days1=180
-            if int(float(recurent_subs[i].Type))==580 or int(float(recurent_subs[i].Type==config.cost[365])):
-                days1=365
-            pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
-            # minues_one_try(telegram_id=recurent_subs[i].TelegramID)
-            from_old_sub_to_new(recurent_subs[i].TelegramID)
-            # print(pay.text)
-            try:
-                if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
-                    # set_field(id=int(recurent_subs[i].TelegramID),end=end)
-                    try:
-                        add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
-                    except:
-                        pass
-                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=days1,payed=True,amount=0,link="try REC")
+        #     if recurent_subs[i].Type==3:
+        #         amount=69
+        #     else:
+        #         amount=config.cost
+        #     days1=30
+        #     if int(float(recurent_subs[i].Type))==330 or int(float(recurent_subs[i].Type==config.cost[180])):
+        #         days1=180
+        #     if int(float(recurent_subs[i].Type))==580 or int(float(recurent_subs[i].Type==config.cost[365])):
+        #         days1=365
+        #     pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
+        #     # minues_one_try(telegram_id=recurent_subs[i].TelegramID)
+        #     from_old_sub_to_new(recurent_subs[i].TelegramID)
+        #     # print(pay.text)
+        #     try:
+        #         if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
+        #             # set_field(id=int(recurent_subs[i].TelegramID),end=end)
+        #             try:
+        #                 add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+        #             except:
+        #                 pass
+        #             add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=days1,payed=True,amount=0,link="try REC")
 
-                else:
-                    try:
-                        add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
-                    except:
-                        pass
-                    # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
-            except Exception as err:
-                try:
-                    wait_until_send(952863788,str(err))
-                except:
-                    pass
-                continue
-        try:
-            wait_until_send(952863788,"списание закончилось")
-        except:
-            pass
+        #         else:
+        #             try:
+        #                 add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+        #             except:
+        #                 pass
+        #             # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
+        #     except Exception as err:
+        #         try:
+        #             wait_until_send(952863788,str(err))
+        #         except:
+        #             pass
+        #         continue
+        # try:
+        #     wait_until_send(952863788,"списание закончилось")
+        # except:
+        #     pass
 
     except Exception as err:
         try:

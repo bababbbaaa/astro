@@ -936,10 +936,10 @@
 
 
 
-from databaseInteraction import *
+# from databaseInteraction import *
 
-today=datetime.now().date()
-from_old_sub_to_new(952863788)
+# today=datetime.now().date()
+# from_old_sub_to_new(952863788)
 # delete_period_sub(952863788)
 # session=sessionmaker(engine)()
 # subs=session.query(SuccessPayment).filter_by(payment_date=today).all()
@@ -983,3 +983,86 @@ from_old_sub_to_new(952863788)
 #         print(user.TelegramID)
 # bot.send_message(chat_id=952863788,text="конец")
 # bot.send_message(chat_id=5127634821,text="конец")
+
+
+text1='''Дорогой подписчик Астробота!
+
+Спешим поделиться с Вами радостной новостью – вчера на Астробот подписался 100 000-ый подписчик! Мы гордимся, что Вы с нами и ценим каждого из Вас!
+По этому случаю мы хотим отметить это событие вместе с вами и предлагаем Вам специальные условия платной подписки, которые будут действовать до 1 марта 2023 года. 
+
+Вы можете активировать ваше персональное спецпредложение и оплатить подписку на Астробота на максимально выгодных условиях:
+на месяц – <strike>99</strike>, 79 рублей
+на полгода – <strike>594</strike>, 399 рублей
+на год – <strike>1188</strike>, 662 рублей
+
+Продолжайте пользоваться Астроботом и меняйте жизнь к лучшему!
+
+Прекрасного дня!
+Ваш Астробот.'''
+
+text2='''Дорогой подписчик Астробота!
+
+Спешим поделиться с Вами радостной новостью – вчера на Астробот подписался 100 000-ый подписчик! Мы гордимся, что Вы с нами и ценим каждого из Вас!
+По этому случаю мы хотим отметить это событие вместе с вами и предлагаем Вам специальные условия платной подписки, которые будут действовать до 1 марта 2023 года. 
+
+Вы можете активировать ваше персональное спецпредложение и оплатить подписку на Астробота на максимально выгодных условиях:
+на месяц – <strike>99</strike>, 84 рублей
+на полгода – <strike>594</strike>, 425 рублей
+на год – <strike>1188</strike>, 715 рублей
+
+Продолжайте пользоваться Астроботом и меняйте жизнь к лучшему!
+
+Прекрасного дня!
+Ваш Астробот.'''
+text3='''Дорогой подписчик Астробота!
+
+Спешим поделиться с Вами радостной новостью – вчера на Астробот подписался 100 000-ый подписчик! Мы гордимся, что Вы с нами и ценим каждого из Вас!
+По этому случаю мы хотим отметить это событие вместе с вами и предлагаем Вам специальные условия платной подписки, которые будут действовать до 1 марта 2023 года. 
+
+Вы можете активировать ваше персональное спецпредложение и оплатить подписку на Астробота на максимально выгодных условиях:
+на месяц – <strike>99</strike>, 89 рублей
+на полгода – <strike>594</strike>, 449 рублей
+на год – <strike>1188</strike>, 745 рублей
+
+Продолжайте пользоваться Астроботом и меняйте жизнь к лучшему!
+
+Прекрасного дня!
+Ваш Астробот.'''
+cod1="sal"
+cod2="sl2"
+cod3="sl3"
+from config import *
+import telebot
+from telebot import types
+bot = telebot.TeleBot(TOKEN, parse_mode=None)
+import time
+keyboard=types.InlineKeyboardMarkup()
+but1=types.InlineKeyboardButton(text="Получить персональное предложение",callback_data=cod1)
+keyboard.add(but1)
+keyboard2=types.InlineKeyboardMarkup()
+
+but2=types.InlineKeyboardButton(text="Получить персональное предложение",callback_data=cod2)
+keyboard2.add(but2)
+keyboard3=types.InlineKeyboardMarkup()
+
+but3=types.InlineKeyboardButton(text="Получить персональное предложение",callback_data=cod3)
+keyboard3.add(but3)
+# for i in range(100):
+from databaseInteraction import *
+session=sessionmaker(engine)()
+users=session.query(User).filter(User.IsActiveBot==1,User.SubscrType_ID==5,User.DesTime_ID!=None ).all()
+# bot.send_message(chat_id=5127634821,text=text3,reply_markup=keyboard,parse_mode="html")
+# bot.send_message(chat_id=5127634821,text=text3,reply_markup=keyboard,parse_mode="html")
+# bot.send_message(chat_id=5127634821,text=text3,reply_markup=keyboard,parse_mode="html")
+for i in range(len(users)):
+    if i%3==0:
+        key=keyboard
+        txt=text1
+    elif i%3==1:
+        key=keyboard2
+        txt=text2
+    elif i%3==2:
+        key=keyboard3
+        txt=text3
+    chat_id=users[i].TelegramID
+    bot.send_message(chat_id=chat_id,text=txt,reply_markup=key,parse_mode="html")
