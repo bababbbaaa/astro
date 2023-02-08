@@ -51,6 +51,20 @@ nomenklarue_365={
               "payment_object": "commodity",
               "tax": "none"
             }]}
+
+def form_nomenklature(days,price):
+    nom={
+          "sno":"usn_income",
+          "items": [
+            {
+              "name": "Подписка на астробот "+str(days)+"дней",
+              "quantity": 1,
+              "sum": price,
+              "payment_method": "full_payment",
+              "payment_object": "commodity",
+              "tax": "none"
+            }]}
+    return nom
 nomenklatura={30:nomenklarue_30,180:nomenklarue_180,365:nomenklarue_365}
 # nomenklatura_for_sign={30:nomenklarue_30_for_sign,180:nomenklarue_180_for_sign,365:nomenklarue_365_for_sign}
 
@@ -176,7 +190,7 @@ def generate_payment_link_recurse(
         'SignatureValue': signature,
         'IsTest': is_test,
         "Recurring":"true",
-        "receipt":nomenklatura[days],
+        "receipt":form_nomenklature(days,cost),
         "Shp_id":number,
         "Shp_days":days,
     }
