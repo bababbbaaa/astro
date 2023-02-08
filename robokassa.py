@@ -175,7 +175,7 @@ def generate_payment_link_recurse(
         merchant_login,
         cost,
         count_payments(),
-        nomenklatura[days],
+        form_nomenklature(days,cost),
         merchant_password_1,
         "Shp_days="+str(days),
         "Shp_id="+str(number),
