@@ -447,23 +447,23 @@ def service_message() -> None:
                         # make_notificartion_with_keyboard(all_service_messages[i]["id"],photos[str(days)])
                     finally:
                         time.sleep(1/15)
-#                 if days==-3:
-#                     id=all_service_messages[i]["id"]
-#                     # print(all_service_messages[i]["id"],all_service_messages[i])
-#                     caption="""Заметили, что последние 3 дня даются вам тяжелее обычного? 
-# Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
+                if days==-3:
+                    id=all_service_messages[i]["id"]
+                    # print(all_service_messages[i]["id"],all_service_messages[i])
+                    caption="""Заметили, что последние 3 дня даются вам тяжелее обычного? 
+Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
 
-# Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
-#                     Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(3)],days,caption)).start()
-#                     time.sleep(1/15)  
-#                 if days==-10:
-#                     id=all_service_messages[i]["id"]
-#                     caption="""Заметили, что последние 10 дней даются вам тяжелее обычного? 
-# Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
+Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
+                    Thread(target=make_notificartion_with_keyboard,args=(id,photos[str(3)],days,caption)).start()
+                    time.sleep(1/15)  
+                if days==-10:
+                    id=all_service_messages[i]["id"]
+                    caption="""Заметили, что последние 10 дней даются вам тяжелее обычного? 
+Все потому, что вы забыли оформить подписку на Астробота, который составляет для вас ежедневный персональный гороскоп с учетом вашей натальной карты! 
 
-# Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
-#                     Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start() 
-#                     time.sleep(1/15)
+Оформите подписку прямо сейчас, и вы сможете строить планы, разбираться в различных ситуациях и получать максимум от каждого дня!"""
+                    Thread(target=make_notificartion_with_keyboard,args=(all_service_messages[i]["id"],photos[str(10)],days,caption)).start() 
+                    time.sleep(1/15)
             except:
                 continue
 #         print(recurent_subs)
@@ -474,48 +474,48 @@ def service_message() -> None:
             wait_until_send(952863788,"рассылка закончилась")
         except:
             pass
-        # for i in range(len(recurent_subs)):
+        for i in range(len(recurent_subs)):
             
-            # print(0)
+            print(0)
             
-            # print(recurent_subs[i].PayID,"Pay1111")
-        #     if recurent_subs[i].Type==3:
-        #         amount=69
-        #     else:
-        #         amount=config.cost
-        #     days1=30
-        #     if int(float(recurent_subs[i].Type))==330 or int(float(recurent_subs[i].Type==config.cost[180])):
-        #         days1=180
-        #     if int(float(recurent_subs[i].Type))==580 or int(float(recurent_subs[i].Type==config.cost[365])):
-        #         days1=365
-        #     pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
-        #     # minues_one_try(telegram_id=recurent_subs[i].TelegramID)
-        #     from_old_sub_to_new(recurent_subs[i].TelegramID)
-        #     # print(pay.text)
-        #     try:
-        #         if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
-        #             # set_field(id=int(recurent_subs[i].TelegramID),end=end)
-        #             try:
-        #                 add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
-        #             except:
-        #                 pass
-        #             add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=days1,payed=True,amount=0,link="try REC")
+            print(recurent_subs[i].PayID,"Pay1111")
+            if recurent_subs[i].Type==3:
+                amount=69
+            else:
+                amount=config.cost
+            days1=30
+            if int(float(recurent_subs[i].Type))==330 or int(float(recurent_subs[i].Type==config.cost[180])):
+                days1=180
+            if int(float(recurent_subs[i].Type))==580 or int(float(recurent_subs[i].Type==config.cost[365])):
+                days1=365
+            pay=for_payments.get_money_for_sub(id=int(recurent_subs[i].PayID),amount=int(float(recurent_subs[i].Type)),days=days1,test=0,tg_id=recurent_subs[i].TelegramID)
+            # minues_one_try(telegram_id=recurent_subs[i].TelegramID)
+            from_old_sub_to_new(recurent_subs[i].TelegramID)
+            # print(pay.text)
+            try:
+                if "ERROR" not in pay.text:#Если автоплатеж не удался, то включается функция,которая закидывает информацию о автоплатеже а таблицу payments, Где проверяется то, оплатили ли счет
+                    # set_field(id=int(recurent_subs[i].TelegramID),end=end)
+                    try:
+                        add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+                    except:
+                        pass
+                    add_payment(sub_type=3,telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),active_until="01.10.1000",days=days1,payed=True,amount=0,link="try REC")
 
-        #         else:
-        #             try:
-        #                 add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
-        #             except:
-        #                 pass
-        #             # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
-        #     except Exception as err:
-        #         try:
-        #             wait_until_send(952863788,str(err))
-        #         except:
-        #             pass
-        #         continue
-        # try:
-        #     wait_until_send(952863788,"списание закончилось")
-        # except:
+                else:
+                    try:
+                        add_success_payment(telegram_id=recurent_subs[i].TelegramID,payment_id=str(count_payments()),days=30,price=0,type_of_payment="TRY REC")
+                    except:
+                        pass
+                    # add_payment(sub_type =2,telegram_id = id,payment_id = payment_id,active_until = active_until,days = days,payed = False,amount = config.cost[days],link = url)
+            except Exception as err:
+                try:
+                    wait_until_send(952863788,str(err))
+                except:
+                    pass
+                continue
+        try:
+            wait_until_send(952863788,"списание закончилось")
+        except:
         #     pass
 
     except Exception as err:

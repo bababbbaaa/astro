@@ -1034,7 +1034,7 @@ cod3="sl3"
 from config import *
 import telebot
 from telebot import types
-bot = telebot.TeleBot(TOKEN, parse_mode=None)
+from threading import Thread
 import time
 keyboard=types.InlineKeyboardMarkup()
 but1=types.InlineKeyboardButton(text="Получить персональное предложение",callback_data=cod1)
@@ -1050,10 +1050,12 @@ keyboard3.add(but3)
 # for i in range(100):
 from databaseInteraction import *
 session=sessionmaker(engine)()
+bot = telebot.TeleBot(TOKEN, parse_mode=None)
 users=session.query(User).filter(User.IsActiveBot==1,User.SubscrType_ID==5,User.DesTime_ID!=None ).all()
-# bot.send_message(chat_id=5127634821,text=text3,reply_markup=keyboard,parse_mode="html")
-# bot.send_message(chat_id=5127634821,text=text3,reply_markup=keyboard,parse_mode="html")
-# bot.send_message(chat_id=5127634821,text=text3,reply_markup=keyboard,parse_mode="html")
+bot.send_message(chat_id=952863788,text=text1,reply_markup=keyboard,parse_mode="html")
+bot.send_message(chat_id=952863788,text=text2,reply_markup=keyboard2,parse_mode="html")
+Thread(target=bot.send_message,kwargs={"chat_id":952863788,"text":text2,"reply_markup":keyboard2,"parse_mode":"html"}).start()
+# bot.send_message(chat_id=952863788,text=text3,reply_markup=keyboard3,parse_mode="html")
 for i in range(len(users)):
     if i%3==0:
         key=keyboard
@@ -1065,4 +1067,5 @@ for i in range(len(users)):
         key=keyboard3
         txt=text3
     chat_id=users[i].TelegramID
-    bot.send_message(chat_id=chat_id,text=txt,reply_markup=key,parse_mode="html")
+    Thread(target=bot.send_message,kwargs={"chat_id":chat_id,"text":txt,"reply_markup":key,"parse_mode":"html"}).start()
+    time.sleep(1/15)
