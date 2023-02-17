@@ -679,9 +679,9 @@ def select_all_active_until_table(id=None):
         conn=horoscopedb.ConnectDb()
         cur = conn.cursor()
         if id ==None:
-            cur.execute("SELECT TelegramID, ActiveUntil FROM Users")
+            cur.execute("SELECT TelegramID, ActiveUntil, Name,Gender_ID FROM Users")
         else:
-            cur.execute("SELECT TelegramID, ActiveUntil FROM Users WHERE (TelegramID = %s)",(id,))
+            cur.execute("SELECT TelegramID, ActiveUntil, Name,Gender_ID FROM Users WHERE (TelegramID = %s)",(id,))
         res = list()
         records = cur.fetchall()
         cur.close()
@@ -693,7 +693,7 @@ def select_all_active_until_table(id=None):
                 days_till_end=end_date-today_data
                 days_till_end=days_till_end.days
                 end_date=datetime.strftime(end_date,"%d.%m.%Y")
-                res.append({"id":row[0],"active_until":end_date,"days_till_end":days_till_end})
+                res.append({"id":row[0],"active_until":end_date,"days_till_end":days_till_end,"name":row[2],"gender":row[3]})
         res[0]=dict(res[0])
         if id==None:
             return res

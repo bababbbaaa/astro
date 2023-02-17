@@ -35,7 +35,7 @@ async def sal_subscribe(call):
         keyboard=types.InlineKeyboardMarkup()
         but1=types.InlineKeyboardButton(text="Активировать подписку", callback_data="sal_2opt;"+str(sub_type))
         keyboard.row(but1)
-        await wait_until_send(id, str(config.sub_type1_text(id)), reply_markup=keyboard)
+        await wait_until_send(id, str(config.sale_type1_text(id)), reply_markup=keyboard)
 
     if sub_type == 100:
         keyboard = types.InlineKeyboardMarkup()
@@ -59,7 +59,7 @@ async def sal_subscribe(call):
         but1 = types.InlineKeyboardButton(
             text="Активировать подписку", callback_data="sal_2opt;"+str(sub_type))
         keyboard.row(but1)
-        await wait_until_send(id, config.sub_type4_text(id), reply_markup=keyboard)
+        await wait_until_send(id, config.sale_type4_text(id), reply_markup=keyboard)
 
 
 
