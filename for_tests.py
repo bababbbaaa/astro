@@ -98,7 +98,7 @@ def make_notificartion_with_keyboard(id,photo,end_time,name,gender,caption=None)
     
     x=wait_until_send_photo(id,caption=text_for_notifications(end_time,name,gender),photo=photo,reply_markup=keyboard,parse_mode="html")
 
-all_service_messages=[functions.select_all_active_until_table(id=952863788)]
+all_service_messages=[functions.select_all_active_until_table(id=5127634821)]
 photos={}
 photos["0"]=open("days/"+"0.jpg","rb").read()
 
