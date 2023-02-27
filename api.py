@@ -344,8 +344,9 @@ def get_payment():
 
         end_for_users = change_active_until_date(
             start=Get_Data(), date_end=date_end, days=int(days), base="users")
-
+        delete_period_sub(id)
         if get_sub(id) != None:
+
             delete_sub(id)
             if prev_id != None and prev_id != 0:
                 x = prev_id

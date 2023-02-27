@@ -256,6 +256,8 @@ class New_Subscription(Base):
 
 # --------------------- PRIVATE METHODS ---------------------
 
+# def check_period_sub(telegram_id)
+    
 def delete_period_sub(telegram_id):
     session=sessionmaker(engine)()
     sub=session.query(New_Subscription).filter_by(TelegramID=telegram_id).first()
