@@ -146,7 +146,7 @@ server_url="192.168.7.199"
 port="443"
 err_mess="Данные заполнены некорректно. Пожалуйста, введите их точно, как написано в предыдущем сообщении."
 
-days_for_mailing=[3,0,1,-3,-10]
+days_for_mailing=[3,0,1,-3,-10,4,6]
 
 def form_notification(id):
     end_date=str(select_all_active_until_table(id)["active_until"])
