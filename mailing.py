@@ -410,7 +410,7 @@ def service_message() -> None:
             else:
                 i+=1
 
-        breakpoint()
+        # breakpoint()
 
         for i in range(len(recurent_subs)):
             
